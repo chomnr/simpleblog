@@ -1,48 +1,20 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager NavigationManager;
 
 <PageTitle>Web</PageTitle>
 
-<body>
-@if (NavigationManager.Uri.Contains("login") && isNavActive )
-{
-    isNavActive = false;
-}
-
-@if (NavigationManager.Uri.Contains("register") && isNavActive )
-{
-    isNavActive = false;
-}
-
-@if (isNavActive)
-{
+<div class="foundation">
+    <!--todo: simplify this ok?-->
     <Navbar/>
-}
+    <main>
+        @Body
+    </main>
+</div>
 
-<main>
-    @Body
-</main>
-</body>
-
-@code {
-    private bool isNavActive { get; set; } = true;
-}
+@code {}
 
 <!--
-<div class="page">
-    <div>
-        <Navbar/>
-    </div>
-
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay/>
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+<div class="top-row px-4 auth">
+    <LoginDisplay/>
+    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
 </div>
 -->
