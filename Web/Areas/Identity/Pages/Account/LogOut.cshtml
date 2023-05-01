@@ -1,7 +1,8 @@
 ﻿@page
+@using Application.Entities
 @using Microsoft.AspNetCore.Identity
 @attribute [IgnoreAntiforgeryToken]
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<BlogUser> SignInManager
 
 @functions {
 

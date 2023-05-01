@@ -1,0 +1,10 @@
+﻿
+<div style="display: flex; flex-direction: column;">
+    <input class="custom-input" placeholder="@PlaceHolder" type="@Type"/>
+</div>
+@code {
+    [Parameter]
+    public string? PlaceHolder { get; set; } = "Placeholder";
+    [Parameter]
+    public string? Type { get; set; } = "text";
+}

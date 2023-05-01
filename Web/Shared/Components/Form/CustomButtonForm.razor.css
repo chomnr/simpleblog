@@ -1,0 +1,18 @@
+
+.custom-button {
+    font-family: inherit;
+    outline: none;
+    border: 0;
+    padding: 6px;
+    cursor: pointer;
+}
+
+.default {
+    background-color: var(--blue-default);
+    color: var(--white-lighter)
+}
+
+.default:hover {
+    background-color: var(--blue-light);
+    color: var(--white-lighter)
+}

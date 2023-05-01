@@ -1,0 +1,50 @@
+﻿@inject IJSRuntime Js
+
+<section @ref="_pageSection" class="page-section"
+         style="background-color: @BackGroundColor;
+                flex-direction: @Convert.ToString(@FlexDirection);
+                align-items: @Convert.ToString(@AlignItem);
+                justify-content: @Convert.ToString(@JustifyItem);
+                height: @MaxHeight">
+    <div class="child-node" style="justify-content: @Convert.ToString(ChildJustifyItem);">
+        @ChildContent
+    </div>
+</section>
+
+@code {
+    public enum FlexDirectionType { Column, Row }
+    
+    public enum ItemAlignment { Normal, Center, Inherit, Start, End }
+    
+    public enum JustifyItemAlignment { Center, Normal }
+
+    private ElementReference _pageSection;
+
+    [Parameter]
+    public string? BackGroundColor { get; set; } = "inherit";
+
+    [Parameter]
+    public FlexDirectionType? FlexDirection { get; set; } = FlexDirectionType.Column;
+
+    [Parameter]
+    public ItemAlignment AlignItem { get; set; } = ItemAlignment.Center;
+    
+    [Parameter]
+    public JustifyItemAlignment JustifyItem { get; set; } = JustifyItemAlignment.Normal;
+    
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public JustifyItemAlignment ChildJustifyItem { get; set; } = JustifyItemAlignment.Normal;
+
+    [Parameter]
+    public bool UseMaxHeight { get; set; }
+    private string MaxHeight { get; set; } = "inherit";
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        MaxHeight = UseMaxHeight ? "100vh" : "inherit";
+    }
+}
