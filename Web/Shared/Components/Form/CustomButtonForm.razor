@@ -1,0 +1,15 @@
+﻿
+<button class="custom-button @Theme" @onsubmit="Action" style="width: @Width" type="submit">@ChildContent</button>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    [Parameter]
+    public string? Type { get; set; } = "text";
+    [Parameter]
+    public string? Theme { get; set; } = "default";
+    [Parameter]
+    public string? Width { get; set; } = "fit-content";
+    [Parameter]
+    public EventCallback Action { get; set; }
+}

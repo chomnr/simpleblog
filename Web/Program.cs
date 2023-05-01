@@ -1,27 +1,25 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Application;
+using Application.Entities;
+using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
 using Web.Areas.Identity;
 using Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var application = new Startup(builder.Configuration);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
+application.ConfigureServices(services);
+application.AddInfrastructure(services);
+
+services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<DatabaseDbContext>();
+services.AddRazorPages();
+services.AddServerSideBlazor();
+services
+    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BlogUser>>();
+services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 

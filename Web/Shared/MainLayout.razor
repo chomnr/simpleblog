@@ -1,10 +1,37 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager;
 
 <PageTitle>Web</PageTitle>
 
+<body>
+@if (NavigationManager.Uri.Contains("login") && isNavActive )
+{
+    isNavActive = false;
+}
+
+@if (NavigationManager.Uri.Contains("register") && isNavActive )
+{
+    isNavActive = false;
+}
+
+@if (isNavActive)
+{
+    <Navbar/>
+}
+
+<main>
+    @Body
+</main>
+</body>
+
+@code {
+    private bool isNavActive { get; set; } = true;
+}
+
+<!--
 <div class="page">
-    <div class="sidebar">
-        <NavMenu/>
+    <div>
+        <Navbar/>
     </div>
 
     <main>
@@ -18,3 +45,4 @@
         </article>
     </main>
 </div>
+-->

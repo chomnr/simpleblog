@@ -1,0 +1,13 @@
+﻿
+<div style="display: flex;align-items: center">
+    <input class="custom-checkbox @Theme" @onsubmit="Action" type="checkbox"/>
+    <label class="custom-checkbox-label">@ChildContent</label>
+</div>
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    [Parameter]
+    public string? Theme { get; set; } = "default";
+    [Parameter]
+    public EventCallback Action { get; set; }
+}

@@ -1,0 +1,22 @@
+﻿@inject NavigationManager Navigation
+<div class="navbar">
+    <nav class="font-default bg-white">
+        <div class="brand-group">
+            <div class="brand">BLOG</div>
+        </div>
+        <AuthorizeView>
+            <NotAuthorized>
+                <div class="user-group">
+                    <span class="login">
+                        <a href="/account/login">Log in</a>
+                    </span>
+                    <span class="register">
+                        <a href="/account/register">Register</a>
+                    </span>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </nav>
+</div>
+
+@code {}
