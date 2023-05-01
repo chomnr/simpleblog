@@ -5,6 +5,11 @@
             <div class="brand">BLOG</div>
         </div>
         <AuthorizeView>
+            <Authorized>
+                <div class="user-group">
+                    <a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
+                </div>
+            </Authorized>
             <NotAuthorized>
                 <div class="user-group">
                     <span class="login">
