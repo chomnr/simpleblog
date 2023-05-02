@@ -2,6 +2,8 @@ using Application;
 using Application.Entities;
 using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Web.Areas.Identity;
 using Web.Data;
 
@@ -13,13 +15,16 @@ application.ConfigureServices(services);
 application.AddInfrastructure(services);
 
 services.AddDatabaseDeveloperPageExceptionFilter();
-services.AddDefaultIdentity<BlogUser>(options => options.SignIn.RequireConfirmedAccount = true)
+
+services.AddIdentity<BlogUser, IdentityRole>(options => 
+        options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<DatabaseDbContext>();
+services.AddAntiforgery();
+
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BlogUser>>();
-services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
@@ -41,7 +46,17 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();  
+
+app.UseAuthorization();  
+  
+/*
+app.UseEndpoints(endpoints =>  
+{  
+    endpoints.MapControllerRoute(  
+        name: "default",  
+        pattern: "{controller=Home}/{action=Index}/{id?}");  
+});  */
 
 app.MapControllers();
 app.MapBlazorHub();

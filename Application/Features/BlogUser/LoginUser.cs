@@ -1,28 +1,28 @@
 ﻿using Application.Common;
 using MediatR;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Application.Entities;
 
 namespace Application.Features.BlogUser;
 
-public class LoginUserController : FeatureController
+public class LoginUser : FeatureController
 {
     private readonly IMediator _mediator;
 
-    public LoginUserController(IMediator mediator)
+    public LoginUser(IMediator mediator)
     {
         _mediator = mediator;
     }
     
-    public async Task<ActionResult<string>> LoginUser(LoginAccountCommand command)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult<string>> Login(LoginCommand command)
     {
         return await _mediator.Send(command);
     }
 }
 
-public class LoginAccountCommand : IRequest<string>
+public class LoginCommand : IRequest<string>
 {
     public string Login { get; set; }
     public string Password { get; set; }
@@ -30,7 +30,7 @@ public class LoginAccountCommand : IRequest<string>
 }
 
 
-internal sealed class LoginAccountCommandHandler : IRequest<LoginAccountCommand>
+internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, string>
 {
     private readonly SignInManager<Entities.BlogUser> _signInManager;
     
@@ -39,7 +39,7 @@ internal sealed class LoginAccountCommandHandler : IRequest<LoginAccountCommand>
         _signInManager = signManager;
     }
     
-    public async Task<string> Handle(LoginAccountCommand payLoad, CancellationToken cancellationToken)
+    public async Task<string> Handle(LoginCommand payLoad, CancellationToken cancellationToken)
     {
         //check for whether it is email or username...
         var payLoadAccount = new Entities.BlogUser { UserName = payLoad.Login };
@@ -47,20 +47,12 @@ internal sealed class LoginAccountCommandHandler : IRequest<LoginAccountCommand>
             payLoad.Password, 
             payLoad.RememberMe, 
             false);
-        
-        var payLoadSuccess = payLoadResult.Succeeded;
-        if (payLoadSuccess)
-        {
-            return payLoadResult.ToString();
-        } else
-        {
-            return payLoadResult.ToString();
-        }
+        return payLoadResult.ToString();
     }
     
-    public class LoginAccountEvent : DomainEvent
+    public class LoginUserEvent : DomainEvent
     {
-        public LoginAccountEvent(Entities.BlogUser account)
+        public LoginUserEvent(Entities.BlogUser account)
         {
             Account = account;
         }
