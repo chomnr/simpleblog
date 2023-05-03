@@ -2,35 +2,34 @@
 @using Web.Areas.Account.Pages
 @using Application.Entities
 @model MediatorLoginModel<BlogUser>;
-
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="~/"/>
+    <link href="css/site.css" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="favicon.png"/>
+</head>
 @{
     ViewData["Title"] = "Login Into Account";
     Layout = "";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                @Html.AntiForgeryToken();
-                <h2>Use a local account to log in.</h2>
-                <hr/>
-                <input asp-for="Input.Login" class="form-control" autocomplete="username" aria-required="true" name="Login" />
-                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" name="Password" />
-                <div class="form-group">
-                    <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-        </section>
-    </div>
-</div>
+<section class="custom-section" style="justify-content: center;height: 100vh;align-items: center">
+    <form id="account" method="post" class="custom-form">
+        <h2 style="color:var(--blue-default);text-align: center">@ViewData["Title"]</h2>
+        @Html.AntiForgeryToken()
+        <input asp-for="Input.Login" class="custom-input" autocomplete="username" aria-required="true" name="Login" placeholder="Username or Email"/>
+        <input asp-for="Input.Password" class="custom-input" autocomplete="current-password" aria-required="true" name="Password" placeholder="Password"/>
+        <div class="custom-form-group row">
+            <input type="checkbox" class="custom-checkbox"/>
+            <label class="custom-checkbox-label">Remember Me</label>
+        </div>
+        <div class="form-group">
+            <button id="login-submit" type="submit" class="custom-button default">Log in</button>
+        </div>
+    </form>
+</section>
 
 
 <!-- Login Page -->
