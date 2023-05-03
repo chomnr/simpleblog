@@ -3,23 +3,35 @@ using Application.Entities;
 using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Web.Areas.Identity;
-using Web.Data;
+using Web.Areas.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var application = new Startup(builder.Configuration);
 
-application.ConfigureServices(services);
 application.AddInfrastructure(services);
+application.ConfigureServices(services);
 
 services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDefaultIdentity<BlogUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedEmail = false;
+    } )
+    .AddEntityFrameworkStores<DatabaseDbContext>();
 
+services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => true;
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+
+/*
 services.AddIdentity<BlogUser, IdentityRole>(options => 
         options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<DatabaseDbContext>();
-services.AddAntiforgery();
+*/
+builder.Services.AddAntiforgery();
 
 services.AddRazorPages();
 services.AddServerSideBlazor();
@@ -50,13 +62,15 @@ app.UseAuthentication();
 
 app.UseAuthorization();  
   
+
 /*
 app.UseEndpoints(endpoints =>  
 {  
     endpoints.MapControllerRoute(  
         name: "default",  
         pattern: "{controller=Home}/{action=Index}/{id?}");  
-});  */
+}); 
+*/
 
 app.MapControllers();
 app.MapBlazorHub();

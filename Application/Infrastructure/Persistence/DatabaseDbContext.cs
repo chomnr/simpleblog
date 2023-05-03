@@ -1,4 +1,5 @@
-﻿using Application.Common;
+﻿using System.Reflection;
+using Application.Common;
 using Application.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -27,7 +28,8 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
 {
     private readonly IConfiguration _configuration;
 
-    public DatabaseDbContext(IConfiguration configuration)
+    public DatabaseDbContext(IConfiguration configuration,
+        DbContextOptions<DatabaseDbContext> options) : base(options)
     {
         _configuration = configuration;
     }
@@ -43,14 +45,42 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
         builder.Ignore<DomainEvent>();
-        builder.Entity<BlogUser>(e =>
+        
+         builder.Entity<BlogUser>(e =>
         {
-            //do stuff here.,.. configure default account, and limit characterts and such...
+            e.ToTable("users");
+            
+            e.Property(u => u.UserName).HasMaxLength(255);
+            e.Property(u => u.Email).HasMaxLength(256);
+            
+            e.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
+            
+            /* Default Admin User */
+            var hasher = new PasswordHasher<BlogUser>();
+            var adminAccount = new BlogUser
+            {
+                Id = "1",
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                Email = "admin@nowhere.land",
+                NormalizedEmail = "ADMIN@NOWHERE.LAND",
+                EmailConfirmed = true,
+                Done = true
+            };
+            adminAccount.PasswordHash = hasher.HashPassword(adminAccount, "Password1!");
+            e.HasData(adminAccount);
+
+            e.HasMany<IdentityUserClaim<string>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+            e.HasMany<IdentityUserLogin<string>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
+            e.HasMany<IdentityUserToken<string>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
+            e.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
         });
+        
         builder.Entity<IdentityRole>(e =>
         {
+            e.ToTable("roles");
+            
             e.HasKey(r => r.Id);
             e.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
             
@@ -72,6 +102,8 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
 
         builder.Entity<IdentityUserRole<string>>(e =>
         {
+            e.ToTable("user_roles");
+            
             e.HasKey(r => new { r.UserId, r.RoleId });
             e.HasData(new IdentityUserRole<string>
             {
@@ -82,22 +114,32 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
         
         builder.Entity<IdentityUserClaim<string>>(e =>
         {
+            e.ToTable("user_claims");
+            
             e.HasKey(uc => uc.Id);
         });
         
         builder.Entity<IdentityUserLogin<string>>(e =>
         {
+            e.ToTable("user_logins");
+            
             e.HasKey(l => new { l.LoginProvider, l.ProviderKey });
         });
         
         builder.Entity<IdentityRoleClaim<string>>(e =>
         {
+            e.ToTable("role_claims");
+            
             e.HasKey(r => r.Id);
         });
         
         builder.Entity<IdentityUserToken<string>>(e =>
         {
+            e.ToTable("user_tokens");
+            
             e.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
         });
+        
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

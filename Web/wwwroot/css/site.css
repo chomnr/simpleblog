@@ -29,16 +29,79 @@ html, body {
     overflow-x: hidden;
 }
 
+h1 { font-size: 3rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1rem; }
+
+a { color: inherit; text-decoration: none !important; }
+
 .foundation {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+/* INPUT */
+.custom-input {
+    font-family: inherit;
+    outline: none;
+    border: 0;
+    border-bottom: 1px solid dimgray;
+    padding: 5px;
+    background-color: transparent;
+    color: var(--black-default)
+}
 
+.custom-input:active {
+    border-bottom: 1px solid var(--blue-light);
+}
 
-h1 { font-size: 3rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1rem; }
+.custom-input:focus {
+    border-bottom: 1px solid var(--blue-light);
+}
 
-a { color: inherit; text-decoration: none !important; }
+.custom-checkbox {
+    font-family: inherit;
+    outline: none;
+    border: 0;
+    padding: 6px;
+}
+
+.custom-checkbox-label {
+    font-family: inherit;
+    outline: none;
+    border: 0;
+    padding: 6px;
+    font-size: 0.7em;
+}
+
+/* BUTTON */
+.custom-button {
+    font-family: inherit;
+    outline: none;
+    border: 0;
+    padding: 6px;
+    cursor: pointer;
+}
+
+.custom-button.default {
+    background-color: var(--blue-default);
+    color: var(--white-lighter)
+}
+
+.custom-button.default:hover {
+    background-color: var(--blue-light);
+    color: var(--white-lighter)
+}
+
+/* CHECKBOX */
+.custom-checkbox {
+    background-color: var(--blue-default);
+    color: var(--white-lighter)
+}
+
+.custom-checkbox {
+    background-color: var(--blue-light);
+    color: var(--white-lighter)
+}
+
