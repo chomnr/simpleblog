@@ -29,6 +29,9 @@ public class Startup
         {
             cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
         });
+        services.AddScoped<IHostEnvironmentAuthenticationStateProvider>(sp =>
+            (ServerAuthenticationStateProvider) sp.GetRequiredService<AuthenticationStateProvider>()
+        );
         return services;
     }
 
@@ -37,6 +40,7 @@ public class Startup
         services.AddDbContext<DatabaseDbContext>(
             options => options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
         services.AddScoped<IDomainEventService, DomainEventService>();
+        services.AddScoped<SignInManager<BlogUser>>();
         return services;
     }
 }
