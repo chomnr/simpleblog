@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Areas.Account.Pages;
 
-public abstract class MediatorLoginModel : PageModel
+public abstract class MediatorRegisterModel : PageModel
 {   
     [BindProperty]
-    public LoginCommand Input { get; set; } = default!;
+    public RegisterCommand Input { get; set; } = default!;
     
     public string? ReturnUrl { get; set; }
     
@@ -22,11 +22,11 @@ public abstract class MediatorLoginModel : PageModel
     public virtual Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
 }
 
-internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser : class
+internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where TUser : class
 {
     private readonly IMediator _mediator;
 
-    public MediatorLoginModel(IMediator mediator)
+    public MediatorRegisterModel(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -47,9 +47,15 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
     
     public override async Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null)
     {
+        if (!ModelState.IsValid)
+        {
+            Console.WriteLine("Bad Model...");
+        }
+
         if (ModelState.IsValid)
         {
             var test = await _mediator.Send(Input);
+            Console.WriteLine(test);
             Console.WriteLine("testing");
         }
         return Page();

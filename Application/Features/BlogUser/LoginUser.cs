@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using Application.Common;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -17,40 +18,59 @@ public class LoginUser : FeatureController
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult<string>> Login(LoginCommand command)
+    public async Task<ActionResult<bool>> Login(LoginCommand command)
     {
         return await _mediator.Send(command);
     }
 }
 
-public class LoginCommand : IRequest<string>
+public class LoginCommand : IRequest<bool>
 {   
     [Required]
     public string Login { get; set; }
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; }
-
     public bool RememberMe { get; set; } = false;
 }
 
-internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, string>
+internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, bool>
 {
     private readonly SignInManager<Entities.BlogUser> _signInManager;
+    private readonly UserManager<Entities.BlogUser> _userManager;
     
-    public LoginAccountCommandHandler(SignInManager<Entities.BlogUser> signManager)
+    public LoginAccountCommandHandler(SignInManager<Entities.BlogUser> signManager,
+        UserManager<Entities.BlogUser> userManager)
     {
         _signInManager = signManager;
+        _userManager = userManager;
     }
     
-    public async Task<string> Handle(LoginCommand payLoad, CancellationToken cancellationToken)
+    public async Task<bool> Handle(LoginCommand payLoad, CancellationToken cancellationToken)
     {
-        
+        if (Utilities.isValidEmail(payLoad.Login, false))
+        {
+            var user = await _userManager.FindByEmailAsync(payLoad.Login);
+            if (user != null)
+            {
+                var payloadResult = await _signInManager.PasswordSignInAsync(user.UserName,
+                    payLoad.Password,
+                    payLoad.RememberMe,
+                    false);
+                Console.WriteLine(user.UserName);
+                return payloadResult.Succeeded;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // Login by Username
         var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
             payLoad.Password, 
             payLoad.RememberMe,
             false);
-        return payLoadResult.ToString();
+        return payLoadResult.Succeeded;
     }
     
     public class LoginUserEvent : DomainEvent
