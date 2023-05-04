@@ -1,0 +1,36 @@
+﻿@page
+@using Web.Areas.Account.Pages;
+@using Application.Entities;
+@model MediatorRegisterModel<BlogUser>;
+
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="~/"/>
+    <link href="css/site.css" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="favicon.png"/>
+</head>
+
+@{
+    ViewData["Title"] = "Register an Account";
+    Layout = "";
+}
+
+<section class="custom-section" style="justify-content: center;height: 100vh;align-items: center">
+    <form id="account" method="post" class="custom-form" style="height: 275px;">
+        <h2 style="color:var(--blue-default);text-align: center">@ViewData["Title"]</h2>
+        @Html.AntiForgeryToken()
+        <input asp-for="Input.Username" class="custom-input" autocomplete="username" aria-required="true" name="Username" placeholder="Username"/>
+        <input asp-for="Input.Email" class="custom-input" autocomplete="email" aria-required="true" name="Email" placeholder="Email" type="Email"/>
+        <input asp-for="Input.Password" class="custom-input" autocomplete="Password" aria-required="true" name="Password" placeholder="Password" type="password"/>
+        <input asp-for="Input.ConfirmPassword" class="custom-input" autocomplete="confirm-password" aria-required="true" name="ConfirmPassword" placeholder="Confirm Password" type="password"/>
+        <div class="form-group">
+            <button id="login-submit" type="submit" class="custom-button default">Log in</button>
+        </div>
+        <label>Have an account already? <a href="/account/login" style="color: var(--blue-light)">Login</a></label>
+    </form>
+</section>
+
+
+<!-- Login Page -->
