@@ -52,6 +52,7 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
         if (!Utilities.isValidEmail(payLoad.Email, true))
         {
             // Probably redundant because of the [EmailAddress] annotation on Email Field.
+            // i dont trust the annotation.
             return "The email is invalid."; 
         }
 
@@ -60,13 +61,13 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
             return "The passwords do not match.";
         }
         
-        var new_user = new Entities.BlogUser
+        var newUser = new Entities.BlogUser
         {
             UserName = payLoad.Username,
             Email = payLoad.Email
         };
         
-        var payLoadResult = await _userManager.CreateAsync(new_user, payLoad.Password);
+        var payLoadResult = await _userManager.CreateAsync(newUser, payLoad.Password);
         if (payLoadResult.Succeeded)
         {
             return "Account successfully created.";

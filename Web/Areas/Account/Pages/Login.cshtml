@@ -22,7 +22,7 @@
         <h2 style="color:var(--blue-default);text-align: center">@ViewData["Title"]</h2>
         @Html.AntiForgeryToken()
         <input asp-for="Input.Login" class="custom-input" autocomplete="username" aria-required="true" name="Login" placeholder="Username or Email"/>
-        <input asp-for="Input.Password" class="custom-input" autocomplete="current-password" aria-required="true" name="Password" placeholder="Password"/>
+        <input asp-for="Input.Password" class="custom-input" autocomplete="current-password" aria-required="true" name="Password" placeholder="Password" type="password"/>
         <div class="custom-form-group row">
             @Html.CheckBox("RememberMe")
             <label class="custom-checkbox-label">Remember Me</label>

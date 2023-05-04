@@ -2,6 +2,7 @@
 using Application.Features.BlogUser;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -31,6 +32,7 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
         _mediator = mediator;
     }
     
+    // todo fix.
     public override async Task OnGetAsync(string? returnUrl = null)
     {
         if (!string.IsNullOrEmpty(ErrorMessage))
@@ -49,8 +51,15 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
     {
         if (ModelState.IsValid)
         {
-            var test = await _mediator.Send(Input);
-            Console.WriteLine("testing");
+            var result = await _mediator.Send(Input);
+            if (result)
+            {
+                Response.Redirect("/");
+            }
+            else
+            {
+                //
+            }
         }
         return Page();
     }
