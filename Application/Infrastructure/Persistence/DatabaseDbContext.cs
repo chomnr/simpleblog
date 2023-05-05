@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Application.Common;
 using Application.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,11 +28,15 @@ namespace Application.Infrastructure.Persistence;
 public class DatabaseDbContext : IdentityDbContext<BlogUser>
 {
     private readonly IConfiguration _configuration;
+    private readonly IMediator _mediator;
+    
 
     public DatabaseDbContext(IConfiguration configuration,
-        DbContextOptions<DatabaseDbContext> options) : base(options)
+        DbContextOptions<DatabaseDbContext> options,
+        IMediator mediator) : base(options)
     {
         _configuration = configuration;
+        _mediator = mediator;
     }
 
     public DbSet<BlogUser> BlogUsers => Set<BlogUser>();
@@ -46,7 +51,29 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
     {
         base.OnModelCreating(builder);
         builder.Ignore<DomainEvent>();
-        
+
+        builder.Entity<Post>(e =>
+        {
+            e.ToTable("posts");
+
+            var testPost = new Post
+            {
+                PostId = "1",
+                UserId = "1",
+                Title = "First Blog Post",
+                NormalizedTitle = "FIRST BLOG POST",
+                Body = "You've successfully setup SimpleBlog",
+                Tags = new List<string> {"Introduction", "Welcoming", "Cool"}
+            };
+
+            e.HasData(testPost);
+
+            e.Property(p => p.PostId).HasIdentityOptions(startValue: 1, incrementBy: 1);
+            
+            e.HasIndex((p => new { p.Title, p.PostId })).HasDatabaseName("PostIndex");
+
+            e.HasKey(p => p.PostId);
+        });
          builder.Entity<BlogUser>(e =>
         {
             e.ToTable("users");
@@ -75,6 +102,7 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
             e.HasMany<IdentityUserLogin<string>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
             e.HasMany<IdentityUserToken<string>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
             e.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            e.HasMany<Post>().WithOne().HasForeignKey(p => p.UserId).IsRequired();
         });
         
         builder.Entity<IdentityRole>(e =>
