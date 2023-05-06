@@ -9,7 +9,7 @@ public class Utilities
         https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression &
         https://learn.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format?redirectedfrom=MSDN
     */
-    public static bool isValidEmail(string email, bool aggressive)
+    public static bool IsValidEmail(string email, bool aggressive)
     {
         if (aggressive)
         {
