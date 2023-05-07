@@ -1,7 +1,7 @@
 ﻿@page
-@using System.Reflection.Metadata
 @using Web.Areas.Account.Pages;
 @using Application.Entities;
+@using Microsoft.AspNetCore.Mvc.ModelBinding;
 @model MediatorRegisterModel<BlogUser>;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -15,40 +15,34 @@
             align-items: center;
             flex-direction: column">
     <div class="lds-dual-ring" style="display: none;"><div></div></div>
-    <form id="registerForm" class="custom-form"  style="
+    <form id="registerForm" class="custom-form" style="
             background: var(--white);
             display: flex; 
             align-items: center" method="post">
         <h3>Create an Account</h3>
-        <span class="subtitle">Enter your credentials to access your account.</span>
+        <span class="subtitle">Enter credentials to create your account.</span>
+        <span asp-validation-for="Input.Username" style="font-size: 0.6em;"></span>
+        <span asp-validation-for="Input.Email" style="font-size: 0.6em;"></span>
+        <span asp-validation-for="Input.Password" style="font-size: 0.6em;"></span>
+        <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
+        
         <div class="form-spacer"></div>
         <div class="custom-form-group col">
-            <span asp-validation-for="Input.Username"></span>
-            <div style="display: flex;">
-                <i class="fa-solid fa-user custom-input-icon" style="color: var(--blue-light)"></i>
-                <input asp-for="Input.Username" class="custom-input icon-supp" placeholder="Username" type="text"/>
-            </div>
+            <i class="fa-solid fa-user custom-input-icon" style="color: var(--blue-light)"></i>
+            <input asp-for="Input.Username" class="custom-input icon-supp" placeholder="Username" type="text"/>
         </div>
         <div class="custom-form-group col">
-            <span asp-validation-for="Input.Email"></span>
-            <div style="display: flex;">
-                <i class="fa-solid fa-envelope custom-input-icon" style="color: var(--blue-light)"></i>
-                <input asp-for="Input.Email" class="custom-input icon-supp" placeholder="Email" type="email"/>
-            </div>
+           <!-- <span asp-validation-for="Input.Email"></span>-->
+            <i class="fa-solid fa-envelope custom-input-icon" style="color: var(--blue-light)"></i>
+           <input asp-for="Input.Email" class="custom-input icon-supp" placeholder="Email" type="email"/>
         </div>
         <div class="custom-form-group col">
-            <span asp-validation-for="Input.Password"></span>
-            <div style="display: flex;">
-                <i id="password" class="fa-solid fa-lock custom-input-icon" style="color: var(--blue-light)"></i>
-                <input asp-for="Input.Password" onkeyup="checkForMatch()" class="custom-input icon-supp" placeholder="Password" type="password"/>
-            </div>
+            <i id="password" class="fa-solid fa-lock custom-input-icon" style="color: var(--blue-light)"></i>
+            <input asp-for="Input.Password" onkeyup="checkForMatch()" class="custom-input icon-supp" placeholder="Password" type="password"/>
         </div>
         <div class="custom-form-group col">
-            <span asp-validation-for="Input.ConfirmPassword"></span>
-            <div style="display: flex">
-                <i id="dynamic_icon_label" class="fa-solid fa-x custom-input-icon" style="color: var(--blue-light)"></i>
-                <input asp-for="Input.ConfirmPassword" onkeyup="checkForMatch()" class="custom-input icon-supp" placeholder="Confirm Password" type="password"/>
-            </div>
+            <i id="dynamic_icon_label" class="fa-solid fa-x custom-input-icon" style="color: var(--blue-light)"></i>
+            <input asp-for="Input.ConfirmPassword" onkeyup="checkForMatch()" class="custom-input icon-supp" placeholder="Confirm Password" type="password"/>
         </div>
         <div class="custom-form-group">
             <button class="custom-button default" id="loginSubmit"  type="submit">Register</button>
@@ -67,6 +61,7 @@
     var password = document.getElementById("Input_Password");
     var confirmpassword = document.getElementById("Input_ConfirmPassword")
     var icon = document.getElementById("dynamic_icon_label")
+    
     function checkForMatch(){
         if (password.value === confirmpassword.value) {
             icon.classList.remove("fa-x");
