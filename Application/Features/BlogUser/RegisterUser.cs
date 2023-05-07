@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Common;
+using Application.Common.Interface;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Features.BlogUser;
 
-public class RegisterUser
+public class RegisterUser : FeatureController
 {
     private readonly IMediator _mediator;
-
+    
     public RegisterUser(IMediator mediator)
     {
         _mediator = mediator;
@@ -17,42 +18,51 @@ public class RegisterUser
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult<string>> Register(RegisterCommand command)
-    {
+    public async Task<ActionResult<IdentityResult>> Register(RegisterCommand command)
+    {   
+        var sender = await _mediator.Send(command);
         return await _mediator.Send(command);
     }
 }
 
-public class RegisterCommand : IRequest<string>
-{   
-    [Required]
+public class RegisterCommand : IRequest<IdentityResult>
+{
     public string Username { get; set; }
-    [Required]
-    [EmailAddress]
     public string Email { get; set; }
-    [Required]
-    [DataType(DataType.Password)]
     public string Password { get; set; }
-    [Required]
-    [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
 }
 
-internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCommand, string>
+internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCommand, IdentityResult>
 {
-    private readonly UserManager<Entities.BlogUser> _userManager;
-    
-    public RegisterAccountCommandHandler(UserManager<Entities.BlogUser> userManager)
+    private readonly ICustomIdentityService _customIdentityService;
+
+    public RegisterAccountCommandHandler(ICustomIdentityService customIdentityService)
     {
-        _userManager = userManager;
+        _customIdentityService = customIdentityService;
     }
 
-    public async Task<string> Handle(RegisterCommand payLoad, CancellationToken cancellationToken)
+    public async Task<IdentityResult> Handle(RegisterCommand payLoad, CancellationToken cancellationToken)
     {
+        return await _customIdentityService.CustomCreateAsync(payLoad);
+    }
+    public class RegisterUserEvent : DomainEvent
+    {
+        public RegisterUserEvent(Entities.BlogUser account)
+        {
+            Account = account;
+        }
+
+        public Entities.BlogUser Account { get; }
+    }
+}
+
+/*
         if (!Utilities.isValidEmail(payLoad.Email, true))
         {
             // Probably redundant because of the [EmailAddress] annotation on Email Field.
             // i dont trust the annotation.
+            //write exceptionhandler for the errors
             return "The email is invalid."; 
         }
 
@@ -76,15 +86,4 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
         {
             return payLoadResult.Errors.ToString() ?? "Something went wrong.";
         }
-    }
-    public class RegisterUserEvent : DomainEvent
-    {
-        public RegisterUserEvent(Entities.BlogUser account)
-        {
-            Account = account;
-        }
-
-        public Entities.BlogUser Account { get; }
-    }
-    
-}
+        */
