@@ -30,7 +30,7 @@ public class CustomIdentityService : ICustomIdentityService
         
         if (!string.Equals(payLoad.Password, payLoad.ConfirmPassword)) 
         {
-            return IdentityResult.Failed(error.PasswordMismatch());
+            return IdentityResult.Failed(error.PasswordDoesNotMatch());
         }
         return await _userManager.CreateAsync(user, payLoad.Password);
     }

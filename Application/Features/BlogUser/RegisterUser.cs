@@ -63,8 +63,8 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
     {
         var user = new Entities.BlogUser { UserName = payLoad.Username, Email = payLoad.Email };
         var config = _configuration.GetSection("Authentication").GetSection("Email");
-        var task = await _customIdentityService.CustomCreateAsync(payLoad, user);
-        if (task.Succeeded)
+        var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
+        if (result.Succeeded)
         {
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var basePath = _webHelperService.GetBaseUrl();
@@ -73,9 +73,9 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
                               $"&verifyToken={Uri.EscapeDataString(emailToken)}";
             var formatHtml = $"<a href={basePath + confirmPath}>Confirm Account</a>";
             await _emailSender.SendEmailAsync( payLoad.Email, config["EmailConfirmationSubject"], formatHtml);
-            return task;
+            return result;
         }
-        return task;
+        return result;
     }
     public class RegisterUserEvent : DomainEvent
     {
