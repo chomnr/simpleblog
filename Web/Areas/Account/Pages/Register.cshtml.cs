@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Web.Areas.Account.Pages;
 
@@ -45,11 +46,14 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
         ReturnUrl = returnUrl;
     }
     
-    public override async Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null)
+    public override async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         if (!ModelState.IsValid)
         {
+            returnUrl ??= Url.Content("~/");
+            ErrorMessage = "Data Validation Failed";
             Console.WriteLine("Bad Model...");
+            return Page();
         }
 
         if (ModelState.IsValid)
