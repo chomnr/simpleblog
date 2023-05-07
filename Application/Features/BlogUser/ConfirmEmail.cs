@@ -33,6 +33,7 @@ public class ConfirmAccountQueryHandler : IRequestHandler<ConfirmAccountQuery, s
     public async Task<string> Handle(ConfirmAccountQuery payLoad, CancellationToken cancellationToken)
     {
         var account = await _accountManager.FindByIdAsync(payLoad.UserId);
+        //todo rewrite emailconfirmation... 
         if (account != null)
         {
             if (account.EmailConfirmed)

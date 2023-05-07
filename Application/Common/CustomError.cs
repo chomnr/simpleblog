@@ -12,4 +12,13 @@ public class CustomError : IdentityErrorDescriber
             Description = "The email does not follow the constraints."
         };
     }
+    
+    public IdentityError PasswordDoesNotMatch()
+    {
+        return new IdentityError
+        {
+            Code = "PasswordDoesNotMatch",
+            Description = "The passwords do not match each other."
+        };
+    }
 }
