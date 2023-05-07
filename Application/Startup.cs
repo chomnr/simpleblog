@@ -41,6 +41,8 @@ public class Startup
             options => options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddScoped<ICustomIdentityService, CustomIdentityService>();
+        services.AddScoped<IEmailSenderService, EmailSenderService>();
+        services.AddScoped<IWebHelperService, WebHelperService>();
         services.AddScoped<SignInManager<BlogUser>>();
         return services;
     }
