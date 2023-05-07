@@ -73,6 +73,10 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
                     {
                         ModelState.AddModelError("Input.Email", error.Description);
                     }
+                    if (error.Code.ToLower().Contains("password"))
+                    {
+                        ModelState.AddModelError("Input.Password", error.Description);
+                    }
                 }
                 return Page();
             }
