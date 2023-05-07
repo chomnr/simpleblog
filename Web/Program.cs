@@ -4,6 +4,7 @@ using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Web.Areas.Account;
+using Web.Areas.Account.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -25,6 +26,7 @@ services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
 
 /*
 services.AddIdentity<BlogUser, IdentityRole>(options => 

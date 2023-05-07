@@ -58,7 +58,7 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
             }
             else
             {
-                //
+                // flash cookie maybe...
             }
         }
         return Page();

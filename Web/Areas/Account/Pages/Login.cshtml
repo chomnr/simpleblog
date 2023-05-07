@@ -2,36 +2,63 @@
 @using Web.Areas.Account.Pages;
 @using Application.Entities;
 @model MediatorLoginModel<BlogUser>;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<!DOCTYPE html>
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <base href="~/"/>
-    <link href="css/site.css" rel="stylesheet"/>
-    <link rel="icon" type="image/png" href="favicon.png"/>
-</head>
 
 @{
-    ViewData["Title"] = "Login Into Account";
-    Layout = "";
+    Layout = "_Layout";
 }
 
-<section class="custom-section" style="justify-content: center;height: 100vh;align-items: center">
-    <form id="account" method="post" class="custom-form">
-        <h2 style="color:var(--blue-default);text-align: center">@ViewData["Title"]</h2>
-        @Html.AntiForgeryToken()
-        <input asp-for="Input.Login" class="custom-input" autocomplete="username" aria-required="true" name="Login" placeholder="Username or Email"/>
-        <input asp-for="Input.Password" class="custom-input" autocomplete="current-password" aria-required="true" name="Password" placeholder="Password" type="password"/>
-        <div class="custom-form-group row">
-            @Html.CheckBox("RememberMe")
-            <label class="custom-checkbox-label">Remember Me</label>
+@Html.AntiForgeryToken();
+<section class="custom-section" style="
+            justify-content: center;
+            height: 100vh;
+            align-items: center;
+            flex-direction: column">
+    <div class="lds-dual-ring" style="display: none;"><div></div></div>
+    <form id="loginForm" class="custom-form"  style="
+            background: var(--white);
+            display: flex; 
+            align-items: center" method="post">
+        <h3>Welcome Back</h3>
+        <span class="subtitle">Enter your credentials to access your account.</span>
+        <div class="form-spacer"></div>
+        <div class="custom-form-group">
+            <i class="fa-solid fa-user custom-input-icon" style="color: var(--blue-light)"></i>
+            <input asp-for="Input.Login" name="Login" class="custom-input icon-supp" placeholder="Username or Email" type="text"/>
         </div>
-        <div class="form-group">
-            <button id="login-submit" type="submit" class="custom-button default">Log in</button>
+        <div class="custom-form-group">
+            <i class="fa-solid fa-lock custom-input-icon" style="color: var(--blue-light)"></i>
+            <input asp-for="Input.Password" name="Password" class="custom-input icon-supp" placeholder="Password" type="password"/>
         </div>
-        <label>Need an account? <a href="/account/register" style="color: var(--blue-light)">Register</a></label>
+        <div class="custom-form-group row"; style="margin-top: 6px; margin-bottom: 6px;">
+            <div style="position: absolute;left: 0;">
+                @Html.CheckBox("RememberMe")
+                <label class="custom-checkbox-label">Remember Me</label>
+            </div>
+        </div>
+        <div class="custom-form-group">
+            <button class="custom-button default" id="loginSubmit"  type="submit">Sign In</button>
+        </div>
     </form>
+
+    <p style="padding-top: 3rem;font-size: 0.8em;">Forgot your password? <a href="/account/reset_password" style="color: var(--blue-light)">Reset Password</a></p>
+    <!--  <form id="account" method="post" class="custom-form">-->
+    <!--
+    <h2 style="color:var(--blue-default);text-align: center">@ViewData["Title"]</h2>
+    @Html.AntiForgeryToken()
+    <input asp-for="Input.Login" class="custom-input" autocomplete="username" aria-required="true" name="Login" placeholder="Username or Email"/>
+    <input asp-for="Input.Password" class="custom-input" autocomplete="current-password" aria-required="true" name="Password" placeholder="Password" type="password"/>
+    <div class="custom-form-group row">
+        @Html.CheckBox("RememberMe")
+        <label class="custom-checkbox-label">Remember Me</label>
+    </div>
+    <div class="form-group">
+        <button id="login-submit" type="submit" class="custom-button default">Log in</button>
+    </div>
+    <label>Need an account? <a href="/account/register" style="color: var(--blue-light)">Register</a></label>
+    -->
+    <!-- </form>-->
 </section>
 
 <!-- Login Page -->

@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
 using Application.Common;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Application.Features.BlogUser;
 
@@ -28,9 +27,11 @@ public class LoginUser : FeatureController
 public class LoginCommand : IRequest<bool>
 {   
     [Required]
+    [Display(Name = "Username or Email")]
     public string Login { get; set; }
     [Required]
     [DataType(DataType.Password)]
+    [Display(Name = "Password")]
     public string Password { get; set; }
     [Required]
     public bool RememberMe { get; set; }
@@ -50,6 +51,8 @@ internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand,
     
     public async Task<bool> Handle(LoginCommand payLoad, CancellationToken cancellationToken)
     {
+        /*
+        //identity_SignInWithEmailOrUsername
         if (Utilities.isValidEmail(payLoad.Login, false))
         {
             var user = await _userManager.FindByEmailAsync(payLoad.Login);
@@ -59,15 +62,20 @@ internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand,
                     payLoad.Password,
                     payLoad.RememberMe,
                     false);
-                Console.WriteLine(user.UserName);
                 return payloadResult.Succeeded;
             }
             else
             {
-                return false;
+                
             }
         }
         // Login by Username
+        var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
+            payLoad.Password, 
+            payLoad.RememberMe,
+            false);
+        return payLoadResult.Succeeded;
+        */
         var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
             payLoad.Password, 
             payLoad.RememberMe,
