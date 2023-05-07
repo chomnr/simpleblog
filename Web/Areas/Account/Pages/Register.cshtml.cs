@@ -50,17 +50,32 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
     {
         if (!ModelState.IsValid)
         {
-            returnUrl ??= Url.Content("~/");
-            ErrorMessage = "Data Validation Failed";
-            Console.WriteLine("Bad Model...");
             return Page();
         }
-
         if (ModelState.IsValid)
         {
-            var test = await _mediator.Send(Input);
-            Console.WriteLine(test);
-            Console.WriteLine("testing");
+            var result = await _mediator.Send(Input);
+            if (result.Succeeded)
+            {
+                Response.Redirect("/account/registration/successful");
+                Console.WriteLine("Successful");
+                // make a create account page that renders after register successful.
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    if (error.Code.ToLower().Contains("username"))
+                    {
+                        ModelState.AddModelError("Input.Username", error.Description);
+                    }
+                    if (error.Code.ToLower().Contains("email"))
+                    {
+                        ModelState.AddModelError("Input.Email", error.Description);
+                    }
+                }
+                return Page();
+            }
         }
         return Page();
     }

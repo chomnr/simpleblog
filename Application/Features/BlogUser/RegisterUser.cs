@@ -27,7 +27,7 @@ public class RegisterUser : FeatureController
 
 public class RegisterCommand : IRequest<IdentityResult>
 {
-    [Required] 
+    [Required]
     public string Username { get; set; }
     [Required]
     public string Email { get; set; }
