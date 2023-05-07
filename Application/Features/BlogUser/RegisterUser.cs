@@ -4,6 +4,7 @@ using Application.Common.Interface;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Features.BlogUser;
 
@@ -39,15 +40,42 @@ public class RegisterCommand : IRequest<IdentityResult>
 internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCommand, IdentityResult>
 {
     private readonly ICustomIdentityService _customIdentityService;
+    private readonly IEmailSenderService _emailSender;
+    private readonly IConfiguration _configuration;
+    private readonly UserManager<Entities.BlogUser> _userManager;
+    private readonly IWebHelperService _webHelperService;
 
-    public RegisterAccountCommandHandler(ICustomIdentityService customIdentityService)
+    public RegisterAccountCommandHandler(
+        ICustomIdentityService customIdentityService, 
+        IEmailSenderService emailSender,
+        IConfiguration configuration,
+        UserManager<Entities.BlogUser> userManager,
+        IWebHelperService webHelperService)
     {
         _customIdentityService = customIdentityService;
+        _emailSender = emailSender;
+        _configuration = configuration;
+        _userManager = userManager;
+        _webHelperService = webHelperService;
     }
 
     public async Task<IdentityResult> Handle(RegisterCommand payLoad, CancellationToken cancellationToken)
     {
-        return await _customIdentityService.CustomCreateAsync(payLoad);
+        var user = new Entities.BlogUser { UserName = payLoad.Username, Email = payLoad.Email };
+        var config = _configuration.GetSection("Authentication").GetSection("Email");
+        var task = await _customIdentityService.CustomCreateAsync(payLoad, user);
+        if (task.Succeeded)
+        {
+            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var basePath = _webHelperService.GetBaseUrl();
+            var confirmPath = $"/auth/confirm-email" +
+                              $"?userId={Uri.EscapeDataString(user.Id)}" +
+                              $"&verifyToken={Uri.EscapeDataString(emailToken)}";
+            var formatHtml = $"<a href={basePath + confirmPath}>Confirm Account</a>";
+            await _emailSender.SendEmailAsync( payLoad.Email, config["EmailConfirmationSubject"], formatHtml);
+            return task;
+        }
+        return task;
     }
     public class RegisterUserEvent : DomainEvent
     {
