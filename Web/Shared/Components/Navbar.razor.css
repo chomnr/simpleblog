@@ -18,7 +18,7 @@
 }
 
 .navbar nav.font-default { font-family: inherit; font-size: 32px; }
-.navbar nav.bg-white { background: var(--white-default); }
+.navbar nav.bg-white { background: var(--blue-lighter); }
 
 .navbar nav .brand-group {
     display: flex;
