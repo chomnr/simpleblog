@@ -23,16 +23,16 @@ public class ConfirmAccountQuery : IRequest<string>
 
 public class ConfirmAccountQueryHandler : IRequestHandler<ConfirmAccountQuery, string>
 {
-    private readonly UserManager<Entities.BlogUser> _accountManager;
+    private readonly UserManager<Entities.BlogUser> _userManager;
 
-    public ConfirmAccountQueryHandler(UserManager<Entities.BlogUser> accountManager)
+    public ConfirmAccountQueryHandler(UserManager<Entities.BlogUser> userManager)
     {
-        _accountManager = accountManager;
+        _userManager = userManager;
     }
 
     public async Task<string> Handle(ConfirmAccountQuery payLoad, CancellationToken cancellationToken)
     {
-        var account = await _accountManager.FindByIdAsync(payLoad.UserId);
+        var account = await _userManager.FindByIdAsync(payLoad.UserId);
         //todo rewrite emailconfirmation... 
         if (account != null)
         {
@@ -40,12 +40,11 @@ public class ConfirmAccountQueryHandler : IRequestHandler<ConfirmAccountQuery, s
             {
                 return "Email is already Confirmed..."; /* Email is already Confirmed redirect or add fancy html &css*/
             }
-            
-            var payLoadResult = await _accountManager.ConfirmEmailAsync(account, payLoad.VerifyToken ?? "");
+
+            var payLoadResult = await _userManager.ConfirmEmailAsync(account, payLoad.VerifyToken ?? "");
             var payLoadSuccess = payLoadResult.Succeeded;
             if (payLoadSuccess)
             {
-                account.Done = true;
                 return "Verified Account"; // some fancy html & css load here.
             }
             else
