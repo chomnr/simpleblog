@@ -38,7 +38,6 @@ public class LoginCommand : IRequest<SignInResult>
 
 internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, SignInResult>
 {
-    //private readonly SignInManager<Entities.BlogUser> ;
     private readonly ICustomSignInService _customSignIn;
     
     public LoginAccountCommandHandler(ICustomSignInService customSignIn)
@@ -61,29 +60,3 @@ internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand,
         public Entities.BlogUser Account { get; }
     }
 }
-
-/*
-      //identity_SignInWithEmailOrUsername
-      if (Utilities.isValidEmail(payLoad.Login, false))
-      {
-          var user = await _userManager.FindByEmailAsync(payLoad.Login);
-          if (user != null)
-          {
-              var payloadResult = await _signInManager.PasswordSignInAsync(user.UserName,
-                  payLoad.Password,
-                  payLoad.RememberMe,
-                  false);
-              return payloadResult.Succeeded;
-          }
-          else
-          {
-              
-          }
-      }
-      // Login by Username
-      var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
-          payLoad.Password, 
-          payLoad.RememberMe,
-          false);
-      return payLoadResult.Succeeded;
-      */
