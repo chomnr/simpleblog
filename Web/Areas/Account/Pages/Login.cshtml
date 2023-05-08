@@ -21,6 +21,10 @@
             align-items: center" method="post">
         <h3>Welcome Back</h3>
         <span class="subtitle">Enter your credentials to access your account.</span>
+        <span asp-validation-for="Input.Login" style="font-size: 0.6em;"></span>
+        <span asp-validation-for="Input.Password" style="font-size: 0.6em;"></span>
+        <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
+        
         <div class="form-spacer"></div>
         <div class="custom-form-group">
             <i class="fa-solid fa-user custom-input-icon" style="color: var(--blue-light)"></i>
