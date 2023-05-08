@@ -87,34 +87,3 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
         public Entities.BlogUser Account { get; }
     }
 }
-
-/*
-        if (!Utilities.isValidEmail(payLoad.Email, true))
-        {
-            // Probably redundant because of the [EmailAddress] annotation on Email Field.
-            // i dont trust the annotation.
-            //write exceptionhandler for the errors
-            return "The email is invalid."; 
-        }
-
-        if (payLoad.Password != payLoad.ConfirmPassword)
-        {
-            return "The passwords do not match.";
-        }
-        
-        var newUser = new Entities.BlogUser
-        {
-            UserName = payLoad.Username,
-            Email = payLoad.Email
-        };
-        
-        var payLoadResult = await _userManager.CreateAsync(newUser, payLoad.Password);
-        if (payLoadResult.Succeeded)
-        {
-            return "Account successfully created.";
-        }
-        else
-        {
-            return payLoadResult.Errors.ToString() ?? "Something went wrong.";
-        }
-        */
