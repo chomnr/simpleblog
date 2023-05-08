@@ -19,7 +19,7 @@
             background: var(--white);
             display: flex; 
             align-items: center" method="post">
-        <h3>Welcome Back</h3>
+        <h3>Welcome Back.</h3>
         <span class="subtitle">Enter your credentials to access your account.</span>
         <span asp-validation-for="Input.Login" style="font-size: 0.6em;"></span>
         <span asp-validation-for="Input.Password" style="font-size: 0.6em;"></span>
@@ -45,7 +45,7 @@
         </div>
     </form>
 
-    <p style="padding-top: 3rem;font-size: 0.8em;">Forgot your password? <a href="/account/reset_password" style="color: var(--blue-light)">Reset Password</a></p>
+    <p style="padding-top: 3rem;font-size: 0.8em;">Forgot your password? <a href="/account/recovery" style="color: var(--blue-light)">Reset Password</a></p>
 </section>
 
 @section Scripts {
