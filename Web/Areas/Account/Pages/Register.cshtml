@@ -1,7 +1,6 @@
 ﻿@page
 @using Web.Areas.Account.Pages;
 @using Application.Entities;
-@using Microsoft.AspNetCore.Mvc.ModelBinding;
 @model MediatorRegisterModel<BlogUser>;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
@@ -19,7 +18,7 @@
             background: var(--white);
             display: flex; 
             align-items: center" method="post">
-        <h3>Create an Account</h3>
+        <h3>Create an Account.</h3>
         <span class="subtitle">Enter credentials to create your account.</span>
         <span asp-validation-for="Input.Username" style="font-size: 0.6em;"></span>
         <span asp-validation-for="Input.Email" style="font-size: 0.6em;"></span>
@@ -43,7 +42,7 @@
         <div class="custom-form-group col">
             <i id="dynamic_icon_label" class="fa-solid fa-x custom-input-icon" style="color: var(--blue-light)"></i>
             <input asp-for="Input.ConfirmPassword" onkeyup="checkForMatch()" class="custom-input icon-supp" placeholder="Confirm Password" type="password"/>
-        </div>
+        </div>  
         <div class="custom-form-group">
             <button class="custom-button default" id="loginSubmit"  type="submit">Register</button>
         </div>
@@ -56,7 +55,6 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
- 
 <script>
     var password = document.getElementById("Input_Password");
     var confirmpassword = document.getElementById("Input_ConfirmPassword")
