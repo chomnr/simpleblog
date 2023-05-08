@@ -28,11 +28,11 @@
         <div class="form-spacer"></div>
         <div class="custom-form-group">
             <i class="fa-solid fa-user custom-input-icon" style="color: var(--blue-light)"></i>
-            <input asp-for="Input.Login" name="Login" class="custom-input icon-supp" placeholder="Username or Email" type="text"/>
+            <input asp-for="Input.Login" class="custom-input icon-supp" placeholder="Username or Email" type="text"/>
         </div>
         <div class="custom-form-group">
             <i class="fa-solid fa-lock custom-input-icon" style="color: var(--blue-light)"></i>
-            <input asp-for="Input.Password" name="Password" class="custom-input icon-supp" placeholder="Password" type="password"/>
+            <input asp-for="Input.Password" class="custom-input icon-supp" placeholder="Password" type="password"/>
         </div>
         <div class="custom-form-group row"; style="margin-top: 6px; margin-bottom: 6px;">
             <div style="position: absolute;left: 0;display:flex;align-items: center">
@@ -47,3 +47,7 @@
 
     <p style="padding-top: 3rem;font-size: 0.8em;">Forgot your password? <a href="/account/reset_password" style="color: var(--blue-light)">Reset Password</a></p>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
