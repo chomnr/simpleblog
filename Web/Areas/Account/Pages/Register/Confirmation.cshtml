@@ -1,0 +1,26 @@
+﻿@page
+@model Web.Areas.Account.Pages.Register.RegisterConfirmationModel<Application.Entities.BlogUser>
+
+@{
+    Layout = "_Layout";
+}
+<section class="custom-section" style="
+            justify-content: center;
+            height: 100vh;
+            align-items: center;
+            flex-direction: column">
+    <div class="custom-form" style="  background: var(--white);
+                                  display: flex; 
+                                  align-items: center;">
+        <i class="fa-sharp fa-regular fa-circle-check" style="font-size: 4em;color: #6dcf9e"></i>
+        <span class="subtitle" style="margin-top: 10px;">Your account has been created successfully! Confirmation email has been sent</span>
+        <div class="form-spacer"></div>
+        <button class="custom-button" style="background: #6dcf9e; 
+                                        color: white;
+                                        border-radius: 10px;
+                                        height: 45px;
+                                        font-size: 1em;">
+            GET STARTED <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</section>
