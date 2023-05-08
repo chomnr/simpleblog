@@ -12,6 +12,8 @@ public interface ICustomIdentityService
     // Update
     
     Task<IdentityResult> CustomCreateAsync(RegisterCommand command, BlogUser user);
+    
+    Task<IdentityResult> CustomResetPassword(ForgotPasswordCommand command);
     //CreateCustomAsync
     //Task<BlogUser?> SignInWithEmailOrUsername();
     //Task<BlogUser> RegisterBlogUser();
