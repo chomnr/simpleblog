@@ -39,7 +39,7 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
         _mediator = mediator;
     }
 
-    public DbSet<BlogUser> BlogUsers => Set<BlogUser>();
+    //public DbSet<BlogUser> BlogUsers => Set<BlogUser>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
