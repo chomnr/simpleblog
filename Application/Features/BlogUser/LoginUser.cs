@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Common;
+using Application.Common.Interface;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,69 +19,36 @@ public class LoginUser : FeatureController
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult<bool>> Login(LoginCommand command)
+    public async Task<ActionResult<SignInResult>> Login(LoginCommand command)
     {
         return await _mediator.Send(command);
     }
 }
 
-public class LoginCommand : IRequest<bool>
+public class LoginCommand : IRequest<SignInResult>
 {   
     [Required]
-    [Display(Name = "Username or Email")]
     public string Login { get; set; }
     [Required]
     [DataType(DataType.Password)]
-    [Display(Name = "Password")]
     public string Password { get; set; }
     [Required]
     public bool RememberMe { get; set; }
 }
 
-internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, bool>
+internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, SignInResult>
 {
-    private readonly SignInManager<Entities.BlogUser> _signInManager;
-    private readonly UserManager<Entities.BlogUser> _userManager;
+    //private readonly SignInManager<Entities.BlogUser> ;
+    private readonly ICustomSignInService _customSignIn;
     
-    public LoginAccountCommandHandler(SignInManager<Entities.BlogUser> signManager,
-        UserManager<Entities.BlogUser> userManager)
+    public LoginAccountCommandHandler(ICustomSignInService customSignIn)
     {
-        _signInManager = signManager;
-        _userManager = userManager;
+        _customSignIn = customSignIn;
     }
     
-    public async Task<bool> Handle(LoginCommand payLoad, CancellationToken cancellationToken)
+    public async Task<SignInResult> Handle(LoginCommand payLoad, CancellationToken cancellationToken)
     {
-        /*
-        //identity_SignInWithEmailOrUsername
-        if (Utilities.isValidEmail(payLoad.Login, false))
-        {
-            var user = await _userManager.FindByEmailAsync(payLoad.Login);
-            if (user != null)
-            {
-                var payloadResult = await _signInManager.PasswordSignInAsync(user.UserName,
-                    payLoad.Password,
-                    payLoad.RememberMe,
-                    false);
-                return payloadResult.Succeeded;
-            }
-            else
-            {
-                
-            }
-        }
-        // Login by Username
-        var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
-            payLoad.Password, 
-            payLoad.RememberMe,
-            false);
-        return payLoadResult.Succeeded;
-        */
-        var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
-            payLoad.Password, 
-            payLoad.RememberMe,
-            false);
-        return payLoadResult.Succeeded;
+        return await _customSignIn.LoginWithEmailOrUsername(payLoad);
     }
     
     public class LoginUserEvent : DomainEvent
@@ -93,3 +61,29 @@ internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand,
         public Entities.BlogUser Account { get; }
     }
 }
+
+/*
+      //identity_SignInWithEmailOrUsername
+      if (Utilities.isValidEmail(payLoad.Login, false))
+      {
+          var user = await _userManager.FindByEmailAsync(payLoad.Login);
+          if (user != null)
+          {
+              var payloadResult = await _signInManager.PasswordSignInAsync(user.UserName,
+                  payLoad.Password,
+                  payLoad.RememberMe,
+                  false);
+              return payloadResult.Succeeded;
+          }
+          else
+          {
+              
+          }
+      }
+      // Login by Username
+      var payLoadResult =  await _signInManager.PasswordSignInAsync(payLoad.Login, 
+          payLoad.Password, 
+          payLoad.RememberMe,
+          false);
+      return payLoadResult.Succeeded;
+      */
