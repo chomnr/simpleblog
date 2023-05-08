@@ -24,6 +24,7 @@ public class Startup
     private IConfiguration Configuration { get; set; }
     public IServiceCollection ConfigureServices(IServiceCollection services)
     {
+        services.AddRouting(options => { options.LowercaseUrls = true; });
         services.AddMvc();
         services.AddMediatR(cfg =>
         {

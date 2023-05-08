@@ -40,6 +40,7 @@
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\Login\Login.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\LogOut.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Shared\_LoginPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Account\Pages\Registration\Successful.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
