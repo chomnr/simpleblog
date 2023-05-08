@@ -2,7 +2,7 @@
 
 namespace Web.Areas.Account.Pages;
 
-public class Recovery : PageModel
+public class ForgotPassword : PageModel
 {
     public void OnGet()
     {
