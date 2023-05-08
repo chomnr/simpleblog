@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Entities;
 using Application.Features.BlogUser;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -17,7 +19,7 @@ public abstract class MediatorRegisterModel : PageModel
     
     [TempData]
     public string? ErrorMessage { get; set; }
-    
+
     public virtual Task OnGetAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
     
     public virtual Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
@@ -26,10 +28,12 @@ public abstract class MediatorRegisterModel : PageModel
 internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where TUser : class
 {
     private readonly IMediator _mediator;
+    private readonly UserManager<BlogUser> _userManager;
 
-    public MediatorRegisterModel(IMediator mediator)
+    public MediatorRegisterModel(IMediator mediator, UserManager<BlogUser> userManager)
     {
         _mediator = mediator;
+        _userManager = userManager;
     }
     
     public override async Task OnGetAsync(string? returnUrl = null)
@@ -45,20 +49,21 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
         
         ReturnUrl = returnUrl;
     }
-    
+    //redirect
+    //Response.Redirect("/account/registration/successful");
+    // make a create account page that renders after register successful.
     public override async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         if (!ModelState.IsValid)
         {
-            return Page();
+            return BadRequest();
         }
         if (ModelState.IsValid)
         {
             var result = await _mediator.Send(Input);
             if (result.Succeeded)
             {
-                Response.Redirect("/account/registration/successful");
-                // make a create account page that renders after register successful.
+                return RedirectToPage("register/confirmation", new { email = Input.Email, returnUrl = returnUrl });
             }
             else
             {
