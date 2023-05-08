@@ -58,7 +58,6 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
             if (result.Succeeded)
             {
                 Response.Redirect("/account/registration/successful");
-                Console.WriteLine("Successful");
                 // make a create account page that renders after register successful.
             }
             else
