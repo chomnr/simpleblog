@@ -1,0 +1,37 @@
+﻿@page
+@model Web.Areas.Account.Pages.Recovery
+@using Application.Entities;
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "_Layout";
+}
+
+@Html.AntiForgeryToken();
+<section class="custom-section" style="
+            justify-content: center;
+            height: 100vh;
+            align-items: center;
+            flex-direction: column">
+    <div class="lds-dual-ring" style="display: none;"><div></div></div>
+    <form id="resetPasswordForm" class="custom-form"  style="
+            background: var(--white);
+            display: flex; 
+            align-items: center" method="post">
+        <h3>Forgot Password?</h3>
+        <span class="subtitle">Enter your email to reset your password.</span>
+        <div class="form-spacer"></div>
+        <div class="custom-form-group">
+            <i class="fa-solid fa-envelope custom-input-icon" style="color: var(--blue-light)"></i>
+            <input class="custom-input icon-supp" placeholder="Email" type="email"/>
+        </div>
+        <div class="custom-form-group">
+            <button class="custom-button default" id="loginSubmit" type="submit">Reset Password</button>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
