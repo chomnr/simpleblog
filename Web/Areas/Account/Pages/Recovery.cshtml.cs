@@ -2,7 +2,7 @@
 
 namespace Web.Areas.Account.Pages;
 
-public class Successful : PageModel
+public class Recovery : PageModel
 {
     public void OnGet()
     {
