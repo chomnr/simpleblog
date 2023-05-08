@@ -11,7 +11,7 @@ public interface ICustomIdentityService
     // Delete
     // Update
     
-    Task<IdentityResult> CustomCreateAsync(RegisterCommand payLoad, BlogUser user);
+    Task<IdentityResult> CustomCreateAsync(RegisterCommand command, BlogUser user);
     //CreateCustomAsync
     //Task<BlogUser?> SignInWithEmailOrUsername();
     //Task<BlogUser> RegisterBlogUser();
