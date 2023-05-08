@@ -18,6 +18,7 @@ services.AddDefaultIdentity<BlogUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.SignIn.RequireConfirmedEmail = false;
+        options.User.RequireUniqueEmail = true;
     } )
     .AddEntityFrameworkStores<DatabaseDbContext>();
 
@@ -26,7 +27,6 @@ services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
-
 
 /*
 services.AddIdentity<BlogUser, IdentityRole>(options => 
