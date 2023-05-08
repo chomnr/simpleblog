@@ -18,20 +18,20 @@ public class CustomIdentityService : ICustomIdentityService
     }
     
     //todo: add send emailservice...
-    public async Task<IdentityResult> CustomCreateAsync(RegisterCommand payLoad, BlogUser user)
+    public async Task<IdentityResult> CustomCreateAsync(RegisterCommand command, BlogUser user)
     {
         var error = new CustomError();
-        var email = payLoad.Email;
+        var email = command.Email;
         
         if (!Util.IsValidEmail(email, true)) 
         {
             return IdentityResult.Failed(error.InvalidEmail());
         }
         
-        if (!string.Equals(payLoad.Password, payLoad.ConfirmPassword)) 
+        if (!string.Equals(command.Password, command.ConfirmPassword)) 
         {
             return IdentityResult.Failed(error.PasswordDoesNotMatch());
         }
-        return await _userManager.CreateAsync(user, payLoad.Password);
+        return await _userManager.CreateAsync(user, command.Password);
     }
 }
