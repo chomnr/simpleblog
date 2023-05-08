@@ -52,7 +52,7 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
         if (ModelState.IsValid)
         {
             var result = await _mediator.Send(Input);
-            if (result)
+            if (result.Succeeded)
             {
                 Response.Redirect("/");
             }
