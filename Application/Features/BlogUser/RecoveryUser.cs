@@ -55,11 +55,12 @@ internal sealed class RecoveryUserCommandHandler : IRequestHandler<RecoveryComma
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var email = payLoad.Email; 
         
+        // This is for Reset Password....
         if (!Utilities.IsValidEmail(email, false))
         {
             return IdentityResult.Failed(error.InvalidEmail());
         }
-
+    
         var user = await _userManager.FindByEmailAsync(payLoad.Email);
         if (user != null)
         {
@@ -71,6 +72,8 @@ internal sealed class RecoveryUserCommandHandler : IRequestHandler<RecoveryComma
             var formatHtml = $"<a href={basePath + confirmPath}>Reset Password</a>";
             await _emailSender.SendEmailAsync(payLoad.Email, config["EmailResetPasswordSubject"], formatHtml);
         }
+        // End heres.
+        
         return IdentityResult.Failed(error.DefaultError());
     }
     
