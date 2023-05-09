@@ -34,10 +34,4 @@ public class CustomIdentityService : ICustomIdentityService
         }
         return await _userManager.CreateAsync(user, command.Password);
     }
-
-    public async Task<IdentityResult> CustomResetPassword(ForgotPasswordCommand command)
-    {
-        var user = new BlogUser { Id = command.UserId };
-        return await _userManager.ResetPasswordAsync(user, command.ResetToken, command.NewPassword);
-    }
 }
