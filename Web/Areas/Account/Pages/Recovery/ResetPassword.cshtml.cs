@@ -66,6 +66,7 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
     {
         if (!ModelState.IsValid)
         {
+            IsSuccessful = false;
             return Page();
         }
         
@@ -76,7 +77,6 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
             if (result.Succeeded)
             {
                 IsSuccessful = true;
-                Console.Write("Password Reset!");
             }
             else
             {
@@ -87,6 +87,7 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
                         ModelState.AddModelError("Input.ResetToken", error.Description);
                     }
                 }
+                IsSuccessful = false;
             }
         }
         return Page();
