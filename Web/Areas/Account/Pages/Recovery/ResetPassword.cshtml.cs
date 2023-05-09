@@ -16,7 +16,7 @@ public class MediatorResetPassword : PageModel
     
     public string UserId { get; set; }
     
-    public string Token { get; set; }
+    public string ResetToken { get; set; }
     
     [TempData]
     public string? ErrorMessage { get; set; }
@@ -35,9 +35,9 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
         _mediator = mediator;
     }
     
-    public override async Task OnGetAsync(string userId, string token, string? returnUrl = null)
+    public override async Task OnGetAsync(string userId, string resetToken, string? returnUrl = null)
     {
-        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(resetToken))
         {
             Response.Redirect("/");
         }
@@ -45,7 +45,7 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
         //check if token is valid and check if user is valid. 
    
         UserId = userId;
-        Token = token;
+        ResetToken = resetToken;
         ReturnUrl = returnUrl;
     }
 
