@@ -63,7 +63,7 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
             var result = await _mediator.Send(Input);
             if (result.Succeeded)
             {
-                return RedirectToPage("register/confirmation", new { email = Input.Email, returnUrl = returnUrl });
+                return RedirectToPage("/register/confirmation", new { email = Input.Email, returnUrl = returnUrl });
             }
             else
             {
