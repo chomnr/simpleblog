@@ -2,7 +2,6 @@
 using Application.Features.BlogUser;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -58,8 +57,8 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
             }
             else
             {
-                // need better solution to prevent refreshes from resubmitting form...
-                Response.Redirect("/account/login");
+                ModelState.AddModelError("Input.Login", "Either the username or password is wrong.");
+                return Page();
             }
         }
         return Page();
