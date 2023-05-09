@@ -51,11 +51,8 @@ internal sealed class MediatorRecoveryModel<TUser> : MediatorRecoveryModel where
     {
         if (ModelState.IsValid)
         {
-            var result = await _mediator.Send(Input);
-            if (result.Succeeded)
-            {
-               // reset
-            }
+            await _mediator.Send(Input);
+            return RedirectToPage("recovery/confirmation");
             // we dont want them to know if the email exists or not so send success message regardless ok...
         }
         return Page();
