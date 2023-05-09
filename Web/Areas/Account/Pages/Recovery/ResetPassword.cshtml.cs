@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Entities;
 using Application.Features.BlogUser.Recovery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace Web.Areas.Account.Pages.Recovery;
@@ -17,6 +19,8 @@ public class MediatorResetPassword : PageModel
     public string UserId { get; set; }
     
     public string ResetToken { get; set; }
+
+    public bool IsSuccessful { get; set; } = false;
     
     [TempData]
     public string? ErrorMessage { get; set; }
@@ -29,10 +33,12 @@ public class MediatorResetPassword : PageModel
 internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where TUser : class
 {
     private readonly IMediator _mediator;
+    private readonly UserManager<BlogUser> _userManager;
 
-    public MediatorResetPassword(IMediator mediator)
+    public MediatorResetPassword(IMediator mediator, UserManager<BlogUser> userManager)
     {
         _mediator = mediator;
+        _userManager = userManager;
     }
     
     public override async Task OnGetAsync(string userId, string resetToken, string? returnUrl = null)
@@ -40,12 +46,22 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(resetToken))
         {
             Response.Redirect("/");
+            return;
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            Console.Write("USER NULL");
+            Response.Redirect("/");
+            return;
         }
         
-        //check if token is valid and check if user is valid. 
-   
-        UserId = userId;
-        ResetToken = resetToken;
+        Input = new PasswordResetCommand
+        {
+            UserId = userId,
+            ResetToken = resetToken
+        };
         ReturnUrl = returnUrl;
     }
 
@@ -53,11 +69,28 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return Page();
         }
+        
         if (ModelState.IsValid)
         {
-            // DO MEDIATOR AND RETURN STATUS IF IT'S SUCCESS OR NOT OK...
+            var result = await _mediator.Send(Input);
+
+            if (result.Succeeded)
+            {
+                IsSuccessful = true;
+                Console.Write("Password Reset!");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    if (error.Code.ToLower().Contains("token"))
+                    {
+                        ModelState.AddModelError("Input.ResetToken", error.Description);
+                    }
+                }
+            }
         }
         return Page();
     }
