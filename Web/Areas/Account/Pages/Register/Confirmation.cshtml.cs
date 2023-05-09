@@ -32,7 +32,7 @@ internal sealed class RegisterConfirmationModel<TUser> : RegisterConfirmationMod
         {
             Response.Redirect("/");
         }
-        if (!Utilities.IsValidEmail(email = "", false))
+        if ( email != null && !Utilities.IsValidEmail(email, false))
         {
             Response.Redirect("/");
         }
