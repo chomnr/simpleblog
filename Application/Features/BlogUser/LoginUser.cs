@@ -32,8 +32,7 @@ public class LoginCommand : IRequest<SignInResult>
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; }
-    [Required]
-    public bool RememberMe { get; set; }
+    public bool RememberMe { get; set; } = false;
 }
 
 internal sealed class LoginAccountCommandHandler : IRequestHandler<LoginCommand, SignInResult>
