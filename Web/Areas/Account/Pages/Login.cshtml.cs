@@ -58,7 +58,8 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
             }
             else
             {
-                // flash cookie maybe...
+                // need better solution to prevent refreshes from resubmitting form...
+                Response.Redirect("/account/login");
             }
         }
         return Page();
