@@ -47,9 +47,8 @@ public class PasswordResetCommandHandler : IRequestHandler<PasswordResetCommand,
 
     public async Task<IdentityResult> Handle(PasswordResetCommand payLoad, CancellationToken cancellationToken)
     {
-        //var user = new Entities.BlogUser { Id = payLoad.UserId };
-        // not necessary to check because the resetpassword does it for us...
         var user = await _userManager.FindByIdAsync(payLoad.UserId);
+        // ResetPassword.cshtml.cs checks for it.
         return await _userManager.ResetPasswordAsync(user, payLoad.ResetToken, payLoad.Password);
     }
     
