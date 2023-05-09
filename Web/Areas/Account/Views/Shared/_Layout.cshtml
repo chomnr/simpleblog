@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Microsoft.AspNetCore.Hosting
+﻿@using Microsoft.AspNetCore.Hosting
 @using Microsoft.AspNetCore.Mvc.ViewEngines
 @inject IWebHostEnvironment Environment
 @inject ICompositeViewEngine Engine
@@ -20,9 +18,7 @@
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
           crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="image/png" href="favicon.png"/>
-    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered"/>
 </head>
-
 <body>
 @RenderBody()
 
