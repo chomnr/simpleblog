@@ -22,9 +22,6 @@ public class MediatorResetPassword : PageModel
 
     public bool IsSuccessful { get; set; } = false;
     
-    [TempData]
-    public string? ErrorMessage { get; set; }
-    
     public virtual Task OnGetAsync(string userId, string token, [StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
     
     public virtual Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
