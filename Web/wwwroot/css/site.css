@@ -241,25 +241,21 @@ article.front-page .content ul.tags li {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-column-gap: 15px;
+    grid-row-gap: 15px;
     grid-template-rows: 1fr;
 }
 
 .sub-articles article {
     max-width: 400px;
-    max-height: 300px;
 }
 
 article.front-page .mini-content {
     display: flex;
     flex-direction: column;
-    position: relative;
-    bottom: 0;
-    margin: 0;
     gap: 13px;
 }
 
 article.front-page .mini-content .author {
-    position: relative;
     font-size: 1em;
     font-weight: bold;
     font-family: var(--font-secondary);
@@ -296,8 +292,6 @@ article.front-page .mini-content ul.tags li {
     .sub-articles {
         display: grid;
         grid-template-columns: 1fr;
-        grid-row-gap: 20px;
-        grid-template-rows: 1fr;
     }
 
     .sub-articles article {
