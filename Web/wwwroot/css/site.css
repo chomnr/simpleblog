@@ -37,9 +37,9 @@ h4 { font-size: 1rem; }
 
 @media only screen and (max-width: 767px) {
     /* phones */
-    h1 { font-size: 3rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1rem; }
+    h1.adjust { font-size: 3rem; }
+    h2.adjust { font-size: 1.5rem; }
+    h3.adjust { font-size: 1rem; }
 }
 
 a { color: inherit; text-decoration: none !important; }
@@ -203,5 +203,52 @@ a { color: inherit; text-decoration: none !important; }
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* Front Page */
+article {
+    
+}
+
+article .title {
+    position: absolute;
+    font-size: 2em;  
+    margin-bottom: 30px;
+    margin-left: 30px;
+}
+article .description {
+    display: flex;
+    position: absolute;
+    font-size: 0.9em;
+    margin-bottom: 30px;
+    margin-left: 30px;
+}
+article .tags {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    gap: 7px;
+}
+
+article .tags span {
+    border: 1px solid white;
+    padding: 2px 5px;
+    border-radius: 7px;
+    font-size: 0.7em;
+    color: white;
+}
+
+@media only screen and (max-width: 767px) {
+    /* phones */
+    article .tags {
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+    article .tags span {
+        font-size: 0.6em;
+        padding: 5px 6px;
     }
 }
