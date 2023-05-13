@@ -177,36 +177,6 @@ a { color: inherit; text-decoration: none !important; }
     color: var(--white-lighter)
 }
 
-
-/* Loader */
-.lds-dual-ring {
-    display: inline-block;
-    width: 80px;
-    height: 80px;
-    position: absolute;
-    top: 220px;
-}
-.lds-dual-ring:after {
-    content: " ";
-    display: block;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border-radius: 50%;
-    border: 6px solid var(--blue-default);
-    border-color: var(--blue-default) transparent var(--blue-default) transparent;
-    animation: lds-dual-ring 1.2s linear infinite;
-}
-@keyframes lds-dual-ring {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* Front Page */
 article.front-page {
     position: relative;
 }
@@ -216,8 +186,8 @@ article.front-page .content {
     flex-direction: column;
     position: absolute; 
     bottom: 0; 
-    margin-left: 3%; 
-    margin-bottom: 3%;
+    margin-left: 30px; 
+    margin-bottom: 30px;
     gap: 12px
 }
 
@@ -249,35 +219,36 @@ article.front-page .content ul.tags li {
     padding: 3px 10px;
 }
 
-
-/*
-article .title {
-    position: absolute;
-    font-size: 2em;  
-    margin-bottom: 30px;
-    margin-left: 30px;
-}
-article .description {
-    display: flex;
-    position: absolute;
-    font-size: 0.9em;
-    margin-bottom: 30px;
-    margin-left: 30px;
-}
-article .tags {
-    display: flex;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 30px;
-    margin-left: 30px;
-    gap: 7px;
+@media only screen and (max-width: 767px) {
+    article.front-page .content {
+        margin-left: 15px;
+        margin-bottom: 20px;
+    }
 }
 
-article .tags span {
-    border: 1px solid white;
-    padding: 2px 5px;
-    border-radius: 7px;
-    font-size: 0.7em;
-    color: white;
+.lds-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 220px;
 }
- */
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid var(--blue-default);
+    border-color: var(--blue-default) transparent var(--blue-default) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
