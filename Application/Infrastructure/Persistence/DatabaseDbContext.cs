@@ -88,6 +88,8 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
             var adminAccount = new BlogUser
             {
                 Id = "1",
+                FirstName = "admin",
+                LastName = "admin",
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 Email = "admin@nowhere.land",

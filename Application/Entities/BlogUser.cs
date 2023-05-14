@@ -5,6 +5,11 @@ namespace Application.Entities;
 
 public class BlogUser : IdentityUser
 {
+    public string? Avatar { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int NameDisplayType { get; set; } = 1;
+    
     private bool _done;
     public bool Done
     {
