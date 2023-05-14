@@ -23,6 +23,11 @@ public class CustomIdentityService : ICustomIdentityService
         var error = new CustomError();
         var email = command.Email;
         
+        if (!Utilities.IsLettersOnly(command.FirstName) || !Utilities.IsLettersOnly(command.LastName))
+        {
+            return IdentityResult.Failed(error.BadNameConstraints());
+        }
+        
         if (!Util.IsValidEmail(email, true)) 
         {
             return IdentityResult.Failed(error.InvalidEmail());
