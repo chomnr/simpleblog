@@ -45,6 +45,7 @@ public class Startup
         services.AddScoped<ICustomSignInService, CustomSignInService>();
         services.AddScoped<IEmailSenderService, EmailSenderService>();
         services.AddScoped<IWebHelperService, WebHelperService>();
+        services.AddScoped<IPostService, PostService>();
         services.AddScoped<SignInManager<BlogUser>>();
         return services;
     }
