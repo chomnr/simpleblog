@@ -4,13 +4,14 @@ namespace Application.Entities;
 
 public class Post
 {
-    public string PostId { get; set; }
-    public string UserId { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string? UserId { get; set; }
     public string Title { get; set; }
     public string NormalizedTitle { get; set; }
     public string Body { get; set; }
-    public string Category { get; set; }
-    public List<string> Tags { get; set; }
+    public string? Category { get; set; }
+    public string DateCreated { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+    public List<string>? Tags { get; set; }
     private bool _done;
     
     public bool Done
