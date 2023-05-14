@@ -1,10 +1,14 @@
-﻿using Application.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Application.Common;
 
 namespace Application.Entities;
 
 public class Post
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public string Id { get; set; }
     public string? UserId { get; set; }
     public string Title { get; set; }
     public string NormalizedTitle { get; set; }
