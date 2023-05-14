@@ -29,14 +29,19 @@ public class RegisterUser : FeatureController
 public class RegisterCommand : IRequest<IdentityResult>
 {
     [Required]
+    [RegularExpression("^[a-zA-Z]+$")]
     public string FirstName { get; set; }
     [Required] 
+    [RegularExpression("^[a-zA-Z]+$")]
     public string LastName { get; set; }
     [Required]
+    [RegularExpression(@"^[a-zA-Z0-9_]+$")]
     public string Username { get; set; }
     [Required]
+    [EmailAddress]
     public string Email { get; set; }
     [Required]
+    [RegularExpression(@"^(?=.*[A-Z])(?=.*\W)(?=.*\d)[A-Za-z\d\W]{7,64}$")]
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
 }
@@ -71,6 +76,7 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
             UserName = payLoad.Username, 
             Email = payLoad.Email
         };
+        
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
         if (result.Succeeded)

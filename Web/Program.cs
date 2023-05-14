@@ -19,6 +19,11 @@ services.AddDefaultIdentity<BlogUser>(options =>
         options.SignIn.RequireConfirmedAccount = false;
         options.SignIn.RequireConfirmedEmail = false;
         options.User.RequireUniqueEmail = true;
+        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequiredLength = 7;
+        options.Password.RequireDigit = true;
     } )
     .AddEntityFrameworkStores<DatabaseDbContext>();
 
