@@ -41,6 +41,7 @@ public class RegisterCommand : IRequest<IdentityResult>
     [EmailAddress]
     public string Email { get; set; }
     [Required]
+    // Refer to Web/APP for password constraints.
     [RegularExpression(@"^(?=.*[A-Z])(?=.*\W)(?=.*\d)[A-Za-z\d\W]{7,64}$")]
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
