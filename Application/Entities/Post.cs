@@ -9,6 +9,7 @@ public class Post
     public string Title { get; set; }
     public string NormalizedTitle { get; set; }
     public string Body { get; set; }
+    public string Category { get; set; }
     public List<string> Tags { get; set; }
     private bool _done;
     
