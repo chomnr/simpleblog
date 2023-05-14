@@ -29,6 +29,10 @@ public class RegisterUser : FeatureController
 public class RegisterCommand : IRequest<IdentityResult>
 {
     [Required]
+    public string FirstName { get; set; }
+    [Required] 
+    public string LastName { get; set; }
+    [Required]
     public string Username { get; set; }
     [Required]
     public string Email { get; set; }
@@ -61,11 +65,17 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
 
     public async Task<IdentityResult> Handle(RegisterCommand payLoad, CancellationToken cancellationToken)
     {
-        var user = new Entities.BlogUser { UserName = payLoad.Username, Email = payLoad.Email };
+        var user = new Entities.BlogUser { 
+            FirstName = payLoad.FirstName, 
+            LastName = payLoad.LastName, 
+            UserName = payLoad.Username, 
+            Email = payLoad.Email
+        };
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
         if (result.Succeeded)
         {
+            user.Done = true;
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var basePath = _webHelperService.GetBaseUrl();
             var confirmPath = $"/auth/confirm-email" +
