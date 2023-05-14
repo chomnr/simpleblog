@@ -55,4 +55,8 @@
       <None Remove="Areas\Identity\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Areas\Post\Views\Shared\_Layout.cshtml" />
+    </ItemGroup>
+
 </Project>
