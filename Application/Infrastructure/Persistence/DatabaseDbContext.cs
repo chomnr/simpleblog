@@ -38,9 +38,8 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
         _configuration = configuration;
         _mediator = mediator;
     }
-
-    //public DbSet<BlogUser> BlogUsers => Set<BlogUser>();
-
+    
+    public DbSet<Post> Posts => Set<Post>();
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
         var result = await base.SaveChangesAsync(cancellationToken);
@@ -58,21 +57,22 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
 
             var testPost = new Post
             {
-                PostId = "1",
                 UserId = "1",
+                Category = "Introduction",
                 Title = "First Blog Post",
                 NormalizedTitle = "FIRST BLOG POST",
                 Body = "You've successfully setup SimpleBlog",
-                Tags = new List<string> {"Introduction", "Welcoming", "Cool"}
+                Tags = new List<string> {"Introduction", "Welcoming", "Cool"},
+                Done = true
             };
 
             e.HasData(testPost);
 
-            e.Property(p => p.PostId).HasIdentityOptions(startValue: 1, incrementBy: 1);
+            e.Property(p => p.Id).HasIdentityOptions(startValue: 1, incrementBy: 1);
             
-            e.HasIndex((p => new { p.Title, p.PostId })).HasDatabaseName("PostIndex");
+            e.HasIndex((p => new { p.Title, p.Id })).HasDatabaseName("PostIndex");
 
-            e.HasKey(p => p.PostId);
+            e.HasKey(p => p.Id);
         });
          builder.Entity<BlogUser>(e =>
         {
