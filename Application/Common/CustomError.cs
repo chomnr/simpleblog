@@ -21,4 +21,13 @@ public class CustomError : IdentityErrorDescriber
             Description = "The passwords do not match each other."
         };
     }
+    
+    public IdentityError BadNameConstraints()
+    {
+        return new IdentityError
+        {
+            Code = "WrongConstraints",
+            Description = "Either the first or last name do not follow the constraints."
+        };
+    }
 }

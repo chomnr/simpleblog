@@ -27,4 +27,10 @@ public class Utilities
             return Regex.IsMatch(email, pattern);
         }
     }
+
+    public static bool IsLettersOnly(string input)
+    {
+        var pattern = @"^[a-zA-Z]+$";
+        return Regex.IsMatch(input, pattern);
+    }
 }
