@@ -50,13 +50,35 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
     {
         base.OnModelCreating(builder);
         builder.Ignore<DomainEvent>();
-
+        builder.Entity<PostCategory>(e =>
+        {
+            e.ToTable("post_categories");
+            
+            e.HasData(
+                new PostCategory() { Id = "1", Name = "Introduction"},
+                new PostCategory() { Id = "2", Name = "Programming"}
+            );
+            
+        });
+        builder.Entity<PostTag>(e =>
+        {
+            e.ToTable("post_tags");
+            
+            e.HasData(
+                new PostTag() { Id = "1", Name = "Programming"},
+                new PostTag() { Id = "2", Name = "Time Complexity"},
+                new PostTag() { Id = "3", Name = "C#"},
+                new PostTag() { Id = "4", Name = "Blazor"}
+            );
+            
+        });
         builder.Entity<Post>(e =>
         {
             e.ToTable("posts");
 
             var testPost = new Post
             {
+                Id = "1",
                 UserId = "1",
                 Category = "Introduction",
                 Title = "First Blog Post",
