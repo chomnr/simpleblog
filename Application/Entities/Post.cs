@@ -13,9 +13,8 @@ public class Post
     public string Title { get; set; }
     public string NormalizedTitle { get; set; }
     public string Body { get; set; }
-    public string? Category { get; set; }
-    public string DateCreated { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
     public List<string>? Tags { get; set; }
+    public string DateCreated { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
     private bool _done;
     
     public bool Done
