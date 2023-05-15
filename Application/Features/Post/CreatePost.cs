@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Application.Common;
 using Application.Common.Interface;
 using Application.Infrastructure.Persistence;
 using Application.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Features.Post;
@@ -21,17 +23,18 @@ public class CreatePost : FeatureController
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize]
-    public async Task<ActionResult<string>> Login(CreatePostCommand command)
+    public async Task<ActionResult<bool>> Login(CreatePostCommand command)
     {
         
         return await _mediator.Send(command);
     }
 }
 
-public class CreatePostCommand : IRequest<string>
+public class CreatePostCommand : IRequest<bool>
 {   
     [Required]
     [StringLength(50)]
+    [MinLength(10)]
     [RegularExpression(@"^[A-Za-z0-9\s.,'-]+$")]
     public string Title { get; set; }
     [Required]
@@ -41,21 +44,22 @@ public class CreatePostCommand : IRequest<string>
     public List<string> Tags { get; set; }
 }
 
-internal sealed class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, string>
+internal sealed class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, bool>
 {
 
     private readonly IPostService _postService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     
-    public CreatePostCommandHandler(IPostService postService)
+    public CreatePostCommandHandler(IPostService postService, IHttpContextAccessor httpContextAccessor)
     {
         _postService = postService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<string> Handle(CreatePostCommand payLoad, CancellationToken cancellationToken)
-    {
-       // _context.Posts
-       //_postService.CustomCreateAsync()
-       return "";
+    public async Task<bool> Handle(CreatePostCommand payLoad, CancellationToken cancellationToken)
+    { 
+        var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return await _postService.CustomCreateAsync(payLoad, userId);
     }
     
     public class CreatePostEvent : DomainEvent
