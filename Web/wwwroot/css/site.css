@@ -154,6 +154,16 @@ a { color: inherit; text-decoration: none !important; }
     border-radius: 3px;
 }
 
+
+.custom-select {
+    font-family: inherit;
+    background-color: transparent;
+    color: var(--black-default);
+    text-decoration: none;
+    border: 0;
+    padding: 5px;
+}
+
 .custom-button.default {
     background-color: var(--blue-default);
     color: var(--white-lighter)
@@ -209,6 +219,36 @@ article.front-page .content .description {
     color: var(--white);
 }
 
+.child-node ul.selectable-tags {
+    display: flex;
+    gap: 5px;
+    font-size: 0.8em;
+    list-style-type: none;
+}
+
+.child-node ul.selectable-tags li {
+    border: 1px solid var(--black-default);
+    border-radius: 15px;
+    color: var(--black-default);
+    background-color: transparent;
+    font-size: 0.68em;
+    padding: 3px 10px;
+    text-align: center;
+}
+
+.child-node ul.selectable-tags li:hover {
+    background-color: var(--black-default);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.child-node ul.selectable-tags li:hover::after {
+    background-color: var(--black-default);
+    color: var(--white);
+    cursor: pointer;
+    content: "\00a0\00a0X";
+}
+
 article.front-page .content ul.tags {
     display: flex;
     color: blue;
@@ -217,7 +257,7 @@ article.front-page .content ul.tags {
 }
 
 article.front-page .content ul.tags li {
-    border: 1px solid white;
+    border: 1px solid var(--white);
     border-radius: 15px;
     color: var(--white);
     background-color: transparent;
@@ -364,6 +404,8 @@ article .view-content ul.tags li {
     font-size: 0.68em;
     padding: 3px 10px;
 }
+
+
 
 
 /* ENDS HERE. */
