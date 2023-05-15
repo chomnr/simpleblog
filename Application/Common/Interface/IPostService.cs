@@ -4,5 +4,5 @@ namespace Application.Common.Interface;
 
 public interface IPostService
 {
-    Task<string> CustomCreateAsync(CreatePostCommand command);
+    Task<bool> CustomCreateAsync(CreatePostCommand command, string userId);
 }
