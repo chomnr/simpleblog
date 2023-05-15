@@ -33,6 +33,8 @@ services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
+services.AddHttpContextAccessor();
+
 /*
 services.AddIdentity<BlogUser, IdentityRole>(options => 
         options.SignIn.RequireConfirmedAccount = false)
