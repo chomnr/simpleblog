@@ -11,6 +11,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 
+@Html.AntiForgeryToken();
 <section class="custom-section" style="
             justify-content: start;
             height: 100vh;
@@ -22,12 +23,12 @@
                 <input class="custom-input" placeholder="TITLE" style="border: 0;font-size: 1em;"/>
             </div>
             <div class="custom-form-group row" style="width: 100%;justify-content: start;align-items: center">
-                <ul id="tags-output" class="selectable-tags">
-                </ul>
+                <ul id="tags-output" class="selectable-tags"></ul>
                 <input id="tags" class="custom-input" placeholder="TAGS" style="border: 0;font-size: 0.8em;"/>
+                <input asp-for="Input.Tags" class="custom-input" placeholder="TITLE" style="border: 0;font-size: 1em;" type="hidden"/>
             </div>
             <div class="custom-form-group col" style="width: 100%;justify-content: start;align-items: start">
-                <div id="editor" style="max-width: 691px;">
+                <div id="editor" style="max-width: 691px;width: 100%">
                     <p style="word-break: break-all">Write something great!</p>
                 </div>
             </div>
@@ -35,9 +36,11 @@
     </div>
 </section>
 
+<!--
 <style>
     .ql-container.ql-snow { border: none !important;}
 </style>
+-->
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
@@ -65,45 +68,56 @@
 let currentTags = [];
 let input = document.getElementById("tags");
 let result = document.getElementById("tags-output");
+let real = document.getElementById("Input_Tags");
 
-var MAX_TAGS = 4;
-var MAX_TAG_NAME_LENGTH = 15;
+const MAX_TAGS = 4;
+const MAX_TAG_NAME_LENGTH = 15;
+const MIN_TAG_NAME_LENGTH = 3;
 
 function reloadTags() {
-    while (result.firstChild) {
-        result.removeChild(result.firstChild);
-    }
+    result.innerHTML = '';
+    real.value = '';
+}
+
+function addTag(tag) {
+    var child = document.createElement("li");
+    child.textContent = tag.replace(" ", "\u00A0");
+    result.appendChild(child);
+    real.value = JSON.stringify(currentTags);
 }
 
 function addTags() {
     reloadTags();
-    for (var i = 0; i < currentTags.length; i++) {
-        var child = document.createElement("li");
-        child.textContent = currentTags[i].replace(" ", "\u00A0");
-        child.id = "tag-" + i;
-        result.appendChild(child);
-    }
-    console.log(currentTags)
+    for (let i = 0; i < currentTags.length; i++) {
+        addTag(currentTags[i]);
+        console.log("test");
+    }    
 }
 
 input.addEventListener('keyup', function(e) {
     if (e.key === 'Enter') {
-        var target_value = e.target.value;
-        if (currentTags.length < MAX_TAGS && target_value.length <= MAX_TAG_NAME_LENGTH && !currentTags.includes(target_value) && input.value.length !== 0) {
-            currentTags.push(input.value.trim());
-            addTags();
+        const targetValue = e.target.value.trim().replace(",", "");
+        if (
+            targetValue.length >= MIN_TAG_NAME_LENGTH &&
+            targetValue.length <= MAX_TAG_NAME_LENGTH &&
+            currentTags.length < MAX_TAGS &&
+            !currentTags.includes(targetValue) &&
+            input.value.length !== 0
+        ) {
+            currentTags.push(targetValue);
+            addTag(targetValue);
             input.value = '';
         }
     }
-})
+});
 
 result.addEventListener("click", function(e) {
     if (e.target.tagName === 'LI') {
-        currentTags.splice(e.target.id.replace("tag-", ""), 1)
-        addTags();
+        var tagIndex = e.target.id.replace("tag-", "");
+        currentTags.splice(tagIndex, 1);
         e.target.remove();
+        addTags();
     }
 });
-
 
 </script>
