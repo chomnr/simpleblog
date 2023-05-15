@@ -75,14 +75,14 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
             FirstName = payLoad.FirstName, 
             LastName = payLoad.LastName, 
             UserName = payLoad.Username, 
-            Email = payLoad.Email
+            Email = payLoad.Email,
+            Done = true
         };
         
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
         if (result.Succeeded)
         {
-            user.Done = true;
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var basePath = _webHelperService.GetBaseUrl();
             var confirmPath = $"/auth/confirm-email" +
