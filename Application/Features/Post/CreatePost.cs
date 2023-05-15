@@ -38,8 +38,6 @@ public class CreatePostCommand : IRequest<string>
     [StringLength(30000)]
     public string Body { get; set; }
     [Required]
-    public string Category { get; set; }
-    [Required]
     public List<string> Tags { get; set; }
 }
 
