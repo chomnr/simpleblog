@@ -88,7 +88,8 @@ function addTags() {
 
 input.addEventListener('keyup', function(e) {
     if (e.key === 'Enter') {
-        if (currentTags.length < MAX_TAGS && e.target.value.length <= MAX_TAG_NAME_LENGTH) {
+        var target_value = e.target.value;
+        if (currentTags.length < MAX_TAGS && target_value.length <= MAX_TAG_NAME_LENGTH && !currentTags.includes(target_value) && input.value.length !== 0) {
             currentTags.push(input.value.trim());
             addTags();
             input.value = '';
