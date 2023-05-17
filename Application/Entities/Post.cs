@@ -7,8 +7,7 @@ namespace Application.Entities;
 public class Post
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string Id { get; set; }
+    public int Id { get; set; }
     public string? UserId { get; set; }
     public string Title { get; set; }
     public string NormalizedTitle { get; set; }
@@ -30,7 +29,7 @@ public class Post
             _done = value;
         }
     }
-    public List<DomainEvent> DomainEvents { get; } = new List<DomainEvent>();
+    public List<DomainEvent> DomainEvents { get; }
 }
 public class PostCompletedEvent : DomainEvent
 {
