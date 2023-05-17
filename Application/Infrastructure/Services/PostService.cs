@@ -30,7 +30,7 @@ public class PostService : IPostService
         _context = context;
     }
     
-    public async Task<bool> CustomCreateAsync(CreatePostCommand command, string userId)
+    public async Task<bool> CreateAsync(CreatePostCommand command, string userId)
     {
         var title = command.Title;
         var body = command.Body;
