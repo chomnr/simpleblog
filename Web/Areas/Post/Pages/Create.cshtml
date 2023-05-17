@@ -19,18 +19,28 @@
             flex-direction: column;">
     <div class="child-node" style="max-width: 900px;">
         <form id="createPost" class="custom-form" style="padding: 0;" method="post">
+            <span asp-validation-for="Input.Title" style="font-size: 0.6em;"></span>
+            <span asp-validation-for="Input.Body" style="font-size: 0.6em;"></span>
+            <span asp-validation-for="Input.Tags" style="font-size: 0.6em;"></span>
+            <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
+            
             <div class="custom-form-group col" style="width: 100%;justify-content: start;align-items: start">
-                <input class="custom-input" placeholder="TITLE" style="border: 0;font-size: 1em;"/>
+                <input asp-for="Input.Title" class="custom-input" placeholder="TITLE" style="border: 0;font-size: 1em;"/>
             </div>
             <div class="custom-form-group row" style="width: 100%;justify-content: start;align-items: center">
                 <ul id="tags-output" class="selectable-tags"></ul>
                 <input id="tags" class="custom-input" placeholder="TAGS" style="border: 0;font-size: 0.8em;"/>
-                <input asp-for="Input.Tags" class="custom-input" placeholder="TITLE" style="border: 0;font-size: 1em;" type="hidden"/>
+                <input asp-for="Input.Tags" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+                <input asp-for="TagHolder" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
             </div>
             <div class="custom-form-group col" style="width: 100%;justify-content: start;align-items: start">
                 <div id="editor" style="max-width: 691px;width: 100%">
                     <p style="word-break: break-all">Write something great!</p>
                 </div>
+            </div>
+            <input asp-for="Input.Body" class="custom-input" placeholder="BODY_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+            <div class="custom-form-group">
+                <button class="custom-button" id="postSubmit"  type="submit">Post</button>
             </div>
         </form>
     </div>
@@ -69,6 +79,11 @@ let currentTags = [];
 let input = document.getElementById("tags");
 let result = document.getElementById("tags-output");
 let real = document.getElementById("Input_Tags");
+let tagHolder = document.getElementById("TagHolder");
+
+let editor = document.getElementById("editor");
+let editor_value = document.getElementById("Input_Body");
+
 
 const MAX_TAGS = 4;
 const MAX_TAG_NAME_LENGTH = 15;
@@ -77,6 +92,7 @@ const MIN_TAG_NAME_LENGTH = 3;
 function reloadTags() {
     result.innerHTML = '';
     real.value = '';
+    tagHolder.value = real.value;
 }
 
 function addTag(tag) {
@@ -84,6 +100,7 @@ function addTag(tag) {
     child.textContent = tag.replace(" ", "\u00A0");
     result.appendChild(child);
     real.value = JSON.stringify(currentTags);
+    tagHolder.value = real.value;
 }
 
 function addTags() {
@@ -94,8 +111,8 @@ function addTags() {
     }    
 }
 
-input.addEventListener('keyup', function(e) {
-    if (e.key === 'Enter') {
+input.addEventListener('keydown', function(e) {
+      if (e.key === "," || e.code === "Comma" || e.code === "Unidentified") {
         const targetValue = e.target.value.trim().replace(",", "");
         if (
             targetValue.length >= MIN_TAG_NAME_LENGTH &&
@@ -106,10 +123,22 @@ input.addEventListener('keyup', function(e) {
         ) {
             currentTags.push(targetValue);
             addTag(targetValue);
-            input.value = '';
         }
     }
 });
+
+input.addEventListener('keyup', function(e) {
+    if (e.key === "," || e.code === "Comma" || e.code === "Unidentified") {
+        input.value = "";
+        tag_holder = input.value;
+    }
+});
+
+editor.addEventListener('keyup', function(e) {
+    editor_value.value = editor.innerHTML;
+    console.log(editor_value.value)
+});
+
 
 result.addEventListener("click", function(e) {
     if (e.target.tagName === 'LI') {
