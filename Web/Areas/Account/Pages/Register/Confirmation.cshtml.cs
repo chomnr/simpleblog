@@ -1,4 +1,5 @@
 ﻿using Application;
+using Application.Common;
 using Application.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -32,7 +33,7 @@ internal sealed class RegisterConfirmationModel<TUser> : RegisterConfirmationMod
         {
             Response.Redirect("/");
         }
-        if ( email != null && !Utilities.IsValidEmail(email, false))
+        if ( email != null && !Constraints.IsValidEmail(email))
         {
             Response.Redirect("/");
         }
