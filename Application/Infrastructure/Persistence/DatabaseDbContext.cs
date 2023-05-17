@@ -60,7 +60,7 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
     {
         builder.Ignore<DomainEvent>();
         
-        DatabaseDbModel.AutoRenameIdentityTables(builder);
+        //DatabaseDbModel.AutoRenameIdentityTables(builder);
         DatabaseDbModel.BaseUserModel(builder, _configuration);
         
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
