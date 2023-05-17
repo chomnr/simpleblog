@@ -8,7 +8,6 @@ namespace Application.Infrastructure.Persistence;
 
 public static class DatabaseDbModel
 {
-    
     [Obsolete]
     public static void AutoRenameIdentityTables(ModelBuilder builder)
     {
@@ -36,19 +35,23 @@ public static class DatabaseDbModel
             e.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
             e.HasData(adminUser);
-            
-            /*
-            e.HasMany<IdentityUserClaim<string>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
-            e.HasMany<IdentityUserLogin<string>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
-            e.HasMany<IdentityUserToken<string>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
-            e.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-            e.HasMany<Post>().WithOne().HasForeignKey(p => p.UserId).IsRequired();
-            */
         });
 
         builder.Entity<IdentityUserRole<string>>(e =>
         {
             e.HasData(adminRole);
+        });
+    }
+
+    public static void BaseRoleModel(ModelBuilder builder)
+    {
+        builder.Entity<IdentityRole>(e =>
+        {
+            e.HasData(
+                new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN"},
+                new IdentityRole { Id = "2", Name = "Moderator", NormalizedName = "MODERATOR"},
+                new IdentityRole { Id = "3", Name = "Member", NormalizedName = "MEMBER"}
+            );
         });
     }
 }
