@@ -45,6 +45,7 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
     public DbSet<Post> Posts => Set<Post>();
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
+        /*
         var events = ChangeTracker.Entries<IHasDomainEvent>()
             .Select(x => x.Entity.DomainEvents)
             .SelectMany(x => x)
@@ -52,6 +53,7 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
             .ToArray();
         
         await DispatchEvents(events);
+        */
         
         return await base.SaveChangesAsync(cancellationToken);
     }
