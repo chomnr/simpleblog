@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Common;
 /*
@@ -17,25 +18,43 @@ namespace Application.Common;
 
 public static class Constraints
 {
-    public static bool IsValidRealName(string name)
+    public static IdentityResult IsValidRealName(string name)
     {
+        var error = new CustomError();
+        
         var regex = new Regex(UserConstraints.RealNameRegex);
 
-        if (!regex.IsMatch(name)) { return false; }
-        if (name.Length > UserConstraints.RealNameMaxLength) { return false; }
+        if (!regex.IsMatch(name)) { return IdentityResult.Failed(error.InvalidName()); }
+        if (name.Length > UserConstraints.RealNameMaxLength)
+        {
+            return IdentityResult.Failed(error.InputLengthTooLong(name, UserConstraints.RealNameMaxLength));
+        }
         
-        return true;
+        return IdentityResult.Success;
     }
     
-    public static bool IsValidUsername(string username)
+    public static IdentityResult IsValidUsername(string username)
     {
+        var error = new CustomError();
+        
         var regex = new Regex(UsernameConstraints.AllowedCharactersRegex);
+
+        if (!regex.IsMatch(username))
+        {
+            return IdentityResult.Failed(error.InvalidUserName(username));
+        }
+
+        if (username.Length < UsernameConstraints.MinLength)
+        {
+            return IdentityResult.Failed(error.InputLengthTooSmall(username, UsernameConstraints.MinLength));
+        }
+
+        if (username.Length > UsernameConstraints.MaxLength)
+        {
+            return IdentityResult.Failed(error.InputLengthTooLong(username, UsernameConstraints.MaxLength));
+        }
         
-        if (!regex.IsMatch(username)) { return false; }
-        if (username.Length < UsernameConstraints.MinLength) { return false; }
-        if (username.Length > UsernameConstraints.MaxLength) { return false; }
-        
-        return true;
+        return IdentityResult.Success;
     }
 
     public static bool IsValidEmail(string email)
@@ -51,7 +70,7 @@ public static class Constraints
 public static class UserConstraints
 {
     //public const string RealNameRegex = @"^[\p{L}\p{N}\s[^$&+,:;=?@#|'<>.^*()%!-]+$";
-    public const string RealNameRegex = @"^(?!.*(.)(?:.*\1){2})[\p{L}\p{N}\s[^$&+,:;=?@#|'<>.^*()%!-]]+$";
+    public const string RealNameRegex = @"^[a-zA-Z]+$";
     public const int RealNameMaxLength = 256;
 
     public const string EmailRegex = @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,63}\.?$";
