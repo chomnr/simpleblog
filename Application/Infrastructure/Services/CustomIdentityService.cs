@@ -4,8 +4,6 @@ using Application.Entities;
 using Application.Features.BlogUser;
 using Microsoft.AspNetCore.Identity;
 
-using Util = Application.Utilities;
-
 namespace Application.Infrastructure.Services;
 
 public class CustomIdentityService : ICustomIdentityService
@@ -22,15 +20,15 @@ public class CustomIdentityService : ICustomIdentityService
     {
         var error = new CustomError();
         var email = command.Email;
-        
-        if (!Utilities.IsLettersOnly(command.FirstName) || !Utilities.IsLettersOnly(command.LastName))
+
+        if (!Constraints.IsValidUsername(command.Username))
         {
-            return IdentityResult.Failed(error.BadNameConstraints());
+            return IdentityResult.Failed(error.InvalidName());
         }
-        
-        if (!Util.IsValidEmail(email, true)) 
+
+        if (!Constraints.IsValidEmail(command.Email))
         {
-            return IdentityResult.Failed(error.InvalidEmail());
+            return IdentityResult.Failed(error.InvalidEmail()); 
         }
         
         if (!string.Equals(command.Password, command.ConfirmPassword)) 

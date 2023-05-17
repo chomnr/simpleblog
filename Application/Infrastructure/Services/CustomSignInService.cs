@@ -23,7 +23,7 @@ public class CustomSignInService : ICustomSignInService
         var password = command.Password;
         var rememberMe = command.RememberMe;
         
-        if (Utilities.IsValidEmail(login, false))
+        if (Constraints.IsValidEmail(login))
         {
             var user = await _userManager.FindByEmailAsync(login);
             if (user?.UserName != null)
