@@ -37,6 +37,7 @@ public class RegisterCommand : IRequest<IdentityResult>
     [RegularExpression(UserConstraints.RealNameRegex)]
     public string LastName { get; set; }
     [Required]
+    [MinLength(UsernameConstraints.MinLength)]
     [StringLength(UsernameConstraints.MaxLength)]
     [RegularExpression(UsernameConstraints.AllowedCharactersRegex)]
     public string Username { get; set; }
@@ -45,6 +46,7 @@ public class RegisterCommand : IRequest<IdentityResult>
     [RegularExpression(UserConstraints.EmailRegex)]
     public string Email { get; set; }
     [Required]
+    [MinLength(PasswordConstraints.MinLength)]
     [StringLength(PasswordConstraints.MaxLength)]
     [RegularExpression(PasswordConstraints.PasswordRegex)]
     public string Password { get; set; }

@@ -30,6 +30,9 @@ public class LoginCommand : IRequest<SignInResult>
     [Required]
     public string Login { get; set; }
     [Required]
+    [MinLength(PasswordConstraints.MinLength)]
+    [StringLength(PasswordConstraints.MaxLength)]
+    [RegularExpression(PasswordConstraints.PasswordRegex)]
     [DataType(DataType.Password)]
     public string Password { get; set; }
     public bool RememberMe { get; set; } = false;
