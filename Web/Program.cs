@@ -1,4 +1,5 @@
 using Application;
+using Application.Common;
 using Application.Entities;
 using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -19,12 +20,14 @@ services.AddDefaultIdentity<BlogUser>(options =>
         options.SignIn.RequireConfirmedAccount = false;
         options.SignIn.RequireConfirmedEmail = false;
         options.User.RequireUniqueEmail = true;
-        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-        options.Password.RequireUppercase = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.Password.RequiredLength = 7;
-        options.Password.RequireDigit = true;
-    } )
+        
+        options.User.AllowedUserNameCharacters = UsernameConstraints.AllowedCharacters;
+
+        options.Password.RequireUppercase = PasswordConstraints.RequireUpperCase;
+        options.Password.RequireNonAlphanumeric = PasswordConstraints.RequireNonAlphanumeric;
+        options.Password.RequireDigit = PasswordConstraints.RequireDigit;
+        options.Password.RequiredLength = PasswordConstraints.MinLength;
+    })
     .AddEntityFrameworkStores<DatabaseDbContext>();
 
 services.Configure<CookiePolicyOptions>(options =>
