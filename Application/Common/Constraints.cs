@@ -17,7 +17,6 @@ namespace Application.Common;
 
 public static class Constraints
 {
-    [GeneratedRegex(UserConstraints.RealNameRegex, RegexOptions.CultureInvariant, matchTimeoutMilliseconds: 1000)]
     public static bool IsValidRealName(string name)
     {
         var regex = new Regex(UserConstraints.RealNameRegex);
@@ -28,7 +27,6 @@ public static class Constraints
         return true;
     }
     
-    [GeneratedRegex(UsernameConstraints.AllowedCharactersRegex, RegexOptions.CultureInvariant, matchTimeoutMilliseconds: 1000)]
     public static bool IsValidUsername(string username)
     {
         var regex = new Regex(UsernameConstraints.AllowedCharactersRegex);
