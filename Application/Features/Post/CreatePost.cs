@@ -33,15 +33,16 @@ public class CreatePost : FeatureController
 public class CreatePostCommand : IRequest<bool>
 {   
     [Required]
-    [StringLength(50)]
-    [MinLength(10)]
-    [RegularExpression(@"^[A-Za-z0-9\s.,'-]+$")]
+    [StringLength(PostConstraints.MaxTitleLength)]
+    [MinLength(PostConstraints.MinTitleLength)]
     public string Title { get; set; }
     [Required]
-    [StringLength(30000)]
+    [StringLength(PostConstraints.MaxBodyLength)]
     public string Body { get; set; }
-    [Required]
-    public List<string> Tags { get; set; }
+    [Required] 
+    [MinLength(PostConstraints.MinTagLength)] 
+    [StringLength(PostConstraints.MaxTagLength)]
+    public List<string> Tags { get; set; } = new List<string>();
 }
 
 internal sealed class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, bool>
@@ -59,7 +60,7 @@ internal sealed class CreatePostCommandHandler : IRequestHandler<CreatePostComma
     public async Task<bool> Handle(CreatePostCommand payLoad, CancellationToken cancellationToken)
     { 
         var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return await _postService.CustomCreateAsync(payLoad, userId);
+        return await _postService.CreateAsync(payLoad, userId);
     }
     
     public class CreatePostEvent : DomainEvent

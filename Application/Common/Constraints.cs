@@ -94,3 +94,16 @@ public static class PasswordConstraints
     public const int MinLength = 7;
     public const int MaxLength = 64;
 }
+
+public static class PostConstraints
+{
+    public const int MinTagLength = 1;
+    public const int MaxTagLength = 4;
+    public const int MinTagNameLength = 3;
+    public const int MaxTagNameLength = 15;
+    
+    public const int MinTitleLength = 10;
+    public const int MaxTitleLength = 50;
+    
+    public const int MaxBodyLength = 30000;
+}
