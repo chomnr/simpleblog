@@ -29,20 +29,24 @@ public class RegisterUser : FeatureController
 public class RegisterCommand : IRequest<IdentityResult>
 {
     [Required]
-    [RegularExpression("^[a-zA-Z]+$")]
+    [StringLength(UserConstraints.RealNameMaxLength)]
+    [RegularExpression(UserConstraints.RealNameRegex)]
     public string FirstName { get; set; }
     [Required] 
-    [RegularExpression("^[a-zA-Z]+$")]
+    [StringLength(UserConstraints.RealNameMaxLength)]
+    [RegularExpression(UserConstraints.RealNameRegex)]
     public string LastName { get; set; }
     [Required]
-    [RegularExpression(@"^[a-zA-Z0-9_]+$")]
+    [StringLength(UsernameConstraints.MaxLength)]
+    [RegularExpression(UsernameConstraints.AllowedCharactersRegex)]
     public string Username { get; set; }
     [Required]
-    [EmailAddress]
+    [StringLength(UserConstraints.EmailMaxLength)]
+    [RegularExpression(UserConstraints.EmailRegex)]
     public string Email { get; set; }
     [Required]
-    // Refer to Web/APP for password constraints.
-    [RegularExpression(@"^(?=.*[A-Z])(?=.*\W)(?=.*\d)[A-Za-z\d\W]{7,64}$")]
+    [StringLength(PasswordConstraints.MaxLength)]
+    [RegularExpression(PasswordConstraints.PasswordRegex)]
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
 }
@@ -76,8 +80,10 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
             LastName = payLoad.LastName, 
             UserName = payLoad.Username, 
             Email = payLoad.Email,
-            Done = true
+            Done = false
         };
+        
+        user.DomainEvents.Add(new RegisterUserEvent(user));
         
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
