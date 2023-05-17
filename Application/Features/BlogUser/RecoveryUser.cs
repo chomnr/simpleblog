@@ -55,8 +55,7 @@ internal sealed class RecoveryUserCommandHandler : IRequestHandler<RecoveryComma
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var email = payLoad.Email; 
         
-        // This is for Reset Password....
-        if (!Utilities.IsValidEmail(email, false))
+        if (!Constraints.IsValidEmail(email))
         {
             return IdentityResult.Failed(error.InvalidEmail());
         }
