@@ -83,7 +83,7 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
             Done = false
         };
         
-        user.DomainEvents.Add(new RegisterUserEvent(user));
+      //  user.DomainEvents.Add(new RegisterUserEvent(user));
         
         var config = _configuration.GetSection("Authentication").GetSection("Email");
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
