@@ -19,14 +19,32 @@ public class CustomIdentityService : ICustomIdentityService
     public async Task<IdentityResult> CustomCreateAsync(RegisterCommand command, BlogUser user)
     {
         var error = new CustomError();
+        
+        var username = command.Username;
         var email = command.Email;
+        var firstName = command.FirstName;
+        var lastName = command.LastName;
 
-        if (!Constraints.IsValidUsername(command.Username))
+        var userNameConstraint = Constraints.IsValidUsername(username);
+        var firstNameConstraint = Constraints.IsValidRealName(firstName);
+        var lastNameConstraint = Constraints.IsValidRealName(lastName);
+
+        if (!firstNameConstraint.Succeeded)
         {
-            return IdentityResult.Failed(error.InvalidName());
+            return IdentityResult.Failed(firstNameConstraint.Errors.GetEnumerator().Current);
+        }
+        
+        if (!lastNameConstraint.Succeeded)
+        {
+            return IdentityResult.Failed(lastNameConstraint.Errors.GetEnumerator().Current);
         }
 
-        if (!Constraints.IsValidEmail(command.Email))
+        if (!userNameConstraint.Succeeded)
+        {
+            return IdentityResult.Failed(userNameConstraint.Errors.GetEnumerator().Current);
+        }
+
+        if (!Constraints.IsValidEmail(email))
         {
             return IdentityResult.Failed(error.InvalidEmail()); 
         }
