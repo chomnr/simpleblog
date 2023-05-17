@@ -1,4 +1,5 @@
-﻿using Application.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Application.Common;
 using Microsoft.AspNetCore.Identity;
 
 namespace Application.Entities;
@@ -24,7 +25,7 @@ public class BlogUser : IdentityUser
             _done = value;
         }
     }
-    public List<DomainEvent> DomainEvents { get; } = new List<DomainEvent>();
+    public List<DomainEvent> DomainEvents { get; }
 }
 
 public class BlogUserCompletedEvent : DomainEvent
@@ -35,4 +36,25 @@ public class BlogUserCompletedEvent : DomainEvent
     }
     
     public BlogUser Account { get; }
+}
+
+[NotMapped]
+public static class BlogUserHelper
+{
+    public static BlogUser CreateBlogUser(string firstName, string lastName, string userName, string password, string email)
+    {
+        var hasher = new PasswordHasher<BlogUser>();
+        var user = new BlogUser
+        {
+            Id = Guid.NewGuid().ToString(),
+            FirstName = firstName,
+            LastName = lastName,
+            UserName = userName,
+            NormalizedUserName = userName.ToUpper(),
+            Email = email,
+            NormalizedEmail = email.ToUpper()
+        };
+        user.PasswordHash = hasher.HashPassword(user, password);
+        return user;
+    }
 }
