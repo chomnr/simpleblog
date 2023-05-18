@@ -2,8 +2,6 @@
 using System.Security.Claims;
 using Application.Common;
 using Application.Common.Interface;
-using Application.Infrastructure.Persistence;
-using Application.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -40,8 +38,8 @@ public class CreatePostCommand : IRequest<bool>
     [StringLength(PostConstraints.MaxBodyLength)]
     public string Body { get; set; }
     [Required] 
-    [MinLength(PostConstraints.MinTagLength)] 
-    [StringLength(PostConstraints.MaxTagLength)]
+    [MinLength(PostConstraints.MinTagLength)]
+    [MaxLength(PostConstraints.MaxTagLength)]
     public List<string> Tags { get; set; } = new List<string>();
 }
 
