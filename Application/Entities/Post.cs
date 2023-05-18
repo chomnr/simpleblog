@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Application.Common;
+using Newtonsoft.Json;
 
 namespace Application.Entities;
 
@@ -8,7 +9,8 @@ public class Post
 {
     [Key]
     public int Id { get; set; }
-    public string? UserId { get; set; }
+    public string UserId { get; set; }
+    public string? Username { get; set; }
     public string Title { get; set; }
     public string NormalizedTitle { get; set; }
     public string Body { get; set; }
