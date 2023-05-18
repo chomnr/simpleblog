@@ -54,70 +54,8 @@
                         </article>
                     }
                 }
-                <!--
-                <article class="front-page">
-                    <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
-                    <div class="mini-content">
-                        <span class="author">John Doe ● 20 May 2023</span>
-                        <h3 class="title adjust">How to Linear Regress</h3>
-                        <div class="description">How do you create compelling presentations that wow your colleagues and impress your managers?</div>
-                        <ul class="tags">
-                            <li>Programming</li>
-                            <li>Binary Search</li>
-                        </ul>
-                    </div>
-                </article>
-                <article class="front-page">
-                    <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
-                    <div class="mini-content">
-                        <span class="author">John Doe ● 20 May 2023</span>
-                        <h3 class="title adjust">Writing Quality Code.</h3>
-                        <div class="description">How to write quality code.?</div>
-                        <ul class="tags">
-                            <li>Programming</li>
-                            <li>Quality</li>
-                            <li>C#</li>
-                        </ul>
-                    </div>
-                </article>
-                <article class="front-page">
-                    <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
-                    <div class="mini-content">
-                        <span class="author">Johnny Bravo ● 20 May 2023</span>
-                        <h3 class="title adjust">How to Look Good</h3>
-                        <div class="description">How do you look good in front of everyone</div>
-                        <ul class="tags">
-                            <li>Beach</li>
-                            <li>Attractiveness</li>
-                        </ul>
-                    </div>
-                </article>
-                <article class="front-page">
-                    <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
-                    <div class="mini-content">
-                        <span class="author">Johnny Bravo ● 20 May 2023</span>
-                        <h3 class="title adjust">How to Look Good</h3>
-                        <div class="description">How do you look good in front of everyone</div>
-                        <ul class="tags">
-                            <li>Beach</li>
-                            <li>Attractiveness</li>
-                        </ul>
-                    </div>
-                </article>
-                -->
             </div>
         </div>
-        <!--
-        <article style="position: relative;">
-            <div class="title">Google review questions.</div>
-            <p class="description">A short description about something please I need to find something to put here.</p>
-            <div class="tags">
-                <span>Design</span>
-                <span>Research</span>
-                <span>Presentation</span>
-            </div>
-            <img alt="ds" style="width:100%" src="https://place-hold.it/1200x600"/>
-        </article>-->
     </div>
 </section>
 
@@ -125,14 +63,8 @@
 
     private List<Post> BlogPosts;
 
-    private class HackyPost : Post
-    {
-        public string Username { get; set; }
-    }
-    
     protected override async Task OnInitializedAsync()
     {
-        var json = new JsonSerializer();
 
         var command = new RetrievePostsCommand { Page = 1 };
         var result = await Mediator.Send(command);
