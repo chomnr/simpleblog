@@ -8,20 +8,77 @@ namespace Application.Infrastructure.Persistence;
 
 public static class DatabaseDbModel
 {
-    [Obsolete]
     public static void AutoRenameIdentityTables(ModelBuilder builder)
     {
-        builder.Entity<BlogUser>(bu => { bu.HasKey(r => r.Id); bu.ToTable("users"); });
-        
-        builder.Entity<Post>(pt => { pt.HasKey(r => r.Id); pt.ToTable("posts"); });
-        
-        builder.Entity<IdentityRole>(ir => { ir.HasKey(r => r.Id); ir.ToTable("roles"); });
-        builder.Entity<IdentityRoleClaim<string>>(irc => { irc.HasKey(r => r.Id); irc.ToTable("role_claims"); });
+        builder.Entity<BlogUser>(bu =>
+        {
+            bu.ToTable("users");
+            
+            bu.Property(u => u.UserName).HasMaxLength(255);
+            bu.Property(u => u.Email).HasMaxLength(256);
+            
+            bu.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-        builder.Entity<IdentityUserRole<string>>(iur => { iur.HasKey(r => new { r.UserId, r.RoleId }); iur.ToTable("user_roles"); });
-        builder.Entity<IdentityUserClaim<string>>(iuc => { iuc.HasKey(uc => uc.Id); iuc.ToTable("user_claims"); });
-        builder.Entity<IdentityUserLogin<string>>(iul => { iul.HasKey(l => new { l.LoginProvider, l.ProviderKey }); iul.ToTable("user_logins"); });
-        builder.Entity<IdentityUserToken<string>>(iut => { iut.HasKey(t => new { t.UserId, t.LoginProvider, t.Name }); iut.ToTable("user_tokens"); });
+            bu.HasKey(r => r.Id);
+
+            bu.HasMany<IdentityUserClaim<string>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+            bu.HasMany<IdentityUserLogin<string>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
+            bu.HasMany<IdentityUserToken<string>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
+            bu.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            bu.HasMany<Post>().WithOne().HasForeignKey(p => p.UserId).IsRequired();
+        });
+        
+        builder.Entity<Post>(pt =>
+        {
+            pt.ToTable("posts");
+
+            pt.HasKey(r => r.Id); 
+            
+            pt.HasIndex((p => new { p.Title, p.Id })).HasDatabaseName("PostIndex");
+
+            pt.HasKey(p => p.Id);
+        });
+        
+        builder.Entity<IdentityRole>(ir =>
+        {
+            ir.ToTable("roles");
+            
+            ir.HasKey(r => r.Id);
+            ir.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
+
+            ir.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
+            ir.Property(u => u.Name).HasMaxLength(256);
+            ir.Property(u => u.NormalizedName).HasMaxLength(256);
+            
+            ir.HasMany<IdentityUserRole<string>>().WithOne().HasForeignKey(ur => ur.RoleId).IsRequired();
+            ir.HasMany<IdentityRoleClaim<string>>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
+        });
+        builder.Entity<IdentityRoleClaim<string>>(irc =>
+        {
+            irc.ToTable("role_claims");
+            irc.HasKey(r => r.Id); 
+        });
+
+        builder.Entity<IdentityUserRole<string>>(iur =>
+        {
+            iur.ToTable("user_roles");
+            iur.HasKey(r => new { r.UserId, r.RoleId }); 
+        });
+        builder.Entity<IdentityUserClaim<string>>(iuc =>
+        {
+            iuc.ToTable("user_claims");
+            iuc.HasKey(uc => uc.Id); 
+        });
+        builder.Entity<IdentityUserLogin<string>>(iul =>
+        {
+            iul.ToTable("user_logins");
+            iul.HasKey(l => new { l.LoginProvider, l.ProviderKey }); 
+        });
+        builder.Entity<IdentityUserToken<string>>(iut =>
+        {
+            iut.ToTable("user_tokens");
+            iut.HasKey(t => new { t.UserId, t.LoginProvider, t.Name }); 
+        });
     }
     public static void BaseUserModel(ModelBuilder builder, IConfiguration configuration)
     {
