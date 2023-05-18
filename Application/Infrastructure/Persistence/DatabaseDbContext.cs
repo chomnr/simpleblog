@@ -2,7 +2,6 @@
 using Application.Common;
 using Application.Common.Interface;
 using Application.Entities;
-using Application.Infrastructure.Persistence.Migrations;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -62,12 +61,11 @@ public class DatabaseDbContext : IdentityDbContext<BlogUser>
     {
         builder.Ignore<DomainEvent>();
         
-        //DatabaseDbModel.AutoRenameIdentityTables(builder);
+        DatabaseDbModel.AutoRenameIdentityTables(builder);
         DatabaseDbModel.BaseRoleModel(builder);
         DatabaseDbModel.BaseUserModel(builder, _configuration);
         
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        base.OnModelCreating(builder);
     }
     
     private async Task DispatchEvents(DomainEvent[] events)
