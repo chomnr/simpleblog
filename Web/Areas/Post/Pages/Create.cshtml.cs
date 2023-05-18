@@ -68,7 +68,7 @@ internal sealed class MediatorCreatePostModel<TPost> : MediatorCreatePostModel w
         if (ModelState.IsValid)
         {   
             // Converts {"[\"yes\",\"hello\"]"} to {dog,yes,hello,readable} in Database.
-            Input.Body = Base64.encode(Encoding.ASCII.GetBytes(Input.Body));
+            Input.Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(Input.Body));
             if (TagHolder != null) {
                 Input.Tags = JsonConvert.DeserializeObject<List<string>>(TagHolder);
             }
