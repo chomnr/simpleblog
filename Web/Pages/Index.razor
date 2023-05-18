@@ -1,7 +1,15 @@
 ﻿@page "/"
+@using MediatR
+@using Application.Features.Post
+@using Application.Entities
+@using Newtonsoft.Json
+@using System.Text
+@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Identity
+@inject IMediator Mediator;
+@inject UserManager<BlogUser> UserManager
 
 <PageTitle>Index</PageTitle>
-
 
 <section class="custom-section">
     <div class="child-node" style="flex-direction: column;">
@@ -23,10 +31,34 @@
                 <img style="width:100%;height: 100%" src="https://place-hold.it/1200x600"/>
             </article>
             <div class="sub-articles">
+                @if (BlogPosts != null)
+                {
+                    @foreach (var post in BlogPosts)
+                    {
+                        <article class="front-page">
+                            <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
+                            <div class="mini-content">
+                                <span class="author">@post.Username ● @GetDate(long.Parse(post.DateCreated))</span>
+                                <h3 class="title adjust">@post.Title</h3>
+                                <div class="description">@StripHtmlTags(@GetBody(@post.Body).Substring(0, 150))...</div>
+                                <ul class="tags">
+                                    @if (post.Tags != null)
+                                    {
+                                        @foreach (var tag in post.Tags)
+                                        {
+                                            <li>@tag</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </article>
+                    }
+                }
+                <!--
                 <article class="front-page">
                     <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
                     <div class="mini-content">
-                        <span class="author">John Doe ●  20 May 2023</span>
+                        <span class="author">John Doe ● 20 May 2023</span>
                         <h3 class="title adjust">How to Linear Regress</h3>
                         <div class="description">How do you create compelling presentations that wow your colleagues and impress your managers?</div>
                         <ul class="tags">
@@ -38,7 +70,7 @@
                 <article class="front-page">
                     <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
                     <div class="mini-content">
-                        <span class="author">John Doe ●  20 May 2023</span>
+                        <span class="author">John Doe ● 20 May 2023</span>
                         <h3 class="title adjust">Writing Quality Code.</h3>
                         <div class="description">How to write quality code.?</div>
                         <ul class="tags">
@@ -51,7 +83,7 @@
                 <article class="front-page">
                     <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
                     <div class="mini-content">
-                        <span class="author">Johnny Bravo ●  20 May 2023</span>
+                        <span class="author">Johnny Bravo ● 20 May 2023</span>
                         <h3 class="title adjust">How to Look Good</h3>
                         <div class="description">How do you look good in front of everyone</div>
                         <ul class="tags">
@@ -63,7 +95,7 @@
                 <article class="front-page">
                     <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
                     <div class="mini-content">
-                        <span class="author">Johnny Bravo ●  20 May 2023</span>
+                        <span class="author">Johnny Bravo ● 20 May 2023</span>
                         <h3 class="title adjust">How to Look Good</h3>
                         <div class="description">How do you look good in front of everyone</div>
                         <ul class="tags">
@@ -72,6 +104,7 @@
                         </ul>
                     </div>
                 </article>
+                -->
             </div>
         </div>
         <!--
@@ -87,3 +120,44 @@
         </article>-->
     </div>
 </section>
+
+@code {
+
+    private List<Post> BlogPosts;
+
+    private class HackyPost : Post
+    {
+        public string Username { get; set; }
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var json = new JsonSerializer();
+
+        var command = new RetrievePostsCommand { Page = 1 };
+        var result = await Mediator.Send(command);
+
+        if (result.Value != null)
+        {
+            BlogPosts = JsonConvert.DeserializeObject<List<Post>>(result.Value.ToString());
+        }
+    }
+
+    public string GetDate(long milliseconds)
+    {
+        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
+
+        return dateTimeOffset.ToString("dd MMM yyyy");
+    }
+
+    public string GetBody(string body)
+    {
+        byte[] bytes = Convert.FromBase64String(body);
+        return Encoding.UTF8.GetString(bytes);
+    }
+    
+    public static string StripHtmlTags(string html)
+    {
+        return Regex.Replace(html, "<.*?>", "");
+    }
+}
