@@ -1,4 +1,24 @@
 ﻿@inject NavigationManager Navigation
+
+<div class="blg-head">
+    <nav class="default-nav">
+        <div class="brand"><a href="/">SimpleBlog</a></div>
+        <ul>
+            <AuthorizeView>
+                <Authorized>
+                    <li><NavLink class="nav-link" href="/account">MyAccount</NavLink></li>
+                    <li><NavLink class="nav-link" href="/post/create">Post</NavLink></li>
+                </Authorized>
+                <NotAuthorized>
+                    <li><NavLink class="nav-link" href="/account/login">Login</NavLink></li>
+                    <li><NavLink class="nav-link" href="/account/register">Register</NavLink></li>
+                    <li><NavLink class="nav-link" href="/account/register">Recover</NavLink></li>
+                </NotAuthorized>
+            </AuthorizeView>
+        </ul>
+    </nav>
+</div>
+@*
 <div class="navbar">
     <nav class="font-default bg-white">
         <div class="brand-group">
@@ -23,3 +43,4 @@
         </AuthorizeView>
     </nav>
 </div>
+*@
