@@ -156,6 +156,7 @@ nav.default-nav li a:hover { opacity: 0.6; }
     color: var(--light-black);
     border-radius: 3px;
     padding: 0 7px;
+    margin-left: 2px;
     font-size: 0.7rem;
 }
 
@@ -170,6 +171,9 @@ nav.default-nav li a:hover { opacity: 0.6; }
     padding: 0 7px;
     font-size: 0.7rem;
 }
+.blg-section .blg-child-node article.sub-post .post-title {
+    padding: 0 7px;
+}
 
 .blg-section .blg-child-node article.sub-post .post-title {
     font-size: 0.95rem;
@@ -178,12 +182,12 @@ nav.default-nav li a:hover { opacity: 0.6; }
 .blg-section .blg-child-node article.sub-post ul.post-tags {
     display: flex;
     list-style: none;
-    padding: 0;
+    padding: 0 7px;
     margin: 0;
     gap: 7px;
 }
 .blg-section .blg-child-node article.sub-post ul.post-tags li {
-    background: #FFF176;
+    background: var(--primary-color);
     color: var(--light-black);
     border-radius: 3px;
     font-size: 0.7rem;
@@ -195,14 +199,13 @@ nav.default-nav li a:hover { opacity: 0.6; }
 }
 
 @media only screen and (max-width: 767px) {
-    
     .blg-section .blg-child-node article.sub-post {
         align-items: flex-start;
         flex-direction: column;
         margin-top: 15px;
-        border-left: 2px solid #FDD835;
+        border-left: 2px solid var(--accent-color);
     }
-    
+
     .blg-section .blg-child-node article.sub-post .post-date {
         background: transparent;
         color: var(--primary-color);
@@ -211,5 +214,6 @@ nav.default-nav li a:hover { opacity: 0.6; }
     .blg-section .blg-child-node article.sub-post .post-author {
         background: transparent;
         color: var(--primary-color);
+        margin-left: 0;
     }
 }
