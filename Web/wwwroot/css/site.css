@@ -53,6 +53,75 @@ h1, h2, h3, h4 {
     h4 { font-size: 1.0rem; }
 }
 
+form {
+    /* Your existing styles for the form */
+}
+
+form h1,
+form h2,
+form h3,
+form h4,
+form p,
+form a{
+    padding: 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+form .group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+}
+
+form .group label {
+    font-weight: normal;
+    font-size: 0.8rem;
+}
+
+input {
+    border: 0;
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    background: var(--dirty-red);
+    color: var(--light-black);
+    padding: 3px 6px;
+    width: 100%;
+}
+
+button {
+    outline: none;
+    border: 0;
+    font-family: inherit;
+    background: var(--dirty-red);
+    color: var(--light-black);
+    padding: 3px 6px;
+    width: inherit; /* Set width to inherit from parent */
+}
+
+button:hover {
+    background: var(--secondary-background);
+    color: var(--secondary-color);
+    cursor: pointer;
+}
+
+input[type="checkbox"]
+{
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+input[type="checkbox"]:after
+{
+    clear: both;
+    content: "Remember Me";
+    display: block;
+}
+
 /* NAVIGATION */
 .blg-head {
     display: flex;
@@ -172,6 +241,11 @@ article.sub-post:hover {
     padding: 0 7px;
     font-size: 0.7rem;
 }
+
+article.sub-post .post-date:hover {
+    cursor: default;
+}
+ 
  article.sub-post .post-title {
     padding: 0 7px;
 }
