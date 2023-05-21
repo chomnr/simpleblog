@@ -1,35 +1,160 @@
-﻿@page "/post/view"
+﻿@page "/post/{postId:int}"
+@using MediatR
+@using System.Text
+@using System.Text.RegularExpressions
+@using Application.Entities
+@using Application.Features.Post
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Newtonsoft.Json
+@inject IMediator Mediator;
+@inject IHtmlHelper Html
+@inject NavigationManager NavigationManager
 
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
+    <div class="blg-child-node col" style="color: #eae7e1;">
+        @if (postInfo != null)
+        {
+            <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> @StripHtmlTags(@postInfo.Title)</h1>
+            <article class="view-post">
+                <div class="author-bar">
+                    <img class="avatar" width="35" height="35" src="https://place-hold.it/30x30"/>
+                    <div class="mini-col" >
+                        <div class="name"><a style="color:inherit;text-decoration: none;" href="account/@postInfo.UserId">@postInfo.Username</a></div>
+                        <div class="published">@GetDate(long.Parse(postInfo.DateCreated))</div>
+                    </div>
+                    <ul class="view-tags" style="margin-left: auto">
+                        @if (postInfo.Tags != null)
+                        {
+                            @foreach (var tag in postInfo.Tags)
+                            {
+                                <li><a style="color:inherit;text-decoration: none;" href="post/tags/@tag">@tag</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+                @HtmlContent
+            </article>
+
+        }
+    </div>
+</section>
+
+@code {
+    private Post postInfo;
+
+    [Parameter]
+    public int PostId { get; set; }
+
+    public MarkupString HtmlContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var command = new RetrievePostCommand
+        {
+            Id = PostId
+        };
+
+        var result = await Mediator.Send(command);
+        if (result.Value != null)
+        {
+            postInfo = JsonConvert.DeserializeObject<Post>(result.Value.ToString());
+            HtmlContent = new MarkupString(postInfo.Body);
+        }
+    }
+
+    private string GetDate(long milliseconds)
+    {
+        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
+
+        return dateTimeOffset.ToString("dd MMM yyyy");
+    }
+
+    private string GetBody(string body)
+    {
+        byte[] bytes = Convert.FromBase64String(body);
+        return Encoding.UTF8.GetString(bytes);
+    }
+    private static string StripHtmlTags(string html)
+    {
+        return Regex.Replace(html, "<.*?>", "");
+    }
+}
+@*
 <section class="custom-section">
     <div class="child-node">
         <article>
             <div class="view-content">
-                <div class="category">Product Design</div>
-                <h2 class="title">Cognitive Design Habits Theory: Crash course on germy theory</h2>
-                <!--
-                <div class="description">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. 
-                </div>-->
-                <div style="display:flex;align-items: center;gap: 10px;justify-content: space-between">
-                    <div class="author-bar">
-                        <img alt="image" class="avatar" src="https://place-hold.it/40x40"/>
-                        <div style="display: flex;flex-direction: column">
-                            <span class="name">John Doe</span>
-                            <span class="creation-date">12 January 2003</span>
+                @if (postInfo != null)
+                {
+                    <div class="category"></div>
+                    <h2 class="title">@postInfo.Title</h2>
+                    <!--
+                    <div class="description">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. 
+                    </div>-->
+                    <div style="display:flex;align-items: center;gap: 10px;justify-content: space-between">
+                        <div class="author-bar">
+                            <img alt="image" class="avatar" src="https://place-hold.it/40x40"/>
+                            <div style="display: flex;flex-direction: column">
+                                <span class="name">@postInfo.Username</span>
+                                <span class="creation-date">@GetDate(long.Parse(postInfo.DateCreated))</span>
+                            </div>
                         </div>
+                        <ul class="tags">
+                            @if (postInfo.Tags != null)
+                            {
+                                @foreach (var tag in postInfo.Tags)
+                                {
+                                    <li>@tag</li>
+                                }
+                            }
+                        </ul>
                     </div>
-                    <ul class="tags">
-                        <li>Product</li>
-                        <li>Design</li>
-                    </ul>
-                </div>
-                <div style="margin-top: 40px;">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, 
-                </div>
+                    <div style="margin-top: 40px;">
+                        @HtmlContent
+                    </div>
+                }
             </div>
         </article>
     </div>
 </section>
+
+*/
+
 @code {
+    public Post postInfo;
     
+    [Parameter] 
+    public int PostId { get; set; }
+    
+    public MarkupString HtmlContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var command = new RetrievePostCommand
+        {
+            Id = PostId
+        };
+
+        var result = await Mediator.Send(command);
+        if (result.Value != null)
+        {
+            postInfo = JsonConvert.DeserializeObject<Post>(result.Value.ToString());
+            HtmlContent = new MarkupString(postInfo.Body);
+        }
+    }
+
+    private string GetDate(long milliseconds)
+    {
+        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
+
+        return dateTimeOffset.ToString("dd MMM yyyy");
+    }
+    
+    private string GetBody(string body)
+    {
+        byte[] bytes = Convert.FromBase64String(body);
+        return Encoding.UTF8.GetString(bytes);
+    }
 }
+*@
