@@ -30,6 +30,7 @@
                                 <li><a style="color:inherit;text-decoration: none;" href="post/tags/@tag">@tag</a></li>
                             }
                         }
+                        <li class="read-time"><a style="color:inherit;text-decoration: none;"></a>@GetReadTime(postInfo.Body) min read</li>
                     </ul>
                 </div>
                 @HtmlContent
@@ -74,87 +75,17 @@
         byte[] bytes = Convert.FromBase64String(body);
         return Encoding.UTF8.GetString(bytes);
     }
-    private static string StripHtmlTags(string html)
+    
+    private string StripHtmlTags(string html)
     {
         return Regex.Replace(html, "<.*?>", "");
     }
-}
-@*
-<section class="custom-section">
-    <div class="child-node">
-        <article>
-            <div class="view-content">
-                @if (postInfo != null)
-                {
-                    <div class="category"></div>
-                    <h2 class="title">@postInfo.Title</h2>
-                    <!--
-                    <div class="description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. 
-                    </div>-->
-                    <div style="display:flex;align-items: center;gap: 10px;justify-content: space-between">
-                        <div class="author-bar">
-                            <img alt="image" class="avatar" src="https://place-hold.it/40x40"/>
-                            <div style="display: flex;flex-direction: column">
-                                <span class="name">@postInfo.Username</span>
-                                <span class="creation-date">@GetDate(long.Parse(postInfo.DateCreated))</span>
-                            </div>
-                        </div>
-                        <ul class="tags">
-                            @if (postInfo.Tags != null)
-                            {
-                                @foreach (var tag in postInfo.Tags)
-                                {
-                                    <li>@tag</li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                    <div style="margin-top: 40px;">
-                        @HtmlContent
-                    </div>
-                }
-            </div>
-        </article>
-    </div>
-</section>
-
-*/
-
-@code {
-    public Post postInfo;
     
-    [Parameter] 
-    public int PostId { get; set; }
-    
-    public MarkupString HtmlContent { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    private double GetReadTime(string body, int wpm = 183)
     {
-        var command = new RetrievePostCommand
-        {
-            Id = PostId
-        };
-
-        var result = await Mediator.Send(command);
-        if (result.Value != null)
-        {
-            postInfo = JsonConvert.DeserializeObject<Post>(result.Value.ToString());
-            HtmlContent = new MarkupString(postInfo.Body);
-        }
-    }
-
-    private string GetDate(long milliseconds)
-    {
-        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
-
-        return dateTimeOffset.ToString("dd MMM yyyy");
-    }
-    
-    private string GetBody(string body)
-    {
-        byte[] bytes = Convert.FromBase64String(body);
-        return Encoding.UTF8.GetString(bytes);
+        var strippedBody = StripHtmlTags(body);
+        var words = strippedBody.Trim().Split(' ').Length;
+        var time = Math.Ceiling((double)words / wpm);
+        return time;
     }
 }
-*@

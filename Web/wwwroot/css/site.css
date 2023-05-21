@@ -275,6 +275,7 @@ article.view-post ul.view-tags {
     margin: 0;
     gap: 7px;
 }
+
 article.view-post ul.view-tags li {
     background: var(--primary-color);
     color: var(--light-black);
@@ -283,6 +284,25 @@ article.view-post ul.view-tags li {
     padding: 0 7px;
 }
 
+article.view-post ul.view-tags li.read-time {
+    display: none;
+}
+
 article.view-post ul.view-tags li:hover {
     opacity: 0.7;
+}
+
+@media only screen and (max-width: 767px) {
+    article.view-post ul.view-tags li {
+        display: none;
+    }
+
+    article.view-post ul.view-tags li.read-time {
+        display: block;
+    }
+
+    article.view-post ul.view-tags li.read-time:hover {
+        opacity: 1;
+        cursor: default;
+    }
 }
