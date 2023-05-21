@@ -33,6 +33,20 @@
     </environment>
 </div>
 -->
+
 <script src="_framework/blazor.server.js"></script>
+<script>
+document.addEventListener('click', function(e) {
+    let clicked = e.target;
+    let id_of_clicked = clicked.id;
+    let current_url = window.location.href;
+    console.log("test");
+    if ( id_of_clicked.startsWith('post-')) {
+        window.location.href = current_url = "/post/" + id_of_clicked.substring(5);
+    }
+})
+
+</script>
+
 </body>
 </html>
