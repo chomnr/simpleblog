@@ -86,6 +86,10 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
                     {
                         ModelState.AddModelError("Input.ResetToken", error.Description);
                     }
+                    if (error.Code.ToLower().Contains("Password"))
+                    {
+                        ModelState.AddModelError("Input.Password", error.Description);
+                    }
                 }
                 IsSuccessful = false;
             }

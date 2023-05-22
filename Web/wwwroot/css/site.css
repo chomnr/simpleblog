@@ -118,7 +118,6 @@ input[type="checkbox"]
 input[type="checkbox"]:after
 {
     clear: both;
-    content: "Remember Me";
     display: block;
 }
 

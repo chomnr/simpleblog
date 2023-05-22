@@ -9,6 +9,34 @@
 }
 
 @Html.AntiForgeryToken()
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;height: 100vh">
+    <div class="blg-child-node col" style="color: #eae7e1;justify-content: center;align-items: center;">
+        <form id="recoverForm" method="post" style="width: 270px;">
+            <h3 style="font-weight: lighter;margin-bottom: 12px;">Recovery</h3>
+            <div style="display: flex;flex-direction: column;gap: 12px;">
+                <div class="group">
+                    <span asp-validation-for="Input.Email" style="font-size: 0.6em;"></span>
+                    <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
+                </div>
+                <div class="group">
+                    <label>Email</label>
+                    <input asp-for="Input.Email" placeholder="Email" type="email"/>
+                </div>
+                <div class="group">
+                    <button id="recoverSubmit" type="submit">Request</button>
+                </div>
+                <div class="group">
+                    <label style="font-size: 0.8em;">Need an account? <a href="/account/register" style="color: var(--primary-color);">Register</a></label>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+@*
 <section class="custom-section" style="
             justify-content: center;
             height: 100vh;
@@ -33,7 +61,9 @@
         </div>
     </form>
 </section>
+*/
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+*@

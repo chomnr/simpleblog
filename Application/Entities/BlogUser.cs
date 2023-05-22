@@ -41,7 +41,7 @@ public class BlogUserCompletedEvent : DomainEvent
 [NotMapped]
 public static class BlogUserHelper
 {
-    public static BlogUser CreateBlogUser(string firstName, string lastName, string userName, string password, string email)
+    public static BlogUser CreateBlogUser(string firstName, string lastName, string userName, string password, string email, bool confirmEmail)
     {
         var hasher = new PasswordHasher<BlogUser>();
         var user = new BlogUser
@@ -52,7 +52,8 @@ public static class BlogUserHelper
             UserName = userName,
             NormalizedUserName = userName.ToUpper(),
             Email = email,
-            NormalizedEmail = email.ToUpper()
+            NormalizedEmail = email.ToUpper(),
+            EmailConfirmed = confirmEmail
         };
         user.PasswordHash = hasher.HashPassword(user, password);
         return user;
