@@ -31,15 +31,24 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
 {
     private readonly IMediator _mediator;
     private readonly UserManager<BlogUser> _userManager;
+    private readonly SignInManager<BlogUser> _signInManager;
 
-    public MediatorResetPassword(IMediator mediator, UserManager<BlogUser> userManager)
+    public MediatorResetPassword(IMediator mediator, 
+        UserManager<BlogUser> userManager,
+        SignInManager<BlogUser> signInManager)
     {
         _mediator = mediator;
         _userManager = userManager;
+        _signInManager = signInManager;
     }
     
     public override async Task OnGetAsync(string userId, string resetToken, string? returnUrl = null)
     {
+        if (_signInManager.IsSignedIn(HttpContext.User))
+        {
+            Response.Redirect("/");
+        }
+        
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(resetToken))
         {
             Response.Redirect("/");
@@ -49,7 +58,6 @@ internal sealed class MediatorResetPassword<TUser> : MediatorResetPassword where
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            Console.Write("USER NULL");
             Response.Redirect("/");
             return;
         }
