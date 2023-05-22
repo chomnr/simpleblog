@@ -23,7 +23,8 @@ public class DefaultModelManager
             admin["LastName"], 
             admin["Username"], 
             admin["Password"], 
-            admin["Email"]);
+            admin["Email"],
+            true);
         var adminRole = new IdentityUserRole<string>
         {
             UserId = defaultAdminUser.Id,

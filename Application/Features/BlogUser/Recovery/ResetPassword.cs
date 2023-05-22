@@ -31,6 +31,7 @@ public class PasswordResetCommand : IRequest<IdentityResult>
     public string ResetToken { get; set; }
     [Required]
     [DataType(DataType.Password)]
+    [Compare("ConfirmPassword", ErrorMessage = "Your passwords do not match.")]
     public string Password { get; set; }
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
@@ -48,6 +49,11 @@ public class PasswordResetCommandHandler : IRequestHandler<PasswordResetCommand,
     public async Task<IdentityResult> Handle(PasswordResetCommand payLoad, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(payLoad.UserId);
+        var error = new CustomError();
+        if (payLoad.Password != payLoad.ConfirmPassword)
+        {
+            return IdentityResult.Failed(error.PasswordDoesNotMatch());
+        }
         // ResetPassword.cshtml.cs checks for it.
         return await _userManager.ResetPasswordAsync(user, payLoad.ResetToken, payLoad.Password);
     }
