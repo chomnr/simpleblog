@@ -20,7 +20,8 @@
 }
 
 html, body {
-    background: var(--primary-background);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), 
+    url("https://cdn.discordapp.com/attachments/1088291004341301328/1110035740529795082/chomnr_black_background_texture_subtle_flaws_in_the_tiles_da604a1d-304b-42b1-b404-fb7648a3bf4c.png") ;
     font-family: var(--default-font);
     font-size: var(--primary-font-size);
     padding: 0;
@@ -127,6 +128,8 @@ input[type="checkbox"]:after
     justify-content: center;
     border-bottom: 1px solid var(--accent-color);
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    background: none;
+    background: var(--primary-background);
 }
 
 nav.default-nav {
