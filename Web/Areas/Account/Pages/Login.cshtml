@@ -42,54 +42,6 @@
     </div>
 </section>
 
-@*
-<section class="custom-section" style="
-            justify-content: center;
-            height: 100vh;
-            align-items: center;
-            flex-direction: column">
-    <div class="lds-dual-ring" style="display: none;"><div></div></div>
-    <form id="loginForm" class="custom-form"  style="
-            background: var(--white);
-            display: flex; 
-            align-items: center" method="post">
-        <h3>Welcome Back.</h3>
-        <span class="subtitle">Enter your credentials to access your account.</span>
-        <span asp-validation-for="Input.Login" style="font-size: 0.6em;"></span>
-        <span asp-validation-for="Input.Password" style="font-size: 0.6em;"></span>
-        <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
-        
-        <div class="form-spacer"></div>
-        <div class="custom-form-group">
-            <i class="fa-solid fa-user custom-input-icon" style="color: var(--blue-light)"></i>
-            <input asp-for="Input.Login" class="custom-input icon-supp" placeholder="Username or Email" value=""/>
-        </div>
-        <div class="custom-form-group">
-            <i class="fa-solid fa-lock custom-input-icon" style="color: var(--blue-light)"></i>
-            <input asp-for="Input.Password" class="custom-input icon-supp" placeholder="Password" type="password" autofocus=""/>
-        </div>
-        <div class="custom-form-group row"; style="margin-top: 6px; margin-bottom: 6px;">
-            <div style="position: absolute;left: 0;display:flex;align-items: center">
-                @Html.CheckBox("RememberMe")
-                <label class="custom-checkbox-label">Remember Me</label>
-            </div>
-        </div>
-        <div class="custom-form-group">
-            <button class="custom-button default" id="loginSubmit"  type="submit">Log in</button>
-        </div>
-    </form>
-
-    <p style="padding-top: 3rem;font-size: 0.8em;">Forgot your password? <a href="/account/recovery" style="color: var(--blue-light)">Reset Password</a></p>
-</section>
-*/
-<script>
-    if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href )
-    }
-</script>
-*@
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
