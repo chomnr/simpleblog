@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Entities;
 using Application.Features.BlogUser;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SendGrid;
@@ -26,10 +28,12 @@ public abstract class MediatorRecoveryModel : PageModel
 internal sealed class MediatorRecoveryModel<TUser> : MediatorRecoveryModel where TUser : class
 {
     private readonly IMediator _mediator;
+    private readonly SignInManager<BlogUser> _signInManager;
 
-    public MediatorRecoveryModel(IMediator mediator)
+    public MediatorRecoveryModel(IMediator mediator, SignInManager<BlogUser> signInManager)
     {
         _mediator = mediator;
+        _signInManager = signInManager;
     }
     
     // todo fix.
@@ -41,8 +45,11 @@ internal sealed class MediatorRecoveryModel<TUser> : MediatorRecoveryModel where
         }
 
         returnUrl ??= Url.Content("~/");
-
-        await HttpContext.SignOutAsync();
+        
+        if (_signInManager.IsSignedIn(HttpContext.User))
+        {
+            Response.Redirect("/");
+        }
         
         ReturnUrl = returnUrl;
     }

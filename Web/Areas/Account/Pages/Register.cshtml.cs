@@ -29,11 +29,15 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
 {
     private readonly IMediator _mediator;
     private readonly UserManager<BlogUser> _userManager;
+    private readonly SignInManager<BlogUser> _signInManager;
 
-    public MediatorRegisterModel(IMediator mediator, UserManager<BlogUser> userManager)
+    public MediatorRegisterModel(IMediator mediator, 
+        UserManager<BlogUser> userManager,
+        SignInManager<BlogUser> signInManager)
     {
         _mediator = mediator;
         _userManager = userManager;
+        _signInManager = signInManager;
     }
     
     public override async Task OnGetAsync(string? returnUrl = null)
@@ -44,14 +48,16 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
         }
 
         returnUrl ??= Url.Content("~/");
-
-        await HttpContext.SignOutAsync();
+        
+        if (_signInManager.IsSignedIn(HttpContext.User))
+        {
+            Response.Redirect("/");
+        }
         
         ReturnUrl = returnUrl;
     }
-    //redirect
-    //Response.Redirect("/account/registration/successful");
-    // make a create account page that renders after register successful.
+
+    
     public override async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         if (!ModelState.IsValid)
