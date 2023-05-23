@@ -40,6 +40,6 @@ internal sealed class RetrievePostsCommandHandler : IRequestHandler<RetrievePost
     
     public async Task<JsonResult> Handle(RetrievePostsCommand payLoad, CancellationToken cancellationToken)
     {
-        return await _postService.RetrieveAsync(payLoad, true);
+        return await _postService.RetrieveAllAsync(payLoad, true);
     }
 }

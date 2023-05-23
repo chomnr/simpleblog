@@ -6,5 +6,7 @@ namespace Application.Common.Interface;
 public interface IPostService
 {
     Task<bool> CreateAsync(CreatePostCommand command, string userId);
-    Task<JsonResult> RetrieveAsync(RetrievePostsCommand command, bool partial);
+    Task<JsonResult> RetrieveAllAsync(RetrievePostsCommand command, bool partial);
+    
+    Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command);
 }

@@ -1,4 +1,6 @@
-﻿using Application.Common;
+﻿using System.Net;
+using System.Text.RegularExpressions;
+using Application.Common;
 using Application.Common.Interface;
 using Application.Entities;
 using Application.Features.Post;
@@ -6,6 +8,7 @@ using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using SendGrid.Helpers.Mail.Model;
 
 namespace Application.Infrastructure.Services;
 
@@ -24,13 +27,14 @@ public class PostService : IPostService
     public async Task<bool> CreateAsync(CreatePostCommand command, string userId)
     {
         var title = command.Title;
-        var body = command.Body;
+        var body = WebUtility.HtmlDecode(command.Body);
         var tags = command.Tags;
         
         if (title.Length < PostConstraints.MinTitleLength) { return false; }
         if (title.Length > PostConstraints.MaxTitleLength) { return false; }
-
+        
         if (body.Length > PostConstraints.MaxBodyLength) { return false; }
+        // you can add minimum body tag requirement.
         
         if (tags.Count < PostConstraints.MinTagLength) { return false; }
         if (tags.Count > PostConstraints.MaxTagLength) { return false; }
@@ -63,7 +67,7 @@ public class PostService : IPostService
         return true;
     }
 
-    public async Task<JsonResult> RetrieveAsync(RetrievePostsCommand command, bool partial)
+    public async Task<JsonResult> RetrieveAllAsync(RetrievePostsCommand command, bool partial)
     {
         var page = command.Page;
         var retrieval = page == 1 ? 7 : 12;
@@ -74,7 +78,7 @@ public class PostService : IPostService
                 post => post.UserId,
                 user => user.Id,
                 (post, user) => new { Post = post, UserName = user.UserName }
-            )
+            ).OrderByDescending(post => post.Post.DateCreated)
             .Select(postWithUserName => new
             {
                 postWithUserName.Post.Id,
@@ -97,5 +101,27 @@ public class PostService : IPostService
         var json = JsonConvert.SerializeObject(result);
 
         return new JsonResult(json);
+    }
+
+    public async Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command)
+    {
+        var posts = _context.Posts;
+
+        var id = command.Id;
+
+        var result = await posts.FindAsync(id);
+        var user = await _context.Users.FindAsync(result.UserId);
+        if (user != null)
+        {
+            result.Username = user.UserName;
+        }
+        else
+        {
+            result.Username = "{NOT_FOUND}";
+        }
+        
+        var json = JsonConvert.SerializeObject(result);
+
+        return new JsonResult(JsonConvert.SerializeObject(result));
     }
 }

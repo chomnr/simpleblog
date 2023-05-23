@@ -11,14 +11,80 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 
-@Html.AntiForgeryToken();
+@Html.AntiForgeryToken()
+<div style="margin-bottom: 60px;"></div>
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
+    <div class="blg-child-node col" style="justify-content: center;align-items: center;margin-top:10px;">
+        <span asp-validation-for="Input.Title" style="font-size: 0.6em;"></span>
+        <span asp-validation-for="Input.Body" style="font-size: 0.6em;"></span>
+        <span asp-validation-for="Input.Tags" style="font-size: 0.6em;"></span>
+        <span asp-validation-for="TagHolder" style="font-size: 0.6em;"></span>
+        <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
+        <h1 class="section-title with-divider"><span style="color: #242424">#</span> CREATE POST</h1>
+        <input id="title-proxy" class="section-title" placeholder="TITLE"/>
+
+        <div style="display:flex;width: 100%;justify-content: start;align-items: center">
+            <ul id="tags-display" class="selectable-tags"></ul>
+            <input id="tags-proxy" class="section-tags" placeholder="Tags"/>
+        </div>
+        <form id="loginForm" method="post" style="margin-top: 7px;width: 100%;justify-content: center;">
+            <div style="width: 100%;justify-content: start;align-items: start;word-break: break-all;">
+                <div id="editor" style="width: 100%;word-break: break-all;">
+                    <p style="word-break: break-all"></p>
+                </div>
+            </div>
+            <!-- PROXIED INPUTS -->
+            <input asp-for="Input.Tags" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+            <input asp-for="TagHolder" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+            <input asp-for="Input.Title" class="custom-input" placeholder="TITLE_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+            <input asp-for="Input.Body" class="custom-input" placeholder="BODY_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+            <!-- ENDS HERE -->
+            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+            <button type="submit" class="dark" aria-hidden="true">Post</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    #editor {
+        height: 500px; 
+        overflow-y: auto
+    }
+    .ql-toolbar.ql-snow { 
+        border: 0; !important; 
+        border-left: 2px solid var(--accent-color);
+        background: var(--light-black);
+        color: var(--dirty-red);
+    }
+    
+    .ql-container.ql-snow { 
+        border: 0; !important;
+        border-left: 2px solid var(--accent-color)
+    }
+    
+    .ql-toolbar .ql-stroke {
+        fill: none;
+        stroke: var(--dirty-red);
+    }
+    
+    .ql-toolbar .ql-fill {
+        fill: var(--dirty-red);
+        stroke: none;
+    }
+    
+    .ql-toolbar .ql-picker {
+        color: var(--dirty-red);
+    }
+</style>
+
+@*
 <section class="custom-section" style="
             justify-content: start;
             height: 100vh;
             align-items: center;
             flex-direction: column;">
     <div class="child-node" style="max-width: 900px;">
-        <form id="createPost" class="custom-form" style="padding: 0;" method="post">
+        <form id="createPost" class="custom-form" style="padding: 0;"  method="post">
             <span asp-validation-for="Input.Title" style="font-size: 0.6em;"></span>
             <span asp-validation-for="Input.Body" style="font-size: 0.6em;"></span>
             <span asp-validation-for="Input.Tags" style="font-size: 0.6em;"></span>
@@ -35,17 +101,19 @@
                 <input asp-for="TagHolder" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
             </div>
             <div class="custom-form-group col" style="width: 100%;justify-content: start;align-items: start">
-                <div id="editor" style="max-width: 691px;width: 100%">
+                <div id="editor" style="max-width: 691px; width: 100%;word-break: break-all;">
                     <p style="word-break: break-all">Write something great!</p>
                 </div>
             </div>
             <input asp-for="Input.Body" class="custom-input" placeholder="BODY_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
-            <div class="custom-form-group">
-                <button class="custom-button" id="postSubmit"  type="submit">Post</button>
+            <div class="custom-form-group" style="align-self: center">
+                <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+                <button class="custom-button default" id="postSubmit" type="submit">Post</button>
             </div>
         </form>
     </div>
 </section>
+*@
 
 <!--
 <style>
@@ -55,9 +123,10 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-<!-- Initialize Quill editor -->
+
+<!-- QuillJS Editor -->
 <script>
-    const toolbarOptions = [
+const toolbarOptions = [
         [{ 'header': [1, 2, false] }, { 'font': [] }],
             ['bold', 'italic', 'underline', 'strike', 'blockquote'],
             [{'list': 'ordered'}, {'list': 'bullet'}, 
@@ -65,35 +134,158 @@
             ['link', 'image', 'video', 'code'],
             ['clean']                                        
     ];
+    
+var options = {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  placeholder: 'Compose an epic...',
+  theme: 'snow'
+};
 
-   var quill = new Quill('#editor', {
-     modules: {
-       toolbar: toolbarOptions
-     },
-     theme: 'snow'
-   })
+
+let quill = new Quill('#editor', options);
+
+quill('toolbar').addHandler('image', function() {
+  var url = prompt('Enter the image URL:');
+  if (url) {
+    quill.focus();
+    var range = quill.getSelection();
+    quill.insertEmbed(range.index, 'image', url);
+  }
+});
 </script>
+<!-- QuillJS Editor Ends Here -->
 
-<!-- Tags -->
+
 <script>
+let title = document.getElementById("Input_Title")   
+let title_proxy = document.getElementById("title-proxy");
+
+let body = document.getElementById("Input_Body");
+let body_proxy = quill.root;
+
+let tags = document.getElementById("Input_Tags");
+let tags_proxy = document.getElementById("tags-proxy");
+let tags_display = document.getElementById("tags-display");
+let tags_conversion = document.getElementById("TagHolder");
+let tags_list = [];
+
+/* Constraints */
+const MAX_TAGS = 4;
+const MAX_TAG_NAME_LENGTH = 15;
+const MIN_TAG_NAME_LENGTH = 3;
+/* ENDS HERE */
+
+
+/* PROXIES EVENT HANDLING */
+title_proxy.addEventListener("keydown", function () {
+    title.value = stripHTMLTags(title_proxy.value)
+});
+
+quill.on("text-change", function() {
+    body.value = body_proxy.innerHTML;
+});
+
+tags_proxy.addEventListener("keydown", function(e) {
+	if (e.key === ",") {
+		let target = e.target.value;
+		e.preventDefault();
+		if (
+			target.length >= MIN_TAG_NAME_LENGTH &&
+			target.length <= MAX_TAG_NAME_LENGTH &&
+			tags_list.length < MAX_TAGS &&
+			!tags_list.includes(target) &&
+			tags_proxy.value.length !== 0) {
+			tags_list.push(e.target.value)
+			addTag(e.target.value);
+			e.target.value = '';
+		}
+	}
+});
+/* ENDS HERE */
+
+/* ADDITIONAL EVENT HANDLING  */
+tags_display.addEventListener("click", function(e) {
+    if (e.target.tagName === 'LI') {
+       let index = e.target.id.replace("tag-", "");
+       tags_list.splice(index, 1);
+       e.target.remove();
+       refreshTags();
+    }
+});
+
+/* TAG FUNCTIONS */
+function reloadTags() {
+  tags_proxy.value = '';
+  tags.value = '';
+  tags_conversion.value = '';
+  tags_display.innerHTML = '';
+}
+
+function addTag(tag) {
+    let a = document.createElement("li");
+    a.textContent = tag.replace(" ", "\u00A0");
+    tags_display.appendChild(a);
+    tags.value = JSON.stringify(tags_list);
+    tags_conversion.value = tags.value;
+}
+
+function refreshTags() {
+    reloadTags();
+    for (let i = 0; i < tags_list.length; i++) {
+        addTag(tags_list[i]);
+    }
+}
+/* ENDS HERE */
+
+function stripHTMLTags(htmlString) {
+  return htmlString.replace(/<[^>]*>/g, '');
+}
+
+/*
+   
 let currentTags = [];
+let title = document.getElementById("Input_Title");
+
 let input = document.getElementById("tags");
 let result = document.getElementById("tags-output");
 let real = document.getElementById("Input_Tags");
 let tagHolder = document.getElementById("TagHolder");
 
-let editor = document.getElementById("editor");
 let editor_value = document.getElementById("Input_Body");
-
-
+    
 const MAX_TAGS = 4;
 const MAX_TAG_NAME_LENGTH = 15;
 const MIN_TAG_NAME_LENGTH = 3;
+
+
+let persistent_post = {
+    title: title.value,
+    tags: currentTags,
+    body: editor_value.value
+}
+    
+function loadPersistentPost(){
+    var data = localStorage.getItem("post")
+    
+    if (data !== null) {
+        var parse = JSON.parse(data);
+        title.value = parse.title;
+        currentTags = parse.tags;
+        editor_value.value = parse.body;
+        quill.root.innerHTML = parse.body;
+        addTags();        
+    }
+}
+
+window.addEventListener("load", loadPersistentPost);
 
 function reloadTags() {
     result.innerHTML = '';
     real.value = '';
     tagHolder.value = real.value;
+    persistent_post.tags = '';
 }
 
 function addTag(tag) {
@@ -102,6 +294,7 @@ function addTag(tag) {
     result.appendChild(child);
     real.value = JSON.stringify(currentTags);
     tagHolder.value = real.value;
+    persistent_post.tags = currentTags;
 }
 
 function addTags() {
@@ -109,11 +302,11 @@ function addTags() {
     for (let i = 0; i < currentTags.length; i++) {
         addTag(currentTags[i]);
         console.log("test");
-    }    
+    }
 }
 
 input.addEventListener('keydown', function(e) {
-      if (e.key === "," || e.code === "Comma" || e.code === "Unidentified") {
+      if (e.key === "Enter" || e.code === "Comma" || e.code === "Unidentified") {
         const targetValue = e.target.value.trim().replace(",", "");
         if (
             targetValue.length >= MIN_TAG_NAME_LENGTH &&
@@ -125,29 +318,40 @@ input.addEventListener('keydown', function(e) {
             currentTags.push(targetValue);
             addTag(targetValue);
         }
+        localStorage.setItem("post", JSON.stringify(persistent_post));
     }
+});
+
+title.addEventListener('keyup', function(e) {
+    persistent_post.title = title.value
+    localStorage.setItem("post", JSON.stringify(persistent_post));
 });
 
 input.addEventListener('keyup', function(e) {
-    if (e.key === "," || e.code === "Comma" || e.code === "Unidentified") {
-        input.value = "";
-        tag_holder = input.value;
+    if (e.key === "Enter" || e.code === "Comma" || e.code === "Unidentified") {
+        input.value = ""; // reset the field to empty...
     }
 });
 
-editor.addEventListener('keyup', function(e) {
-    editor_value.value = editor.innerHTML;
-    console.log(editor_value.value)
-});
-
+quill.on("text-change", function() {
+    editor_value.value = quill.root.innerHTML;
+    persistent_post.body = editor_value.value;
+    
+    persistent_post.title = title.value;
+    persistent_post.tags = currentTags;
+        
+    localStorage.setItem("post", JSON.stringify(persistent_post));
+})
 
 result.addEventListener("click", function(e) {
     if (e.target.tagName === 'LI') {
-        var tagIndex = e.target.id.replace("tag-", "");
+        let tagIndex = e.target.id.replace("tag-", "");
         currentTags.splice(tagIndex, 1);
         e.target.remove();
         addTags();
+        localStorage.setItem("post", JSON.stringify(persistent_post));
     }
 });
-
+*/
 </script>
+
