@@ -33,6 +33,11 @@ h1, h2, h3, h4 {
     margin: 0;
 }
 
+code {
+    background: var(--dirty-red);
+    color: var(--light-black);
+}
+
 @media only screen and (min-width: 768px) {
     h1 { font-size: 3rem; }
     h2 { font-size: 2.4rem; }
@@ -77,6 +82,12 @@ form .group {
     width: 100%;
 }
 
+form .group.row {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
 form .group label {
     font-weight: normal;
     font-size: 0.8rem;
@@ -101,6 +112,16 @@ button {
     color: var(--light-black);
     padding: 3px 6px;
     width: inherit; /* Set width to inherit from parent */
+}
+
+button.dark {
+    background: var(--light-black);
+    color: var(--dirty-red);
+}
+
+button.dark:hover {
+    background: var(--dirty-red);
+    color: var(--light-black);
 }
 
 button:hover {
@@ -193,13 +214,30 @@ nav.default-nav li a:hover { opacity: 0.6; }
 .blg-section .blg-child-node .section-title { font-weight: bold; width: 100%; }
 .blg-section .blg-child-node .section-title.with-divider { border-bottom: 1px solid var(--accent-color); }
 
+/* INPUT TITLE */
+.blg-section .blg-child-node input.section-title {
+    background: transparent;
+    font-weight: bold;
+    font-size: 2.8rem;
+    color: var(--dirty-red);
+}
+
+.blg-section .blg-child-node input.section-tags {
+    background: transparent;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--dirty-red);
+}
+
+/* ENDS HERE */
+
 @media only screen and (max-width: 767px) {
     .blg-section .blg-child-node .section-title { font-size: 2.3rem; }
 }
  
 /* Article sub-post (Front Page) */
 .blg-section .blg-child-node > article.sub-post:first-of-type {
-    margin-top: 9px;
+    margin-top: 7px;
 }
 
 article.sub-post {
@@ -381,4 +419,30 @@ article.view-post ul.view-tags li:hover {
         opacity: 1;
         cursor: default;
     }
+}
+
+/* SELECTABLE TAGS */
+ul.selectable-tags {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    gap: 3px;
+}
+
+ul.selectable-tags li {
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    background: var(--dirty-red);
+    color: var(--light-black);
+    padding: 3px 7px;
+    font-size: 0.70rem;
+    border-radius: 7px;
+}
+
+ul.selectable-tags li:hover {
+    cursor: pointer;
+    background: var(--light-black);
+    color: var(--dirty-red);
 }
