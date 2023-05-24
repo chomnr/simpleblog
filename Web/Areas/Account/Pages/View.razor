@@ -1,0 +1,11 @@
+﻿@page "/account/{accountId}"
+
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
+    <div class="blg-child-node col" style="color: #eae7e1;">
+        <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> POSTS BY {USERNAME}</h1>
+    </div>
+</section>
+@code {
+    [Parameter]
+    public string AccountId { get; set; }
+}

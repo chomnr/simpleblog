@@ -12,7 +12,10 @@
     --secondary-color: black;
     
     --dirty-red: #ddd7d5;
+    --darker-dirty-red: #C7C2C0;
+    
     --light-black: #1E1E1E;
+    --darker-black: #0D0D0D;
     
     --accent-color: #1A1A1A;
     
@@ -27,6 +30,12 @@ html, body {
     padding: 0;
     margin: 0;
 }
+
+/* FONT SIZES */
+.text-default {
+    font-size: inherit;
+}
+/* ENDS HERE */
 
 h1, h2, h3, h4 {
     padding: 10px 0;
@@ -419,6 +428,50 @@ article.view-post ul.view-tags li:hover {
         opacity: 1;
         cursor: default;
     }
+}
+/* Pagination */
+.pagination {
+    display: flex;
+    margin-top: 15px;
+    border-radius: 3px;
+    gap: 13px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+.pagination a {
+    text-decoration: none;
+    text-align: center;
+    color: var(--dirty-red);
+    padding: 5px 7px;
+    /* 
+    color: var(--light-black);
+    border-right: 1px solid var(--light-black);
+    background: var(--dirty-red);
+    */
+}
+
+.pagination a:hover {
+    /*
+    color: var(--dirty-red);
+   background: var(--light-black);*/
+    background: var(--dirty-red);
+    color: var(--darker-black);
+    cursor: pointer;
+}
+
+.pagination a:active {
+    /*
+    color: var(--dirty-red);
+   background: var(--light-black);*/
+    background: var(--dirty-red);
+    color: var(--darker-black);
+    cursor: pointer;
+}
+
+
+/* MODIFIERS */
+.no-border {
+    border: 0;
 }
 
 /* SELECTABLE TAGS */
