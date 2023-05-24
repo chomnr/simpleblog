@@ -130,7 +130,22 @@ public class PostService : IPostService
 
         var posts = _context.Posts
             .Where(u => u.Tags.Contains(command.Tag))
-            .Select(u => u);
+            .Join(
+                _context.Users,
+                post => post.UserId,
+                user => user.Id,
+                (post, user) => new { Post = post, UserName = user.UserName }
+            ).OrderByDescending(post => post.Post.DateCreated)
+            .Select(postWithUserName => new
+            {
+                postWithUserName.Post.Id,
+                postWithUserName.Post.UserId,
+                postWithUserName.Post.Title,
+                postWithUserName.Post.Body,
+                postWithUserName.Post.DateCreated,
+                postWithUserName.Post.Tags,
+                UserName = postWithUserName.UserName,
+            });
         
         var skipCalc = page != 1 ? (page - 1) * retrieval : 0;
         var result = await posts.Skip(skipCalc).Take(retrieval).ToListAsync();
