@@ -19,6 +19,9 @@
     
     --accent-color: #1A1A1A;
     
+    --danger: #E53935;
+    --darker-danger: #D32F2F;
+    
     --default-article-padding: 7px 0px;
 }
 
@@ -130,6 +133,16 @@ button.dark {
 
 button.dark:hover {
     background: var(--dirty-red);
+    color: var(--light-black);
+}
+
+button.danger {
+    background: var(--danger);
+    color: var(--dirty-red);
+}
+
+button.danger:hover {
+    background: var(--darker-dirty-red);
     color: var(--light-black);
 }
 
@@ -319,6 +332,21 @@ article.sub-post .post-date:hover {
 
  article.sub-post ul.post-tags li:hover {
     opacity: 0.7;
+}
+
+ article.sub-post .post-manager {
+     display: flex;
+     margin-left: auto;
+     padding-right: 7px;
+     gap: 9px;
+ }
+
+article.sub-post .post-manager a {
+    color: inherit;
+}
+ 
+article.sub-post .post-manager .action {
+    color: inherit;
 }
 
 @media only screen and (max-width: 767px) {

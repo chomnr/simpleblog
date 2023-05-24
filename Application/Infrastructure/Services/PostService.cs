@@ -1,10 +1,12 @@
 ﻿using System.Net;
+using System.Security.Claims;
 using Application.Common;
 using Application.Common.Interface;
 using Application.Entities;
 using Application.Features.BlogUser;
 using Application.Features.Post;
 using Application.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -154,5 +156,32 @@ public class PostService : IPostService
             PageCount = totalPosts,
             AllPosts = result
         }));
+    }
+
+    public async Task<bool> DeleteAsync(DeletePostCommand command, string userId, string role)
+    {
+
+        var posts = _context.Posts;
+        var postId = command.PostId;
+        var findPost = await posts.FindAsync(postId);
+
+        if (findPost != null)
+        {
+            if (findPost.UserId.Equals(userId, StringComparison.OrdinalIgnoreCase))
+            {
+                posts.Remove(findPost);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            if (role != null && role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                posts.Remove(findPost);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 }

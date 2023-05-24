@@ -4,8 +4,10 @@
 @using Application.Entities
 @using Newtonsoft.Json
 @using Application.Common
+@using System.Security.Claims
 @inject IMediator Mediator;
 @inject NavigationManager navManager;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Index</PageTitle>
 
@@ -31,6 +33,14 @@
                             }
                         }
                     </ul>
+                    
+                    @if (post.UserId == UserId)
+                    {
+                        <div class="post-manager">
+                            <div class="action"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></div>
+                            <div class="action"><a href="post/delete?postId=@post.Id"><i class="fa-solid fa-trash"></i></a></div>
+                        </div>
+                    }
                 </article>
             }
             <div class="pagination" >
@@ -73,6 +83,10 @@
     private int Page { get; set; } = 1;
     private int PreviousPage { get; set; }
     private int TotalPages { get; set; }
+
+    private AuthenticationState? UserState;
+    private string? UserId;
+    private string? UserRole;
 
     private List<Post> PostsData { get; set; }
     
@@ -131,6 +145,13 @@
 
     protected override async Task OnInitializedAsync()
     {
+        UserState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (UserState != null)
+        {
+            UserId = UserState.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserRole = UserState.User.FindFirstValue(ClaimTypes.Role);
+        }
+        
         var uri = new Uri(navManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         

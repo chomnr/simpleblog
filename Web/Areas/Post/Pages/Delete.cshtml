@@ -1,0 +1,39 @@
+﻿@page
+@model Web.Areas.Post.Pages.MediatorDeletePost<Application.Entities.BlogUser>
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "_Layout";
+}
+
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;height: 100vh;margin-top: 25px">
+    <div class="blg-child-node col" style="color: #eae7e1;align-items: center;">
+        @if (!Model.IsSuccessful)
+        {
+            <span asp-validation-for="Input.PostId" style="font-size: 0.6em;"></span>
+
+            <div style="padding: 15px;border-radius: 50%;display: flex;align-items: center;">
+                <i class="fa-solid fa-trash" style="font-size: 2rem;"></i>
+            </div>
+            <div style="text-align:center;font-size: 1.3rem;"><b>Would You Like To Trash This Post?</b></div>
+            <br>
+            <p>This action cannot be reversed.</p>
+            <br>
+            <form id="deletePostForm" method="post">
+                <input asp-for="Input.PostId" class="no-border" placeholder="TAGS_VALUE" type="hidden"/>
+                <button style="width: 150px;" type="submit">DELETE</button>
+            </form>
+        }
+        else
+        {
+            <div style="padding: 15px;border-radius: 50%;display: flex;align-items: center;">
+                <i class="fa-solid fa-check" style="font-size: 2rem;"></i>
+            </div>
+            <div style="text-align:center;font-size: 1.3rem;"><b>Post Deleted.</b></div>
+            <br>
+            <p>You have successfully deleted the post.</p>
+            <button style="width: 150px;"><a href="/" style="color:inherit;text-decoration: none;">GO to WEBSITE</a></button>
+        }
+    </div>
+</section>
