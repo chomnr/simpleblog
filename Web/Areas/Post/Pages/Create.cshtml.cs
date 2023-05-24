@@ -69,7 +69,7 @@ internal sealed class MediatorCreatePostModel<TPost> : MediatorCreatePostModel w
             // Converts {"[\"yes\",\"hello\"]"} to {dog,yes,hello,readable} in Database.
              //Input.Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(Input.Body));
             if (TagHolder != null) {
-                Input.Tags = JsonConvert.DeserializeObject<List<string>>(TagHolder);
+                Input.Tags = JsonConvert.DeserializeObject<List<string>>(TagHolder.ToUpper());
             }
             
             Input.Title = sanitizer.Sanitize(Input.Title);

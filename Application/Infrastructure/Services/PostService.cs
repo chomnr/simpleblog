@@ -123,43 +123,23 @@ public class PostService : IPostService
         return new JsonResult(JsonConvert.SerializeObject(posts));
     }
 
-    /*
-    public async Task<JsonResult> RetrieveAllFromUserAsync(RetrievePostsCommand command)
+    public async Task<JsonResult> RetrieveAllByTag(RetrievePostsByTagCommand command)
     {
         var page = command.Page;
-        var userId = command.UserId;
         const int retrieval = PostConstraints.RetrievalAmount;
-        
+
         var posts = _context.Posts
-            .Where(u => u.UserId == userId)
-            .OrderDescending()
+            .Where(u => u.Tags.Contains(command.Tag))
             .Select(u => u);
         
+        var skipCalc = page != 1 ? (page - 1) * retrieval : 0;
+        var result = await posts.Skip(skipCalc).Take(retrieval).ToListAsync();
+        var totalPosts = (int)Math.Ceiling((double)posts.Count() / retrieval);
         
-        
-        /*
-        if (page != 1)
+        return new JsonResult(JsonConvert.SerializeObject(new
         {
-            //retrieval = page == 2 ? postPerPage : postPerPage; // 
-            var result = await posts.Skip((page - 1) * retrieval).Take(retrieval).ToListAsync();
-            var totalPosts = (int)Math.Ceiling((double)posts.Count() / retrieval);
-
-            return new JsonResult(JsonConvert.SerializeObject(new
-            {
-                pageCount = totalPosts,
-                AllPosts = result
-            }));
-        }
-        else
-        {
-            var result = await posts.Take(retrieval).ToListAsync();
-            var totalPosts = (int)Math.Ceiling((double)posts.Count() / retrieval);
-            return new JsonResult(JsonConvert.SerializeObject(new
-            {
-                pageCount = totalPosts,
-                AllPosts = result
-            }));
-            
-        }
-        */
+            PageCount = totalPosts,
+            AllPosts = result
+        }));
+    }
 }
