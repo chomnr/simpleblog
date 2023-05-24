@@ -31,12 +31,24 @@
                         <li class="read-time"><a style="color:inherit;text-decoration: none;"></a>@GetReadTime(PostInfo.Body) min read</li>
                     </ul>
                 </div>
-                @HtmlContent
+                <div id="default-content">
+                    @HtmlContent
+                </div>
             </article>
 
         }
     </div>
 </section>
+
+<style>
+        
+        
+        #default-content p {
+            font-size: 13px;
+            padding:  0;
+            margin:  0;
+        }
+</style>
 
 @code {
     private Post PostInfo;
