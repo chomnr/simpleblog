@@ -53,8 +53,6 @@
             
             var response = await Mediator.Send(command);
             ProfileResult = JsonConvert.DeserializeObject<Profile>(response.Value.ToString());
-            
-            Console.WriteLine(ProfileResult.UserName);
         }
     }
     
