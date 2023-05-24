@@ -9,4 +9,5 @@ public interface IPostService
     Task<JsonResult> RetrieveAllAsync(RetrievePostsCommand command, bool partial);
     
     Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command);
+    Task<JsonResult> RetrieveAllFromUserAsync(string id);
 }
