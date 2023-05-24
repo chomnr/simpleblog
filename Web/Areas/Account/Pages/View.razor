@@ -12,7 +12,7 @@
     <div class="blg-child-node col" style="color: #eae7e1;">
         @if (ProfileResult != null)
         {
-            <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> POSTS BY <span style="color: #FDD835">@ProfileResult.UserName.ToUpper()</span></h1>
+            <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> POSTS BY <span style="color: #FDD835;">@ProfileResult.UserName.ToUpper()</span></h1>
             @foreach (var post in ProfileResult.Posts)
             {
                 <article id="post-@post.Id" class="sub-post">

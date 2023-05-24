@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.RegularExpressions;
 using Application.Common;
 using Application.Common.Interface;
 using Application.Entities;
@@ -9,7 +8,6 @@ using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SendGrid.Helpers.Mail.Model;
 
 namespace Application.Infrastructure.Services;
 
