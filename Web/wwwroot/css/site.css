@@ -433,16 +433,19 @@ article.view-post ul.view-tags li:hover {
 .pagination {
     display: flex;
     margin-top: 15px;
+    margin-bottom: 10px;
     border-radius: 3px;
     gap: 13px;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     font-weight: bold;
 }
 .pagination a {
     text-decoration: none;
     text-align: center;
     color: var(--dirty-red);
-    padding: 5px 7px;
+    padding: 5px 13px;
+    border-radius: 3px;
+    background: var(--darker-black);
     /* 
     color: var(--light-black);
     border-right: 1px solid var(--light-black);
@@ -459,7 +462,7 @@ article.view-post ul.view-tags li:hover {
     cursor: pointer;
 }
 
-.pagination a:active {
+.pagination a.active {
     /*
     color: var(--dirty-red);
    background: var(--light-black);*/
