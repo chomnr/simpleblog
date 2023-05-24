@@ -14,12 +14,12 @@
 @Html.AntiForgeryToken()
 <div style="margin-bottom: 60px;"></div>
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
-    <div class="blg-child-node col" style="justify-content: center;align-items: center;margin-top:10px;">
-        <span asp-validation-for="Input.Title" style="font-size: 0.6em;"></span>
-        <span asp-validation-for="Input.Body" style="font-size: 0.6em;"></span>
-        <span asp-validation-for="Input.Tags" style="font-size: 0.6em;"></span>
-        <span asp-validation-for="TagHolder" style="font-size: 0.6em;"></span>
-        <div asp-validation-summary="ModelOnly" style="font-size: 0.6em;"></div>
+    <div class="blg-child-node col" style="justify-content: center;align-items: center;margin-top:10px;font-size: 0.6em;">
+        <span asp-validation-for="Input.Title" ></span>
+        <span asp-validation-for="Input.Body"></span>
+        <span asp-validation-for="Input.Tags"></span>
+        <span asp-validation-for="TagHolder"></span>
+        <div asp-validation-summary="ModelOnly"></div>
         <h1 class="section-title with-divider"><span style="color: #242424">#</span> CREATE POST</h1>
         <input id="title-proxy" class="section-title" placeholder="TITLE"/>
 
@@ -27,19 +27,19 @@
             <ul id="tags-display" class="selectable-tags"></ul>
             <input id="tags-proxy" class="section-tags" placeholder="Tags"/>
         </div>
-        <form id="loginForm" method="post" style="margin-top: 7px;width: 100%;justify-content: center;">
-            <div style="width: 100%;justify-content: start;align-items: start;word-break: break-all;">
-                <div id="editor" style="width: 100%;word-break: break-all;">
+        <form id="loginForm" method="post">
+            <div>
+                <div id="editor">
                     <p style="word-break: break-all"></p>
                 </div>
             </div>
             <!-- PROXIED INPUTS -->
-            <input asp-for="Input.Tags" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
-            <input asp-for="TagHolder" class="custom-input" placeholder="TAGS_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
-            <input asp-for="Input.Title" class="custom-input" placeholder="TITLE_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
-            <input asp-for="Input.Body" class="custom-input" placeholder="BODY_VALUE" style="border: 0;font-size: 1em;" type="hidden"/>
+            <input asp-for="Input.Tags" class="no-border" placeholder="TAGS_VALUE" type="hidden"/>
+            <input asp-for="TagHolder" class="no-border" placeholder="TAGS_VALUE" type="hidden"/>
+            <input asp-for="Input.Title" class="no-border" placeholder="TITLE_VALUE" type="hidden"/>
+            <input asp-for="Input.Body" class="no-border" placeholder="BODY_VALUE" type="hidden"/>
             <!-- ENDS HERE -->
-            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+            <button type="submit" disabled aria-hidden="true" hidden></button>
             <button type="submit" class="dark" aria-hidden="true">Post</button>
         </form>
     </div>
@@ -48,7 +48,15 @@
 <style>
     #editor {
         height: 500px; 
-        overflow-y: auto
+        overflow-y: auto;
+        width: 100%;
+        word-break: break-all;
+    }
+    
+    #loginForm {
+        margin-top: 7px;
+        width: 100%;
+        justify-content: center;
     }
     .ql-toolbar.ql-snow { 
         border: 0; !important; 
