@@ -1,4 +1,5 @@
-﻿using Application.Features.Post;
+﻿using Application.Features.BlogUser;
+using Application.Features.Post;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Common.Interface;
@@ -9,5 +10,5 @@ public interface IPostService
     Task<JsonResult> RetrieveAllAsync(RetrievePostsCommand command, bool partial);
     
     Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command);
-    Task<JsonResult> RetrieveAllFromUserAsync(string id);
+    Task<JsonResult> RetrieveAllFromUserAsync(ViewUserCommand command);
 }

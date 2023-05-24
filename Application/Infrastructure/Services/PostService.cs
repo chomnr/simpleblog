@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Application.Common;
 using Application.Common.Interface;
 using Application.Entities;
+using Application.Features.BlogUser;
 using Application.Features.Post;
 using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
@@ -90,7 +91,53 @@ public class PostService : IPostService
                 postWithUserName.Post.Tags,
                 UserName = postWithUserName.UserName,
             });
+
+        var skipCalc = page != 1 ? (page - 1) * retrieval : 0;
+        var result = await posts.Skip(skipCalc).Take(retrieval).ToListAsync();
+        var totalPosts = (int)Math.Ceiling((double)posts.Count() / retrieval);
+        return new JsonResult(JsonConvert.SerializeObject(new
+        {
+            pageCount = totalPosts,
+            AllPosts = result
+        }));
+    }
+
+    public async Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command)
+    {
+        var posts = _context.Posts;
+
+        var id = command.Id;
+
+        var result = await posts.FindAsync(id);
+        var user = await _context.Users.FindAsync(result.UserId);
+        result.Username = user != null ? user.UserName : "{DELETED_USER}";
         
+        return new JsonResult(JsonConvert.SerializeObject(result));
+    }
+
+    public async Task<JsonResult> RetrieveAllFromUserAsync(ViewUserCommand command)
+    {
+        var posts = await _context.Posts
+            .Where(u => u.UserId == command.Id)
+            .Select(u => u).ToListAsync();
+        return new JsonResult(JsonConvert.SerializeObject(posts));
+    }
+
+    /*
+    public async Task<JsonResult> RetrieveAllFromUserAsync(RetrievePostsCommand command)
+    {
+        var page = command.Page;
+        var userId = command.UserId;
+        const int retrieval = PostConstraints.RetrievalAmount;
+        
+        var posts = _context.Posts
+            .Where(u => u.UserId == userId)
+            .OrderDescending()
+            .Select(u => u);
+        
+        
+        
+        /*
         if (page != 1)
         {
             //retrieval = page == 2 ? postPerPage : postPerPage; // 
@@ -112,34 +159,7 @@ public class PostService : IPostService
                 pageCount = totalPosts,
                 AllPosts = result
             }));
+            
         }
-    }
-
-    public async Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command)
-    {
-        var posts = _context.Posts;
-
-        var id = command.Id;
-
-        var result = await posts.FindAsync(id);
-        var user = await _context.Users.FindAsync(result.UserId);
-        if (user != null)
-        {
-            result.Username = user.UserName;
-        }
-        else
-        {
-            result.Username = "{NOT_FOUND}";
-        }
-        return new JsonResult(JsonConvert.SerializeObject(result));
-    }
-
-    public async Task<JsonResult> RetrieveAllFromUserAsync(string id)
-    {
-        var posts = await _context.Posts
-            .Where(u => u.UserId == id)
-            .Select(u => u)
-            .ToListAsync();
-        return new JsonResult(JsonConvert.SerializeObject(posts));
-    }
+        */
 }

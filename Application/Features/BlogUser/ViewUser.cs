@@ -2,7 +2,6 @@
 using Application.Common;
 using Application.Common.Interface;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Features.BlogUser;
@@ -27,7 +26,7 @@ public class ViewUser : FeatureController
 public class ViewUserCommand : IRequest<JsonResult>
 {   
     [Required]
-    public string Id { get; }
+    public string Id { get; set; } 
 }
 
 internal sealed class ViewUserCommandHandler : IRequestHandler<ViewUserCommand, JsonResult>

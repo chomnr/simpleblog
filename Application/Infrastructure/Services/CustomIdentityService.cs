@@ -65,7 +65,7 @@ public class CustomIdentityService : ICustomIdentityService
         
         if (result == null) { return new JsonResult(new { success = false }); }
         
-        var serialized = await postService.RetrieveAllFromUserAsync(command.Id);
+        var serialized = await postService.RetrieveAllFromUserAsync(command);
         var posts = JsonConvert.DeserializeObject<List<Post>>(serialized.Value.ToString());
         var userProfile = new Profile
         {
