@@ -70,8 +70,9 @@ public class PostService : IPostService
     public async Task<JsonResult> RetrieveAllAsync(RetrievePostsCommand command, bool partial)
     {
         var page = command.Page;
-        var retrieval = page == 1 ? 7 : 12;
-        
+        //var retrieval = page == 1 ? postPerPage : postPerPage;
+        const int retrieval = 7;
+
         var posts = _context.Posts
             .Join(
                 _context.Users,
@@ -90,17 +91,28 @@ public class PostService : IPostService
                 UserName = postWithUserName.UserName,
             });
         
-        var result = await posts.Take(retrieval).ToListAsync();
-        
         if (page != 1)
         {
-            retrieval = page == 2 ? 7 : 12;
-            result = await posts.Skip(page - 1 * retrieval).Take(retrieval).ToListAsync();
-        }
-        
-        var json = JsonConvert.SerializeObject(result);
+            //retrieval = page == 2 ? postPerPage : postPerPage; // 
+            var result = await posts.Skip((page - 1) * retrieval).Take(retrieval).ToListAsync();
+            var totalPosts = (int)Math.Ceiling((double)posts.Count() / retrieval);
 
-        return new JsonResult(json);
+            return new JsonResult(JsonConvert.SerializeObject(new
+            {
+                pageCount = totalPosts,
+                AllPosts = result
+            }));
+        }
+        else
+        {
+            var result = await posts.Take(retrieval).ToListAsync();
+            var totalPosts = (int)Math.Ceiling((double)posts.Count() / retrieval);
+            return new JsonResult(JsonConvert.SerializeObject(new
+            {
+                pageCount = totalPosts,
+                AllPosts = result
+            }));
+        }
     }
 
     public async Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command)
@@ -119,9 +131,15 @@ public class PostService : IPostService
         {
             result.Username = "{NOT_FOUND}";
         }
-        
-        var json = JsonConvert.SerializeObject(result);
-
         return new JsonResult(JsonConvert.SerializeObject(result));
+    }
+
+    public async Task<JsonResult> RetrieveAllFromUserAsync(string id)
+    {
+        var posts = await _context.Posts
+            .Where(u => u.UserId == id)
+            .Select(u => u)
+            .ToListAsync();
+        return new JsonResult(JsonConvert.SerializeObject(posts));
     }
 }
