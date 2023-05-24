@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Application.Common;
+﻿using Application.Common;
 using Application.Common.Interface;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +15,6 @@ public class RetrievePosts : FeatureController
     }
     
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Produces("application/json")]
     public async Task<ActionResult<JsonResult>> Login(RetrievePostsCommand command)
     {

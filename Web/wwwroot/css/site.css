@@ -19,7 +19,7 @@
     
     --accent-color: #1A1A1A;
     
-    --default-article-padding: 7px 0;
+    --default-article-padding: 7px 9px;
 }
 
 html, body {
@@ -275,7 +275,6 @@ article.sub-post:hover {
     color: var(--light-black);
     border-radius: 3px;
     padding: 0 7px;
-    margin-left: 2px;
     font-size: 0.7rem;
 }
 

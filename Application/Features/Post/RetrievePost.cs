@@ -16,7 +16,6 @@ public class RetrievePost : FeatureController
     }
     
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Produces("application/json")]
     public async Task<ActionResult<JsonResult>> Login(RetrievePostCommand command)
     {

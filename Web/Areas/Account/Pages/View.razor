@@ -1,11 +1,67 @@
 ﻿@page "/account/{accountId}"
+@using MediatR
+@using Application.Entities
+@using Application.Features.BlogUser
+@using Application.Features.Post
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using Newtonsoft.Json
+@inject IMediator Mediator;
+@inject NavigationManager navManager;
 
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
     <div class="blg-child-node col" style="color: #eae7e1;">
-        <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> POSTS BY {USERNAME}</h1>
+        @if (ProfileResult != null)
+        {
+            <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> POSTS BY <span style="color: #FDD835">@ProfileResult.UserName.ToUpper()</span></h1>
+            @foreach (var post in ProfileResult.Posts)
+            {
+                <article id="post-@post.Id" class="sub-post">
+                    <div class="post-date">@GetDate(long.Parse(post.DateCreated))</div>
+                    <div class="post-title"><a style="color:inherit;text-decoration: none;" href="post/@post.Id">@post.Title</a></div>
+                    <ul class="post-tags">
+                        @if (post.Tags != null)
+                        {
+                            @foreach (var tag in post.Tags)
+                            {
+                                <li><a style="color:inherit;text-decoration: none;" href="post/tag/@tag">@tag</a></li>
+                            }
+                        }
+                    </ul>
+                </article>
+            }                                                                                                                                                                                                   
+        }
     </div>
 </section>
 @code {
+    
     [Parameter]
     public string AccountId { get; set; }
+    
+    public Profile ProfileResult { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(navManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+        if (AccountId != null)
+        {
+            var command = new ViewUserCommand
+            {
+                Id = AccountId
+            };
+            
+            var response = await Mediator.Send(command);
+            ProfileResult = JsonConvert.DeserializeObject<Profile>(response.Value.ToString());
+            
+            Console.WriteLine(ProfileResult.UserName);
+        }
+    }
+    
+    private string GetDate(long milliseconds)
+    {
+        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
+
+        return dateTimeOffset.ToString("dd MMM yyyy");
+    }
 }
