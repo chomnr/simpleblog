@@ -1,5 +1,6 @@
 ﻿using Application.Features.BlogUser;
 using Application.Features.Post;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Common.Interface;
@@ -13,4 +14,5 @@ public interface IPostService
     Task<JsonResult> RetrieveAllFromUserAsync(ViewUserCommand command);
     
     Task<JsonResult> RetrieveAllByTag(RetrievePostsByTagCommand command);
+    Task<bool> DeleteAsync(DeletePostCommand command, string userId, string role);
 }
