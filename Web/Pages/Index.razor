@@ -98,7 +98,7 @@
     private int PageRetrieval()
     {
         int difference = TotalPages - Page;
-        Console.WriteLine(difference);
+
         if (difference <= 4 )
         {
             return Page - (4 - difference);
@@ -114,8 +114,8 @@
         
         if (queryParams["page"] != null)
         {
-            
-            Page = int.Parse(queryParams["page"]);
+            Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
+            Page = Page <= TotalPages ? int.Parse(queryParams["page"]) : 0;
             
             if (PreviousPage == Page){ return; }
 
@@ -131,33 +131,18 @@
                 StateHasChanged();
             }
         }
-    /*
-        var absolute = navManager.ToAbsoluteUri(navManager.Uri);
-        
-        Console.Write("OUT");
-        if (QueryHelpers.ParseQuery(absolute.Query).TryGetValue("page", out var param))
-        {
-            Page = int.Parse(param.First());
-            var command = new RetrievePostsCommand { Page = this.Page };
-            var response = await Mediator.Send(command);
-            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
-            Console.WriteLine("3");
-            if (result != null)
-            {
-                Console.WriteLine("4");
-                UpdatePostView(result.AllPosts);
-            }
-        }
-        */
     }
 
     protected override async Task OnInitializedAsync()
     {
         var uri = new Uri(navManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        
         if (queryParams["page"] != null)
         {
             Page = int.Parse(queryParams["Page"]);
+            Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
+            Page = Page > TotalPages ? 1 : int.Parse(queryParams["page"]);
         }
         else
         {
@@ -186,140 +171,3 @@
     }
     
 }
-
-@*
-private string GetBody(string body)
-    {
-        byte[] bytes = Convert.FromBase64String(body);
-        return Encoding.UTF8.GetString(bytes);
-    }
-    
-    private string StripHtmlTags(string html)
-    {
-        return Regex.Replace(html, "<.*?>", "");
-    }
-    
-        if (response.Value != null)
-        {
-            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
-            BlogPosts = result.allPosts;
-            Console.WriteLine(result.pageCount);
-            TotalPages = result.pageCount;
-        }*/
-        /*
-
-        var command = new RetrievePostsCommand { Page = 1 };
-        var response = await Mediator.Send(command);
-
-        if (response.Value != null)
-        {
-            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
-            BlogPosts = result.allPosts;
-            Console.WriteLine(result.pageCount);
-            TotalPages = result.pageCount;
-            StateHasChanged();
-        }
-        *@
-
-<!--
-            <ul class="post-tags">
-                <li>C#</li>
-                <li>ADVANCED</li>
-                <li>EXCLUSIVE CONTENT</li>
-                <li>MICROSOFT</li>
-            </ul>
-            -->
-<!--
-
-<section class="blg-section">
-    <div class="blg-child-node col">
-        <div>dsaads</div>
-    </div>
-</section>
--->
-@*
-<section class="custom-section">
-    <div class="child-node" style="flex-direction: column;">
-        <h4 class="adjust" style="text-align: center; margin-bottom: 5px">the blog.</h4>
-        <h2 class="adjust" style="text-align: center; font-weight: 500; margin-bottom: 7px;">Simple blog for simple writers.</h2>
-        <h3 class="adjust" style="text-align: center; font-weight: 300;margin-bottom: 2rem;font-size: 1em;">The latest news directly from blazor server side.</h3>
-        <div style="display: flex;flex-direction: column;gap: 20px;">
-            <article class="front-page">
-                <div class="content">
-                    <span class="author">John Doe ●  20 May 2023</span>
-                    <h2 class="title adjust">UX review presentations</h2>
-                    <div class="description">How do you create compelling presentations that wow your colleagues and impress your managers?</div>
-                    <ul class="tags">
-                        <li>Design</li>
-                        <li>Research</li>
-                        <li>Presentation</li>
-                    </ul>
-                </div>
-                <img style="width:100%;height: 100%" src="https://place-hold.it/1200x600"/>
-            </article>
-            <div class="sub-articles">
-                @if (BlogPosts != null)
-                {
-                    @foreach (var post in BlogPosts)
-                    {
-                        <article class="front-page">
-                            <img style="width:100%" width="300" height="200" src="https://place-hold.it/400x300"/>
-                            <div class="mini-content">
-                                <span class="author">@post.Username ● @GetDate(long.Parse(post.DateCreated))</span>
-                                <h3 class="title adjust"><a href="/post/@post.Id">@post.Title</a></h3>
-                                <div class="description">@StripHtmlTags(@post.Body).Substring(0, 80)...</div>
-                                <ul class="tags">
-                                    @if (post.Tags != null)
-                                    {
-                                        @foreach (var tag in post.Tags)
-                                        {
-                                            <li>@tag</li>
-                                        }
-                                    }
-                                </ul>
-                            </div>
-                        </article>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-</section>
-
-@code {
-
-    private List<Post> BlogPosts;
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        var command = new RetrievePostsCommand { Page = 1 };
-        var result = await Mediator.Send(command);
-
-        if (result.Value != null)
-        {
-            BlogPosts = JsonConvert.DeserializeObject<List<Post>>(result.Value.ToString());
-        }
-    }
-
-    private string GetDate(long milliseconds)
-    {
-        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
-
-        return dateTimeOffset.ToString("dd MMM yyyy");
-    }
-
-    private string GetBody(string body)
-    {
-        byte[] bytes = Convert.FromBase64String(body);
-        return Encoding.UTF8.GetString(bytes);
-    }
-    
-    private static string StripHtmlTags(string html)
-    {
-        return Regex.Replace(html, "<.*?>", "");
-    }
-}
-*/
-
-*@
