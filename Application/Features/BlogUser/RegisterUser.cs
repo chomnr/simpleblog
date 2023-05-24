@@ -91,13 +91,23 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
         if (result.Succeeded)
         {
+            //EmailConfirmationBody
+
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var basePath = _webHelperService.GetBaseUrl();
             var confirmPath = $"/auth/confirm-email" +
                               $"?userId={Uri.EscapeDataString(user.Id)}" +
                               $"&verifyToken={Uri.EscapeDataString(emailToken)}";
+
+            var emailConfirmBody = config["EmailConfirmationBody"]
+                .Replace("{url}", basePath + confirmPath)
+                .Replace("{token}", emailToken)
+                .Replace("{userid}", user.Id)
+                .Replace("{firstname}", user.FirstName)
+                .Replace("{lastname}", user.LastName);
+
             var formatHtml = $"<a href={basePath + confirmPath}>Confirm Account</a>";
-            await _emailSender.SendEmailAsync( payLoad.Email, config["EmailConfirmationSubject"], formatHtml);
+            await _emailSender.SendEmailAsync( payLoad.Email, config["EmailConfirmationSubject"], emailConfirmBody);
             return result;
         }
         return result;
