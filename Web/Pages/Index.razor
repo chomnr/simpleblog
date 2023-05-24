@@ -43,19 +43,14 @@
                     {
                         <a href="/?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
                     }
-                    for (var i = 1; i < TotalPages; i++)
+                    
+                    for (var i = PageRetrieval() <= 0 ? 1 : PageRetrieval() ; i < Page + 4 && i < TotalPages; i++)
                     {
-                        if (i < 6)
-                        {
-                            if (Page == i)
-                            {
+                        if (Page == i) {
                                 <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
-                            }
-                            else
-                            {
+                        } else {
                                 <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
-                            }
-                        }
+                         }
                     }
                     if (Page == TotalPages)
                     {
@@ -83,7 +78,7 @@
     private int TotalPages { get; set; }
 
     private List<Post> PostsData { get; set; }
-
+    
     public class CustomPostView
     {
         public List<Post> AllPosts { get; set; }
@@ -98,6 +93,17 @@
     private void UpdateTotalPage(int amount)
     {
         TotalPages = amount;
+    }
+
+    private int PageRetrieval()
+    {
+        int difference = TotalPages - Page;
+        Console.WriteLine(difference);
+        if (difference <= 4 )
+        {
+            return Page - (4 - difference);
+        }
+        return Page;
     }
 
     private async void UpdatePostsViewByPage()
