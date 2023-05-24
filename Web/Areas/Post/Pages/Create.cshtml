@@ -206,7 +206,7 @@ tags_proxy.addEventListener("keydown", function(e) {
 			!tags_list.includes(target) &&
 			tags_proxy.value.length !== 0) {
 			tags_list.push(e.target.value)
-			addTag(e.target.value);
+			addTag(e.target.value.toUpperCase());
 			e.target.value = '';
 		}
 	}

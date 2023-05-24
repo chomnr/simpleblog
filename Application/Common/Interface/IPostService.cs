@@ -11,4 +11,6 @@ public interface IPostService
     
     Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command);
     Task<JsonResult> RetrieveAllFromUserAsync(ViewUserCommand command);
+    
+    Task<JsonResult> RetrieveAllByTag(RetrievePostsByTagCommand command);
 }
