@@ -63,22 +63,14 @@ internal sealed class MediatorCreatePostModel<TPost> : MediatorCreatePostModel w
     
     public override async Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null)
     {
-        Console.WriteLine("TAGS:" + Input.Tags);
-        
-        Console.WriteLine("dd:" + TagHolder);
         if (ModelState.IsValid)
         {
-            Console.WriteLine("TESTING");
-
             var sanitizer = new HtmlSanitizer();
             // Converts {"[\"yes\",\"hello\"]"} to {dog,yes,hello,readable} in Database.
              //Input.Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(Input.Body));
             if (TagHolder != null) {
                 Input.Tags = JsonConvert.DeserializeObject<List<string>>(TagHolder);
-                Console.WriteLine("TAGS:" + Input.Tags);
             }
-            
-            Console.WriteLine(TagHolder);
             
             Input.Title = sanitizer.Sanitize(Input.Title);
             Input.Body = sanitizer.Sanitize(Input.Body);
@@ -88,7 +80,6 @@ internal sealed class MediatorCreatePostModel<TPost> : MediatorCreatePostModel w
             {
                 Response.Redirect("/post/create/confirmation");
             }
-            Console.WriteLine(result);
         }
         return Page();
     }
