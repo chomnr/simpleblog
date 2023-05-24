@@ -28,29 +28,29 @@
                 {
                     if (Page > 1)
                     {
-                        <a href="/?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
+                        <a href="/post/tag/@Tag?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
                     }
                     
                     for (var i = PageRetrieval() <= 0 ? 1 : PageRetrieval() ; i < Page + 4 && i < TotalPages; i++)
                     {
                         if (Page == i) {
-                            <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            <a href="/post/tag/@Tag?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
                         } else {
-                            <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            <a href="/post/tag/@Tag?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
                         }
                     }
                     if (Page == TotalPages)
                     {
-                        <a href="/?page=@(TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                        <a href="/post/tag/@Tag?page=@(TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     else
                     {
-                        <a href="/?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                        <a href="/post/tag/@Tag?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     
                     if (Page != TotalPages)
                     {
-                        <a href="/?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
+                        <a href="/post/tag/@Tag?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
                     }
                 }
             </div>
