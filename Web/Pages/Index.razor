@@ -97,8 +97,7 @@
 
     private int PageRetrieval()
     {
-        int difference = TotalPages - Page;
-
+        var difference = TotalPages - Page;
         if (difference <= 4 )
         {
             return Page - (4 - difference);
@@ -159,9 +158,7 @@
             UpdatePostView(result.AllPosts);
             UpdateTotalPage(result.PageCount);
         }
-        Console.WriteLine("RAN INIT ASYNC ");
     }
-    
 
     private string GetDate(long milliseconds)
     {
