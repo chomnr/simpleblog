@@ -4,9 +4,10 @@
 @using Newtonsoft.Json
 @using Application.Entities
 @inject IMediator Mediator;
+@inject NavigationManager navManager;
 
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
-    <div class="blg-child-node col" style="color: #eae7e1;">
+    <div class="blg-child-node col" style="color: #eae7e1;align-items: center">
         <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> FILTER BY TAG <span style="color: #FDD835">@Tag.ToUpper()</span></h1>
         @if (PostTagData != null)
         {
@@ -21,6 +22,38 @@
                     </ul>
                 </article>
             }
+            
+            <div class="pagination" >
+                @if (TotalPages != 0)
+                {
+                    if (Page > 1)
+                    {
+                        <a href="/?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
+                    }
+                    
+                    for (var i = PageRetrieval() <= 0 ? 1 : PageRetrieval() ; i < Page + 4 && i < TotalPages; i++)
+                    {
+                        if (Page == i) {
+                            <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
+                        } else {
+                            <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                        }
+                    }
+                    if (Page == TotalPages)
+                    {
+                        <a href="/?page=@(TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                    }
+                    else
+                    {
+                        <a href="/?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                    }
+                    
+                    if (Page != TotalPages)
+                    {
+                        <a href="/?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
+                    }
+                }
+            </div>
         }
     </div>
 </section>
@@ -41,21 +74,84 @@
         public int PageCount { get; set; }
     }
     
+    private void UpdatePostView(List<Post> data)
+    {
+        PostTagData = data;
+    }
+
+    private void UpdateTotalPage(int amount)
+    {
+        TotalPages = amount;
+    }
+
+    private int PageRetrieval()
+    {
+        var difference = TotalPages - Page;
+        if (difference <= 4 )
+        {
+            return Page - (4 - difference);
+        }
+        return Page;
+    }
+
+    private async void UpdatePostsViewByPage()
+    {
+        await Task.Delay(50);
+        var uri = new Uri(navManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        
+        if (queryParams["page"] != null)
+        {
+            Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
+            Page = Page <= TotalPages ? int.Parse(queryParams["page"]) : 0;
+            
+            if (PreviousPage == Page){ return; }
+
+            PreviousPage = Page;
+            
+            var command = new RetrievePostsCommand { Page = Page };
+            var response = await Mediator.Send(command);
+            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+            
+            if (result != null)
+            {
+                UpdatePostView(result.AllPosts);
+                StateHasChanged();
+            }
+        }
+    }
+    
     protected override async Task OnInitializedAsync()
     {
+        
+        var uri = new Uri(navManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        
+        if (queryParams["page"] != null)
+        {
+            Page = int.Parse(queryParams["Page"]);
+            Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
+            Page = Page > TotalPages ? 1 : int.Parse(queryParams["page"]);
+        }
+        else
+        {
+            Page = 1;
+        }
+        
         var command = new RetrievePostsByTagCommand
         {
-            Page = 1,
+            Page = Page,
             Tag = Tag
         };
-        
+
         var response = await Mediator.Send(command);
         if (response.Value != null)
         {
             var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
 
-            PostTagData = result.AllPosts;
-            TotalPages = result.PageCount;
+            PreviousPage = Page;
+            UpdatePostView(result.AllPosts);
+            UpdateTotalPage(result.PageCount);
         }
     }
     
