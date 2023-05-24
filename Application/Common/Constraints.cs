@@ -106,4 +106,6 @@ public static class PostConstraints
     public const int MaxTitleLength = 50;
     
     public const int MaxBodyLength = 30000;
+
+    public const int RetrievalAmount = 12;
 }
