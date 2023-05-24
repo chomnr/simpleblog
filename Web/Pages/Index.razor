@@ -45,13 +45,16 @@
                     }
                     for (var i = 1; i < TotalPages; i++)
                     {
-                        if (Page == i)
+                        if (i < 6)
                         {
-                            <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
-                        }
-                        else
-                        {
-                            <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            if (Page == i)
+                            {
+                                <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            }
+                            else
+                            {
+                                <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            }
                         }
                     }
                     if (Page == TotalPages)
@@ -62,6 +65,7 @@
                     {
                         <a href="/?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
+                    
                     if (Page != TotalPages)
                     {
                         <a href="/?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
