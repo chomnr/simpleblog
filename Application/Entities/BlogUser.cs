@@ -59,3 +59,10 @@ public static class BlogUserHelper
         return user;
     }
 }
+
+public class Profile
+{
+    public string? Avatar { get; set; }
+    public string UserName { get; set; }
+    public List<Post> Posts { get; set; }
+}
