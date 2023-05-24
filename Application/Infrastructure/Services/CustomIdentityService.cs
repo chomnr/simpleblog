@@ -3,6 +3,8 @@ using Application.Common.Interface;
 using Application.Entities;
 using Application.Features.BlogUser;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Application.Infrastructure.Services;
 
@@ -54,5 +56,23 @@ public class CustomIdentityService : ICustomIdentityService
             return IdentityResult.Failed(error.PasswordDoesNotMatch());
         }
         return await _userManager.CreateAsync(user, command.Password);
+    }
+
+    public async Task<JsonResult> ViewUser(ViewUserCommand command, IPostService postService)
+    {
+        var id = command.Id;
+        var result =  await _userManager.FindByIdAsync(id);
+        
+        if (result == null) { return new JsonResult(new { success = false }); }
+        
+        var serialized = await postService.RetrieveAllFromUserAsync(command.Id);
+        var posts = JsonConvert.DeserializeObject<List<Post>>(serialized.Value.ToString());
+        var userProfile = new Profile
+        {
+            Avatar = result.Avatar,
+            UserName = result.UserName,
+            Posts = posts
+        };
+        return new JsonResult(JsonConvert.SerializeObject(userProfile));
     }
 }

@@ -5,16 +5,21 @@
 @using Newtonsoft.Json
 @using System.Text
 @using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.WebUtilities
 @inject IMediator Mediator;
+@inject NavigationManager navManager;
 
 <PageTitle>Index</PageTitle>
 
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
-    <div class="blg-child-node col" style="color: #eae7e1;">
-        <h1 class="section-title with-divider"><span style="color: #242424">#</span> LATEST POSTS</h1>
-        @if (BlogPosts != null)
+    <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
+        <h1 class="section-title with-divider">
+            <span style="color: #242424">#</span> LATEST POSTS
+        </h1>
+        @if (PostsData != null)
         {
-            @foreach (var post in BlogPosts)
+            @foreach (var post in PostsData)
             {
                 <article id="post-@post.Id" class="sub-post">
                     <div class="post-author"><a style="color:inherit;text-decoration: none;" href="account/@post.UserId">@post.Username</a></div>
@@ -31,25 +36,122 @@
                     </ul>
                 </article>
             }
+            <div class="pagination">
+                @if (TotalPages != 0)
+                {
+                    if (Page > 1)
+                    {
+                        <a href="/?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
+                    }
+                    for (var i = 0; i < TotalPages; i++)
+                    {
+                        <a href="/?page=@(i+1)" @onclick="UpdatePostsViewByPage">@(i+1)</a>
+                    }
+                    if (Page != TotalPages)
+                    {
+                        <a href="/?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
+                    }
+                }
+            </div>
         }
     </div>
 </section>
 
 @code {
 
-    private List<Post> BlogPosts;
+    private int Page { get; set; } = 1;
+    private int PreviousPage { get; set; }
+    private int TotalPages { get; set; }
+
+    private List<Post> PostsData { get; set; }
+
+    public class CustomPostView
+    {
+        public List<Post> AllPosts { get; set; }
+        public int PageCount { get; set; }
+    }
+
+    private void UpdatePostView(List<Post> data)
+    {
+        PostsData = data;
+    }
+
+    private void UpdateTotalPage(int amount)
+    {
+        TotalPages = amount;
+    }
+
+    private async void UpdatePostsViewByPage()
+    {
+        await Task.Delay(50);
+        var uri = new Uri(navManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        
+        if (queryParams["page"] != null)
+        {
+            
+            Page = int.Parse(queryParams["page"]);
+            
+            if (PreviousPage == Page){ return; }
+
+            PreviousPage = Page;
+            
+            var command = new RetrievePostsCommand { Page = Page };
+            var response = await Mediator.Send(command);
+            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+            
+            if (result != null)
+            {
+                UpdatePostView(result.AllPosts);
+                StateHasChanged();
+            }
+        }
+    /*
+        var absolute = navManager.ToAbsoluteUri(navManager.Uri);
+        
+        Console.Write("OUT");
+        if (QueryHelpers.ParseQuery(absolute.Query).TryGetValue("page", out var param))
+        {
+            Page = int.Parse(param.First());
+            var command = new RetrievePostsCommand { Page = this.Page };
+            var response = await Mediator.Send(command);
+            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+            Console.WriteLine("3");
+            if (result != null)
+            {
+                Console.WriteLine("4");
+                UpdatePostView(result.AllPosts);
+            }
+        }
+        */
+    }
 
     protected override async Task OnInitializedAsync()
     {
-
-        var command = new RetrievePostsCommand { Page = 1 };
-        var result = await Mediator.Send(command);
-
-        if (result.Value != null)
+        var uri = new Uri(navManager.Uri);
+        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        if (queryParams["page"] != null)
         {
-            BlogPosts = JsonConvert.DeserializeObject<List<Post>>(result.Value.ToString());
+            Page = int.Parse(queryParams["Page"]);
         }
+        else
+        {
+            Page = 1;
+        }
+
+        var command = new RetrievePostsCommand { Page = Page };
+        var response = await Mediator.Send(command);
+        var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+
+        if (result != null)
+        {
+            PreviousPage = Page;
+            UpdatePostView(result.AllPosts);
+            UpdateTotalPage(result.PageCount);
+        }
+        Console.WriteLine("RAN INIT ASYNC ");
     }
+    
 
     private string GetDate(long milliseconds)
     {
@@ -57,8 +159,11 @@
 
         return dateTimeOffset.ToString("dd MMM yyyy");
     }
+    
+}
 
-    private string GetBody(string body)
+@*
+private string GetBody(string body)
     {
         byte[] bytes = Convert.FromBase64String(body);
         return Encoding.UTF8.GetString(bytes);
@@ -68,7 +173,28 @@
     {
         return Regex.Replace(html, "<.*?>", "");
     }
-}
+    
+        if (response.Value != null)
+        {
+            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+            BlogPosts = result.allPosts;
+            Console.WriteLine(result.pageCount);
+            TotalPages = result.pageCount;
+        }*/
+        /*
+
+        var command = new RetrievePostsCommand { Page = 1 };
+        var response = await Mediator.Send(command);
+
+        if (response.Value != null)
+        {
+            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+            BlogPosts = result.allPosts;
+            Console.WriteLine(result.pageCount);
+            TotalPages = result.pageCount;
+            StateHasChanged();
+        }
+        *@
 
 <!--
             <ul class="post-tags">
