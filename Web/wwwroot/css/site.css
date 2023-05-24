@@ -438,34 +438,27 @@ article.view-post ul.view-tags li:hover {
     gap: 13px;
     font-size: 0.6rem;
     font-weight: bold;
+    width: fit-content;
 }
 .pagination a {
     text-decoration: none;
     text-align: center;
     color: var(--dirty-red);
-    padding: 5px 13px;
+    padding: 5px 10px;
+    width: fit-content;
+    min-width: 15px;
+    height: 15px;
     border-radius: 3px;
     background: var(--darker-black);
-    /* 
-    color: var(--light-black);
-    border-right: 1px solid var(--light-black);
-    background: var(--dirty-red);
-    */
 }
 
 .pagination a:hover {
-    /*
-    color: var(--dirty-red);
-   background: var(--light-black);*/
     background: var(--dirty-red);
     color: var(--darker-black);
     cursor: pointer;
 }
 
 .pagination a.active {
-    /*
-    color: var(--dirty-red);
-   background: var(--light-black);*/
     background: var(--dirty-red);
     color: var(--darker-black);
     cursor: pointer;

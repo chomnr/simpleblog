@@ -71,7 +71,7 @@ public class PostService : IPostService
     {
         var page = command.Page;
         //var retrieval = page == 1 ? postPerPage : postPerPage;
-        const int retrieval = 7;
+        const int retrieval = 12;
 
         var posts = _context.Posts
             .Join(
