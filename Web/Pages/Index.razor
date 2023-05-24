@@ -36,16 +36,31 @@
                     </ul>
                 </article>
             }
-            <div class="pagination">
+            <div class="pagination" >
                 @if (TotalPages != 0)
                 {
                     if (Page > 1)
                     {
                         <a href="/?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
                     }
-                    for (var i = 0; i < TotalPages; i++)
+                    for (var i = 1; i < TotalPages; i++)
                     {
-                        <a href="/?page=@(i+1)" @onclick="UpdatePostsViewByPage">@(i+1)</a>
+                        if (Page == i)
+                        {
+                            <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
+                        }
+                        else
+                        {
+                            <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                        }
+                    }
+                    if (Page == TotalPages)
+                    {
+                        <a href="/?page=@(TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                    }
+                    else
+                    {
+                        <a href="/?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     if (Page != TotalPages)
                     {
