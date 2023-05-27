@@ -30,39 +30,14 @@ public class PostService : IPostService
         var title = command.Title;
         var body = WebUtility.HtmlDecode(command.Body);
         var tags = command.Tags;
-        
-        if (title.Length < PostConstraints.MinTitleLength) { return false; }
-        if (title.Length > PostConstraints.MaxTitleLength) { return false; }
-        
-        if (body.Length > PostConstraints.MaxBodyLength) { return false; }
-        // you can add minimum body tag requirement.
-        
-        if (tags.Count < PostConstraints.MinTagLength) { return false; }
-        if (tags.Count > PostConstraints.MaxTagLength) { return false; }
-        
-        for (int i = 0; i < tags.Count; i++)
-        {
-            if (tags[i].Length < PostConstraints.MinTagNameLength )
-            {
-                return false;
-            }
-            
-            if (tags[i].Length > PostConstraints.MaxTagNameLength )
-            {
-                return false;
-            }
-        }
 
+        if (!PostConstraints.IsValidTitle(title)) { return false; }
+        if (!PostConstraints.IsValidBody(body)) { return false; }
+        if (!PostConstraints.AreTagsValid(tags)) { return false; }
+        
         var posts = _context.Posts;
-        var post = new Post
-        {
-            UserId = userId,
-            Title = title,
-            NormalizedTitle = title.ToUpper(),
-            Body = body,
-            Tags = tags,
-            Done = false
-        };
+        var post = PostHelper.CreateSimplifiedPost(userId, title, body, tags);
+        
         posts.Add(post);
         await _context.SaveChangesAsync();
         return true;
@@ -181,6 +156,39 @@ public class PostService : IPostService
                 return true;
             }
             return false;
+        }
+        return false;
+    }
+
+    public async Task<bool> EditAsync(EditPostCommand command)
+    {
+        var title = command.Title;
+        var body = WebUtility.HtmlDecode(command.Body);
+        var tags = command.Tags;
+
+        var post = _context.Posts;
+        var contextPost = await post.FindAsync(command.PostId);
+
+        if (contextPost != null)
+        {
+            if (!string.IsNullOrEmpty(title) && !contextPost.Title.Equals(title))
+            {
+                if (!PostConstraints.IsValidTitle(title)) { return false; }
+                contextPost.Title = title;
+            }
+            if (!contextPost.Body.Equals(body))
+            {
+                if (!PostConstraints.IsValidBody(body)) { return false; }
+                contextPost.Body = body;
+            }
+
+            if (!contextPost.Tags.SequenceEqual(tags))
+            {
+                if (!PostConstraints.AreTagsValid(tags)) { return false; }
+                contextPost.Tags = tags;
+            }
+            await _context.SaveChangesAsync();
+            return true;
         }
         return false;
     }
