@@ -1,0 +1,99 @@
+﻿@page "/post/edit/{postId:int}"
+@inject IJSRuntime JSRuntime
+@using Microsoft.AspNetCore.Mvc
+@using Application.Features.Post
+
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
+    <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
+        <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> EDIT MODE <span style="color: #FDD835">TEST</span></h1>
+        <article class="view-post">
+            <EditForm Model="@EditModel" OnValidSubmit="() => {}">
+                <!-- Form fields and validation messages go here -->
+                <div>
+                    <div id="editor">
+                        <p style="word-break: break-all"></p>
+                    </div>
+                </div>
+                <button type="submit" style="width: 100%;" class="dark" aria-hidden="true">Save Changes</button>
+            </EditForm>
+        </article>
+    </div>
+</section>
+
+<style>
+    /* QuillJS Editor */
+    .ql-toolbar.ql-snow {
+        border: 0; !important;
+        border-left: 2px solid var(--accent-color);
+        background: var(--light-black);
+        color: var(--dirty-red);
+    }
+    
+    .ql-container.ql-snow {
+        border: 0; !important;
+        border-left: 2px solid var(--accent-color)
+    }
+    
+    .ql-toolbar .ql-stroke {
+        fill: none;
+        stroke: var(--dirty-red);
+    }
+    
+    .ql-toolbar .ql-fill {
+        fill: var(--dirty-red);
+        stroke: none;
+    }
+    
+    .ql-toolbar .ql-picker {
+        color: var(--dirty-red);
+    }
+</style>
+
+<!-- QuillJS Editor -->
+@code {
+    public class MediatorEditPostModel
+    {
+        [BindProperty]
+        public EditPostCommand Input { get; set; } = default!;
+    }
+    
+    [Parameter]
+    public int postId { get; set; }
+
+    private MediatorEditPostModel EditModel = new MediatorEditPostModel();
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("eval", @"
+                const toolbarOptions = [
+                    [{ 'header': [1, 2, false] }, { 'font': [] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [{'list': 'ordered'}, {'list': 'bullet'}, 
+                    {'indent': '-1'}, {'indent': '+1'}],
+                    ['link', 'image', 'video', 'code'],
+                    ['clean']                                        
+                ];
+                var options = {
+                    modules: {
+                        toolbar: toolbarOptions
+                    },
+                    placeholder: 'Compose an epic...',
+                    theme: 'snow'
+                };
+
+                let quill = new Quill('#editor', options);
+
+                quill.getModule('toolbar').addHandler('image', function() {
+                    var url = prompt('Enter the image URL:');
+                    if (url) {
+                        quill.focus();
+                        var range = quill.getSelection();
+                        quill.insertEmbed(range.index, 'image', url);
+                    }
+                });
+            ");
+        }
+    }
+}
