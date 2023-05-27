@@ -108,4 +108,36 @@ public static class PostConstraints
     public const int MaxBodyLength = 30000;
 
     public const int RetrievalAmount = 12;
+
+    public static bool IsValidTitle(string? title = "")
+    {
+        if (title.Length < PostConstraints.MinTitleLength) { return false; }
+        if (title.Length > PostConstraints.MaxTitleLength) { return false; }
+        return true;
+    }
+    
+    public static bool IsValidBody(string? body = "")
+    {
+        if (body.Length > PostConstraints.MaxBodyLength) { return false; }
+        return true;
+    }
+    
+    public static bool AreTagsValid(List<string> tags)
+    {
+        if (tags.Count < PostConstraints.MinTagLength) { return false; }
+        if (tags.Count > PostConstraints.MaxTagLength) { return false; }
+        for (int i = 0; i < tags.Count; i++)
+        {
+            if (tags[i].Length < PostConstraints.MinTagNameLength )
+            {
+                return false;
+            }
+            
+            if (tags[i].Length > PostConstraints.MaxTagNameLength )
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
