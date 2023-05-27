@@ -1,6 +1,6 @@
 ﻿namespace Application.Common;
 
-public static class PostHelper
+public static class Utilities
 {
     public static string GetDate(long milliseconds)
     {
