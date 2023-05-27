@@ -42,3 +42,20 @@ public class PostCompletedEvent : DomainEvent
     
     public Post Post { get; }
 }
+
+
+public static class PostHelper
+{
+    public static Post CreateSimplifiedPost(string userId, string title, string body, List<string> tags)
+    {
+        return new Post
+        {
+            UserId = userId,
+            Title = title,
+            NormalizedTitle = title.ToUpper(),
+            Body = body,
+            Tags = tags,
+            Done = false
+        };
+    }
+}
