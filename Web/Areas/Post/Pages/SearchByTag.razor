@@ -16,7 +16,7 @@
             {
                 <article id="post-@post.Id" class="sub-post">
                     <div class="post-author"><a style="color:inherit;text-decoration: none;" href="account/@post.UserId">@post.Username</a></div>
-                    <div class="post-date">@PostHelper.GetDate(long.Parse(post.DateCreated))</div>
+                    <div class="post-date">@Utilities.GetDate(long.Parse(post.DateCreated))</div>
                     <div class="post-title"><a style="color:inherit;text-decoration: none;" href="post/@post.Id">@post.Title</a></div>
                     <ul class="post-tags">
                         <li><a style="color:inherit;text-decoration: none;">@Tag</a></li>
