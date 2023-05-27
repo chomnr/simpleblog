@@ -22,7 +22,7 @@
             {
                 <article id="post-@post.Id" class="sub-post">
                     <div class="post-author"><a style="color:inherit;text-decoration: none;" href="account/@post.UserId">@post.Username</a></div>
-                    <div class="post-date">@PostHelper.GetDate(long.Parse(post.DateCreated))</div>
+                    <div class="post-date">@Utilities.GetDate(long.Parse(post.DateCreated))</div>
                     <div class="post-title"><a style="color:inherit;text-decoration: none;" href="post/@post.Id">@post.Title</a></div>
                     <ul class="post-tags">
                         @if (post.Tags != null)
@@ -37,7 +37,7 @@
                     @if (post.UserId == UserId)
                     {
                         <div class="post-manager">
-                            <div class="action"><a href="#"><i class="fa-solid fa-pen-to-square"></i></a></div>
+                            <div class="action"><a href="post/edit/@post.Id"><i class="fa-solid fa-pen-to-square"></i></a></div>
                             <div class="action"><a href="post/delete?postId=@post.Id"><i class="fa-solid fa-trash"></i></a></div>
                         </div>
                     }
