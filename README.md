@@ -1,1 +1,1 @@
-![SimpleBlogBanner](https://github.com/okjlez/SimpleBlog/blob/blob/ReadMeLogo.png?raw=true)
+![SimpleBlogBanner](https://github.com/okjlez/SimpleBlog/blob/master/Web/blob/ReadMeLogo.png?raw=true)
