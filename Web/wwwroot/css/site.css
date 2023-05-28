@@ -416,6 +416,7 @@ article.view-post .author-bar .name {
 
 article.view-post .author-bar .name:hover {
     opacity: 0.7;
+    cursor: pointer;
 }
 
 article.view-post .author-bar .published {
