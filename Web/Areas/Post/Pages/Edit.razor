@@ -1,41 +1,45 @@
 ﻿@page "/post/edit/{postId:int}"
-@using Microsoft.AspNetCore.Mvc
 @using Application.Features.Post
 @using MediatR
 @using Application.Entities
 @using Newtonsoft.Json
+@using System.Security.Claims
 @inject IMediator Mediator;
 @inject IJSRuntime JsRuntime
 @inject NavigationManager navManager;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
+<CascadingAuthenticationState>
+    <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
+        <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
+            <AuthorizeView Context="authorize">
 
-<section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
-    <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
-        @if (PostId != null && PostInfo != null)
-        {
-            <h1 class="section-title with-divider"><span style="color: #242424">#</span> EDIT POST <span style="color: #FDD835;">@PostInfo.Title</span></h1>
-            <input id="title-proxy" class="section-title" @bind-value="@_editPost.Title" placeholder="TITLE"/>
-            
-            <article class="view-post">
-                <EditForm Model="@_editPost" OnValidSubmit="@SubmitEventHandler">
-                    <DataAnnotationsValidator />
-                    <ValidationMessage For="@(() => _editPost.Title)"/>
-                    <ValidationMessage For="@(() => _editPost.Body)"/>
-                    <ValidationMessage For="@(() => _editPost.Tags)"/>
-                    <div>
-                        <div id="editor">
-                            @PostBody
+            @if (PostId != null && PostInfo != null)
+            {
+                <h1 class="section-title with-divider"><span style="color: #242424">#</span> EDIT POST <span style="color: #FDD835;">@PostInfo.Title</span></h1>
+                <input id="title-proxy" class="section-title" @bind-value="@_editPost.Title" placeholder="TITLE"/>
+                <article class="view-post">
+                    <EditForm Model="@_editPost" OnValidSubmit="@SubmitEventHandler">
+                        <DataAnnotationsValidator/>
+                        <ValidationMessage For="@(() => _editPost.Title)"/>
+                        <ValidationMessage For="@(() => _editPost.Body)"/>
+                        <ValidationMessage For="@(() => _editPost.Tags)"/>
+                        <div>
+                            <div id="editor">
+                                @PostBody
+                            </div>
                         </div>
-                    </div>
-                    <input type="text" class="form-control" id="Input_PostId" @bind-value="@_editPost.PostId" hidden/>
-                    <input type="text" class="form-control" id="Input_Title" @bind-value="@_editPost.Title" hidden/>
-                    <input type="text" id="Input_Body" @bind-value="@_editPost.Body" hidden/>
-                    <button type="submit" style="width: 100%;" class="dark" aria-hidden="true">Save Changes</button>
-                </EditForm>
-            </article>
-        }
-    </div>
-</section>
+                        <input type="text" class="form-control" id="Input_PostId" @bind-value="@_editPost.PostId" hidden/>
+                        <input type="text" class="form-control" id="Input_Title" @bind-value="@_editPost.Title" hidden/>
+                        <input type="text" id="Input_Body" @bind-value="@_editPost.Body" hidden/>
+                        <button type="submit" style="width: 100%;" class="dark" aria-hidden="true">Save Changes</button>
+                    </EditForm>
+                </article>
+            }
+            </AuthorizeView>
+        </div>
+    </section>
+</CascadingAuthenticationState>
 
 <style>
     .ql-toolbar.ql-snow { 
@@ -116,10 +120,14 @@
         }
     }
     
-
     protected override async Task OnInitializedAsync()
     {
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userId = authenticationState.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        if (userId == null) { navManager.NavigateTo("/"); }
         await LoadPostInfo();
+        if (!userId.Equals(PostInfo.UserId)) { navManager.NavigateTo("/"); }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
