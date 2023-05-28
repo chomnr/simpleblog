@@ -1,12 +1,16 @@
+using Tests.IntegrationTests;
+
 namespace Tests;
 
+using static Testing;
 public class Tests
 {
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
+        await ResetState();
     }
-
+    
     [Test]
     public void Test1()
     {
