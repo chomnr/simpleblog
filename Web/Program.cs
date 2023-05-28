@@ -38,11 +38,6 @@ services.Configure<CookiePolicyOptions>(options =>
 
 services.AddHttpContextAccessor();
 
-/*
-services.AddIdentity<BlogUser, IdentityRole>(options => 
-        options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<DatabaseDbContext>();
-*/
 builder.Services.AddAntiforgery();
 
 services.AddRazorPages();
