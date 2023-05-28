@@ -1,35 +1,51 @@
 ﻿@page "/post/edit/{postId:int}"
-@inject IJSRuntime JSRuntime
 @using Microsoft.AspNetCore.Mvc
 @using Application.Features.Post
+@using MediatR
+@using Application.Entities
+@using Newtonsoft.Json
+@inject IMediator Mediator;
+@inject IJSRuntime JsRuntime
+@inject NavigationManager navManager;
+
 
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
     <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
-        <h1 class="section-title with-divider" style="word-break: break-all"><span style="color: #242424">#</span> EDIT MODE <span style="color: #FDD835">TEST</span></h1>
-        <article class="view-post">
-            <EditForm Model="@EditModel" OnValidSubmit="() => {}">
-                <!-- Form fields and validation messages go here -->
-                <div>
-                    <div id="editor">
-                        <p style="word-break: break-all"></p>
+        @if (PostId != null && PostInfo != null)
+        {
+            <h1 class="section-title with-divider"><span style="color: #242424">#</span> EDIT POST <span style="color: #FDD835;">@PostInfo.Title</span></h1>
+            <input id="title-proxy" class="section-title" @bind-value="@_editPost.Title" placeholder="TITLE"/>
+            
+            <article class="view-post">
+                <EditForm Model="@_editPost" OnValidSubmit="@SubmitEventHandler">
+                    <DataAnnotationsValidator />
+                    <ValidationMessage For="@(() => _editPost.Title)"/>
+                    <ValidationMessage For="@(() => _editPost.Body)"/>
+                    <ValidationMessage For="@(() => _editPost.Tags)"/>
+                    <div>
+                        <div id="editor">
+                            @PostBody
+                        </div>
                     </div>
-                </div>
-                <button type="submit" style="width: 100%;" class="dark" aria-hidden="true">Save Changes</button>
-            </EditForm>
-        </article>
+                    <input type="text" class="form-control" id="Input_PostId" @bind-value="@_editPost.PostId" hidden/>
+                    <input type="text" class="form-control" id="Input_Title" @bind-value="@_editPost.Title" hidden/>
+                    <input type="text" id="Input_Body" @bind-value="@_editPost.Body" hidden/>
+                    <button type="submit" style="width: 100%;" class="dark" aria-hidden="true">Save Changes</button>
+                </EditForm>
+            </article>
+        }
     </div>
 </section>
 
 <style>
-    /* QuillJS Editor */
-    .ql-toolbar.ql-snow {
-        border: 0; !important;
+    .ql-toolbar.ql-snow { 
+        border: 0; !important; 
         border-left: 2px solid var(--accent-color);
         background: var(--light-black);
         color: var(--dirty-red);
     }
     
-    .ql-container.ql-snow {
+    .ql-container.ql-snow { 
         border: 0; !important;
         border-left: 2px solid var(--accent-color)
     }
@@ -49,51 +65,106 @@
     }
 </style>
 
-<!-- QuillJS Editor -->
 @code {
-    public class MediatorEditPostModel
+    [Parameter]
+    public int PostId { get; set; }
+    private Post PostInfo { get; set; }
+
+    private MarkupString PostBody { get; set; }
+    
+    private static EditPostCommand _editPost = new EditPostCommand();
+    
+    [JSInvokable]
+    public static void UpdateTitle(string title)
     {
-        [BindProperty]
-        public EditPostCommand Input { get; set; } = default!;
+        _editPost.Body = title;
     }
     
-    [Parameter]
-    public int postId { get; set; }
+    [JSInvokable]
+    public static void UpdateBody(string body)
+    {
+        _editPost.Body = body;
+    }
 
-    private MediatorEditPostModel EditModel = new MediatorEditPostModel();
+    private async Task LoadPostInfo()
+    {
+        var command = new RetrievePostCommand{ Id = PostId };
+        var response = await Mediator.Send(command);
+        _editPost.PostId = PostId;
+        
+        if (response.Value != null)
+        {
+            PostInfo = JsonConvert.DeserializeObject<Post>(response.Value.ToString());
+            PostBody = new MarkupString(PostInfo.Body);
+            
+            UpdateTitle(PostInfo.Title);
+            UpdateBody(PostInfo.Body);
+        }
+    }
     
+    private async Task SubmitEventHandler(EditContext context)
+    {
+        if (context.Validate())
+        {
+            Console.WriteLine(context.Model);
+            var response = await Mediator.Send(_editPost);
+            if (response)
+            {
+                //success change message to success bla bla.  
+                navManager.NavigateTo("/post/" + PostId);
+            }
+        }
+    }
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPostInfo();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // fixes a bug hacky but it works. (editor gets loaded before the #editor div. this fixes that.)
+        await Task.Delay(100);
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("eval", @"
-                const toolbarOptions = [
-                    [{ 'header': [1, 2, false] }, { 'font': [] }],
-                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                    [{'list': 'ordered'}, {'list': 'bullet'}, 
-                    {'indent': '-1'}, {'indent': '+1'}],
-                    ['link', 'image', 'video', 'code'],
-                    ['clean']                                        
-                ];
-                var options = {
-                    modules: {
-                        toolbar: toolbarOptions
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                };
+            await JsRuntime.InvokeVoidAsync("eval", @"
+    const toolbarOptions = [
+        [{ 'header': [1, 2, false] }, { 'font': [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, 
+        {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image', 'video', 'code'],
+        ['clean']                                        
+    ];
+    var options = {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+    };
 
-                let quill = new Quill('#editor', options);
+    let quill = new Quill('#editor', options);
 
-                quill.getModule('toolbar').addHandler('image', function() {
-                    var url = prompt('Enter the image URL:');
-                    if (url) {
-                        quill.focus();
-                        var range = quill.getSelection();
-                        quill.insertEmbed(range.index, 'image', url);
-                    }
-                });
-            ");
+    quill.getModule('toolbar').addHandler('image', function() {
+        var url = prompt('Enter the image URL:');
+        if (url) {
+            quill.focus();
+            var range = quill.getSelection();
+            quill.insertEmbed(range.index, 'image', url);
+        }
+    });
+    
+        let body = document.getElementById('Input_Body');
+        let body_proxy = quill.root;
+
+        quill.on('text-change', function() {
+            DotNet.invokeMethodAsync('Web', 'UpdateBody', body_proxy.innerHTML);
+            body.value = body_proxy.innerHTML;
+        });
+");
+            
         }
     }
 }
