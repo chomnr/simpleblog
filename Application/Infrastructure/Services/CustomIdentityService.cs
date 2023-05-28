@@ -69,7 +69,6 @@ public class CustomIdentityService : ICustomIdentityService
         var posts = JsonConvert.DeserializeObject<List<Post>>(serialized.Value.ToString());
         var userProfile = new Profile
         {
-            Avatar = result.Avatar,
             UserName = result.UserName,
             Posts = posts
         };
