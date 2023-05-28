@@ -68,8 +68,14 @@ internal sealed class RecoveryUserCommandHandler : IRequestHandler<RecoveryComma
             var confirmPath = $"/account/recovery/resetpassword" +
                               $"?userId={Uri.EscapeDataString(user.Id)}" +
                               $"&resetToken={Uri.EscapeDataString(token)}";
-            var formatHtml = $"<a href={basePath + confirmPath}>Reset Password</a>";
-            await _emailSender.SendEmailAsync(payLoad.Email, config["EmailResetPasswordSubject"], formatHtml);
+            var passwordConfirmBody = config["EmailResetPasswordBody"]
+                .Replace("{url}", basePath + confirmPath)
+                .Replace("{token}", token)
+                .Replace("{userid}", user.Id)
+                .Replace("{firstname}", user.FirstName)
+                .Replace("{lastname}", user.LastName);
+            
+            await _emailSender.SendEmailAsync(payLoad.Email, config["EmailResetPasswordSubject"], passwordConfirmBody);
         }
         // End heres.
         
