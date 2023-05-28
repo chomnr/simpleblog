@@ -6,4 +6,5 @@ You can run SimpleBlog locally using `Docker`. Or you can build it straight from
 ## External Requirements
 The only external requirement that is needed is `PostgreSQL`.
 
-## Dependencies
+## Features
+I intentionally focused on keeping SimpleBlog's features to the most fundamental elements, hence its name, 'SimpleBlog'.
