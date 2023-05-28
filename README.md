@@ -11,8 +11,8 @@ the abstraction, thank you.
 You can modify anything to your liking. 
 
 ## Contributions
-I used various new tools, such as the EntityFramework & Blazor Server. I preferably want commits just from
-`#first-timers-only`. But contributions from anyone is welcomed.
+I used various new tools, such as the EntityFramework & Blazor Server. I preferably want commits 
+just from `#first-timers-only`. But contributions from anyone is welcomed.
 
 
 ## Getting started
