@@ -35,7 +35,7 @@ public class PostService : IPostService
         if (!PostConstraints.AreTagsValid(tags)) { return false; }
         
         var posts = _context.Posts;
-        var post = PostHelper.CreateSimplifiedPost(userId, title, body, tags);
+        var post = PostHelper.CreateSimplifiedPost(userId, title, body, tags.ConvertAll(tag => tag.ToUpper()));
         
         posts.Add(post);
         await _context.SaveChangesAsync();
@@ -193,9 +193,8 @@ public class PostService : IPostService
             
             if (!tags.SequenceEqual(findPost.Tags))
             {
-                Console.WriteLine("3: ");
                 if (!PostConstraints.AreTagsValid(tags)) { return false; }
-                findPost.Tags = tags;
+                findPost.Tags = tags.ConvertAll(tag => tag.ToUpper());
             }
             
             await _context.SaveChangesAsync();

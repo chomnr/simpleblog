@@ -229,7 +229,7 @@
             let index = e.target.id.replace('tag-', '');
             tags_list.splice(index, 1);
             e.target.remove();
-            reloadTags();
+            refreshTags();
         }
     });
 
@@ -242,19 +242,17 @@
 
     function addTag(tag) {
         let a = document.createElement('li');
-        a.textContent = tag.replace(' ', '\u00A0');
+        a.textContent = tag.replace(' ', '\u00A0').toUpperCase();
         tags_display.appendChild(a);
         tags.value = JSON.stringify(tags_list);
         DotNet.invokeMethodAsync('Web', 'UpdateTags', tags.value);
     }
 
-function refreshTags() {
-    reloadTags();
-    for (let i = 0; i < tags_list.length; i++) {
-        addTag(tags_list[i]);
-    }
-}
-");
+    function refreshTags() {
+        reloadTags();
+        for (let i = 0; i < tags_list.length; i++) {
+            addTag(tags_list[i]);
+        }}");
             
         }
     }
