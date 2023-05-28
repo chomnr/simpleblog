@@ -20,5 +20,5 @@ public interface IPostService
     
     Task<bool> DeleteAsync(DeletePostCommand command, string userId, string role);
     
-    Task<bool> EditAsync(EditPostCommand command);
+    Task<bool> EditAsync(EditPostCommand command, string userId);
 }

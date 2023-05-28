@@ -160,33 +160,44 @@ public class PostService : IPostService
         return false;
     }
 
-    public async Task<bool> EditAsync(EditPostCommand command)
+    public async Task<bool> EditAsync(EditPostCommand command, string userId)
     {
+
         var title = command.Title;
-        var body = WebUtility.HtmlDecode(command.Body);
+        var body = command.Body;
         var tags = command.Tags;
-
+        
         var post = _context.Posts;
-        var contextPost = await post.FindAsync(command.PostId);
+        var findPost = await post.FindAsync(command.PostId);
 
-        if (contextPost != null)
+        if (findPost != null)
         {
-            if (!string.IsNullOrEmpty(title) && !contextPost.Title.Equals(title))
+            if (!findPost.UserId.Equals(userId, StringComparison.OrdinalIgnoreCase))
+            {
+                // Administrators should be able to delete posts not update them.
+                // Same thing discord does with messages. Admins can't edit messages
+                // but they can delete them.
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(title) && !findPost.Title.Equals(title))
             {
                 if (!PostConstraints.IsValidTitle(title)) { return false; }
-                contextPost.Title = title;
+                findPost.Title = title;
             }
-            if (!contextPost.Body.Equals(body))
+            if (!string.IsNullOrEmpty(body) && !findPost.Body.Equals(body))
             {
                 if (!PostConstraints.IsValidBody(body)) { return false; }
-                contextPost.Body = body;
+                findPost.Body = body;
             }
-
-            if (!contextPost.Tags.SequenceEqual(tags))
+            /*
+            if (tags.Count != 0 && !tags.SequenceEqual(contextPost.Tags))
             {
+                Console.WriteLine("3: ");
                 if (!PostConstraints.AreTagsValid(tags)) { return false; }
                 contextPost.Tags = tags;
             }
+            */
             await _context.SaveChangesAsync();
             return true;
         }
