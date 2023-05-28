@@ -39,7 +39,8 @@ public class BlogUserCompletedEvent : DomainEvent
     public BlogUser Account { get; }
 }
 
-[NotMapped]
+
+//[NotMapped]
 public static class BlogUserHelper
 {
     public static BlogUser CreateBlogUser(string firstName, string lastName, string userName, string password, string email, bool confirmEmail)

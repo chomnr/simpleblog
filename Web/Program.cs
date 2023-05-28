@@ -17,7 +17,7 @@ application.ConfigureServices(services);
 services.AddDatabaseDeveloperPageExceptionFilter();
 services.AddDefaultIdentity<BlogUser>(options =>
     {
-        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedAccount = false; // enable true for email.
         options.SignIn.RequireConfirmedEmail = false;
         options.User.RequireUniqueEmail = true;
         
