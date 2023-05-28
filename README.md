@@ -21,21 +21,4 @@ You can run SimpleBlog locally using `Docker`. Or you can build it straight from
 ## External Requirements
 The only external requirement that is needed is `PostgreSQL` & `SendGrid`.
 
-## Features
-
-### Account
-Login<br>
-Logout<br>
-Reset Password<br>
-Email Confirmation<br>
-
-### Post
-Create<br>
-Read<br>
-Update<br>
-Delete<br>
-
-### Beyond Rudimentary
-View post by tag<br>
-View post by username<br>
 
