@@ -1,4 +1,6 @@
-﻿@inject NavigationManager Navigation
+﻿@using Microsoft.AspNetCore.Identity
+@using Application.Entities
+@inject NavigationManager Navigation
 
 <div class="blg-head">
     <nav class="default-nav">
@@ -13,7 +15,7 @@
                 </Authorized>
                 <NotAuthorized>
                     <li><NavLink class="nav-link" href="/auth/login">LOGIN</NavLink></li>
-                    <li><NavLink class="nav-link" href="/auth/register">REGISTER</NavLink></li>
+                    <li><NavLink class="nav-link" href="/auth/logout">REGISTER</NavLink></li>
                 </NotAuthorized>
             </AuthorizeView>
         </ul>
