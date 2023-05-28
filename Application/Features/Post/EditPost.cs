@@ -31,9 +31,14 @@ public class EditPostCommand : IRequest<bool>
 {   
     [Required]
     public int PostId { get; set; }
+    [StringLength(PostConstraints.MaxTitleLength)]
+    [MinLength(PostConstraints.MinTitleLength)]
     public string? Title { get; set; }
-    public List<String>? Tags { get; set; }
+    [StringLength(PostConstraints.MaxBodyLength)]
     public string? Body { get; set; }
+    [MinLength(PostConstraints.MinTagLength)]
+    [MaxLength(PostConstraints.MaxTagLength)]
+    public List<String>? Tags { get; set; }
 }
 
 internal sealed class EditPostCommandHandler : IRequestHandler<EditPostCommand, bool>
@@ -49,7 +54,9 @@ internal sealed class EditPostCommandHandler : IRequestHandler<EditPostCommand, 
 
     public async Task<bool> Handle(EditPostCommand payLoad, CancellationToken cancellationToken)
     {
-        return await _postService.EditAsync(payLoad);
+        var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var role = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+        return await _postService.EditAsync(payLoad, userId);
     }
     
     public class EditPostEvent : DomainEvent
