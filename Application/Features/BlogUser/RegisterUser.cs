@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Common;
 using Application.Common.Interface;
+using Application.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -60,19 +61,22 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
     private readonly IConfiguration _configuration;
     private readonly UserManager<Entities.BlogUser> _userManager;
     private readonly IWebHelperService _webHelperService;
+    private readonly DatabaseDbContext _context;
 
     public RegisterAccountCommandHandler(
         ICustomIdentityService customIdentityService, 
         IEmailSenderService emailSender,
         IConfiguration configuration,
         UserManager<Entities.BlogUser> userManager,
-        IWebHelperService webHelperService)
+        IWebHelperService webHelperService,
+        DatabaseDbContext context)
     {
         _customIdentityService = customIdentityService;
         _emailSender = emailSender;
         _configuration = configuration;
         _userManager = userManager;
         _webHelperService = webHelperService;
+        _context = context;
     }
 
     public async Task<IdentityResult> Handle(RegisterCommand payLoad, CancellationToken cancellationToken)
@@ -82,17 +86,16 @@ internal sealed class RegisterAccountCommandHandler : IRequestHandler<RegisterCo
             LastName = payLoad.LastName, 
             UserName = payLoad.Username, 
             Email = payLoad.Email,
-            Done = false
         };
         
       //  user.DomainEvents.Add(new RegisterUserEvent(user));
         
         var config = _configuration.GetSection("Authentication").GetSection("Email");
+
         var result = await _customIdentityService.CustomCreateAsync(payLoad, user);
+
         if (result.Succeeded)
         {
-            //EmailConfirmationBody
-
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var basePath = _webHelperService.GetBaseUrl();
             var confirmPath = $"/auth/confirm-email" +

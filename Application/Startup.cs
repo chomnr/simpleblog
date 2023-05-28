@@ -40,7 +40,7 @@ public class Startup
     {
         services.AddDbContext<DatabaseDbContext>(
             options => options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
-        services.AddScoped<IDomainEventService, DomainEventService>();
+       // services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddScoped<ICustomIdentityService, CustomIdentityService>();
         services.AddScoped<ICustomSignInService, CustomSignInService>();
         services.AddScoped<IEmailSenderService, EmailSenderService>();
