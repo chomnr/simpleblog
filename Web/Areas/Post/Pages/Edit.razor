@@ -95,7 +95,7 @@
     }
 
     [JSInvokable]
-    public static string GetTags()
+    public static string GetDefaultTags()
     {
         return JsonConvert.SerializeObject(PostInfo.Tags);
     }
@@ -127,8 +127,14 @@
     {
         if (context.Validate())
         {
+            if (string.IsNullOrEmpty(_editPost.Tags))
+            {
+                _editPost.Tags = GetDefaultTags();
+            }
+
             Console.WriteLine(context.Model);
             var response = await Mediator.Send(_editPost);
+            
             if (response)
             {
                 navManager.NavigateTo("/post/" + PostId);
@@ -197,7 +203,7 @@
     const MAX_TAG_NAME_LENGTH = 15;
     const MIN_TAG_NAME_LENGTH = 3;
 
-    DotNet.invokeMethodAsync('Web', 'GetTags')
+    DotNet.invokeMethodAsync('Web', 'GetDefaultTags')
             .then(data => {
                 tags_list = JSON.parse(data);
             for (let i = 0; i < tags_list.length; i++) {
