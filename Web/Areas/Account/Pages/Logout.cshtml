@@ -1,0 +1,19 @@
+﻿@page "/auth/logout"
+@model Web.Areas.Account.Pages.LogoutModel<Application.Entities.BlogUser>
+
+@{
+    Layout = "_Layout";
+}
+
+<section class="blg-section" style="padding-left: 25px;padding-right: 25px;height: 100vh;margin-top: 25px">
+    <div class="blg-child-node col" style="color: #eae7e1;align-items: center;">
+        <div style="padding: 15px;border-radius: 50%;display: flex;align-items: center;">
+            <i class="fa-solid fa-check" style="font-size: 2rem;"></i>
+        </div>
+        <div style="text-align:center;font-size: 1.3rem;"><b>Logged Out</b></div>
+        <br>
+        <p style="max-width:500px;text-align:center;">You have successfully logged out!</p>
+        <br>
+        <button style="width: 150px;"><a href="/" style="color:inherit;text-decoration: none;">GO TO WEBSITE</a></button>
+    </div>
+</section>
