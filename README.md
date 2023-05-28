@@ -24,18 +24,18 @@ The only external requirement that is needed is `PostgreSQL` & `SendGrid`.
 ## Features
 
 ### Account
-Login
-Logout
-Reset Password
-Email Confirmation
+Login<br>
+Logout<br>
+Reset Password<br>
+Email Confirmation<br>
 
 ### Post
-Create
-Read
-Update
-Delete
+Create<br>
+Read<br>
+Update<br>
+Delete<br>
 
 ### Beyond Rudimentary
-View post by tag
-View post by username
+View post by tag<br>
+View post by username<br>
 
