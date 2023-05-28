@@ -11,6 +11,7 @@ public class BlogUser : IdentityUser
     public string LastName { get; set; }
     public int NameDisplayType { get; set; } = 1;
     
+    /*
     private bool _done;
     public bool Done
     {
@@ -25,7 +26,9 @@ public class BlogUser : IdentityUser
             _done = value;
         }
     }
+    [NotMapped]
     public List<DomainEvent> DomainEvents { get; }
+    */
 }
 
 public class BlogUserCompletedEvent : DomainEvent
