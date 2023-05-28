@@ -78,10 +78,9 @@
     
     private static EditPostCommand _editPost = new EditPostCommand();
     
-    [JSInvokable]
-    public static void UpdateTitle(string title)
+    private static void UpdateTitle(string title)
     {
-        _editPost.Body = title;
+        _editPost.Title = title;
     }
     
     [JSInvokable]
@@ -114,7 +113,6 @@
             var response = await Mediator.Send(_editPost);
             if (response)
             {
-                //success change message to success bla bla.  
                 navManager.NavigateTo("/post/" + PostId);
             }
         }
