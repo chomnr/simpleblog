@@ -47,6 +47,8 @@ public class Startup
         services.AddScoped<IWebHelperService, WebHelperService>();
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<SignInManager<BlogUser>>();
+        
+        services.AddSingleton<ICurrentUserService, CurrentUserService>();
         return services;
     }
 }
