@@ -18,6 +18,10 @@
             {
                 <h1 class="section-title with-divider"><span style="color: #242424">#</span> EDIT POST <span style="color: #FDD835;">@PostInfo.Title</span></h1>
                 <input id="title-proxy" class="section-title" @bind-value="@_editPost.Title" placeholder="TITLE"/>
+                <div style="display:flex;width: 100%;justify-content: start;align-items: center">
+                    <ul id="tags-display" class="selectable-tags"></ul>
+                    <input id="tags-proxy" bind-value="@_editPost.Tags" class="section-tags" placeholder="Tags"/>
+                </div>
                 <article class="view-post">
                     <EditForm Model="@_editPost" OnValidSubmit="@SubmitEventHandler">
                         <DataAnnotationsValidator/>
@@ -32,6 +36,7 @@
                         <input type="text" class="form-control" id="Input_PostId" @bind-value="@_editPost.PostId" hidden/>
                         <input type="text" class="form-control" id="Input_Title" @bind-value="@_editPost.Title" hidden/>
                         <input type="text" id="Input_Body" @bind-value="@_editPost.Body" hidden/>
+                        <input type="text" id="Input_Tags" @bind-value="@_editPost.Tags" hidden/>
                         <button type="submit" style="width: 100%;" class="dark" aria-hidden="true">Save Changes</button>
                     </EditForm>
                 </article>
@@ -72,7 +77,7 @@
 @code {
     [Parameter]
     public int PostId { get; set; }
-    private Post PostInfo { get; set; }
+    private static Post PostInfo { get; set; }
 
     private MarkupString PostBody { get; set; }
     
@@ -83,6 +88,18 @@
         _editPost.Title = title;
     }
     
+    [JSInvokable]
+    public static void UpdateTags(string tags)
+    {
+        _editPost.Tags = tags;
+    }
+
+    [JSInvokable]
+    public static string GetTags()
+    {
+        return JsonConvert.SerializeObject(PostInfo.Tags);
+    }
+
     [JSInvokable]
     public static void UpdateBody(string body)
     {
@@ -102,6 +119,7 @@
             
             UpdateTitle(PostInfo.Title);
             UpdateBody(PostInfo.Body);
+            UpdateTags(JsonConvert.SerializeObject(PostInfo.Tags));
         }
     }
     
@@ -161,14 +179,81 @@
             quill.insertEmbed(range.index, 'image', url);
         }
     });
-    
-        let body = document.getElementById('Input_Body');
-        let body_proxy = quill.root;
 
-        quill.on('text-change', function() {
-            DotNet.invokeMethodAsync('Web', 'UpdateBody', body_proxy.innerHTML);
-            body.value = body_proxy.innerHTML;
-        });
+    let body = document.getElementById('Input_Body');
+    let body_proxy = quill.root;
+
+    quill.on('text-change', function() {
+        DotNet.invokeMethodAsync('Web', 'UpdateBody', body_proxy.innerHTML);
+        body.value = body_proxy.innerHTML;
+    });
+
+    let tags = document.getElementById('Input_Tags');
+    let tags_proxy = document.getElementById('tags-proxy');
+    let tags_display = document.getElementById('tags-display');
+    let tags_list = [];
+
+    const MAX_TAGS = 4;
+    const MAX_TAG_NAME_LENGTH = 15;
+    const MIN_TAG_NAME_LENGTH = 3;
+
+    DotNet.invokeMethodAsync('Web', 'GetTags')
+            .then(data => {
+                tags_list = JSON.parse(data);
+            for (let i = 0; i < tags_list.length; i++) {
+                addTag(tags_list[i].toUpperCase());
+            }
+    });
+
+    tags_proxy.addEventListener('keydown', function(e) {
+        if (e.key === ',') {
+            let target = e.target.value;
+            e.preventDefault();
+            if (
+                target.length >= MIN_TAG_NAME_LENGTH &&
+                target.length <= MAX_TAG_NAME_LENGTH &&
+                tags_list.length < MAX_TAGS &&
+                !tags_list.includes(target) &&
+                tags_proxy.value.length !== 0
+            ) {
+                console.log(tags_list);
+                tags_list.push(e.target.value);
+                addTag(e.target.value.toUpperCase());
+                e.target.value = '';
+            }
+        }
+    });
+
+    tags_display.addEventListener('click', function(e) {
+        if (e.target.tagName === 'LI') {
+            let index = e.target.id.replace('tag-', '');
+            tags_list.splice(index, 1);
+            e.target.remove();
+            reloadTags();
+        }
+    });
+
+    function reloadTags() {
+        tags_proxy.value = '';
+        tags.value = '';
+        tags_display.innerHTML = '';
+        DotNet.invokeMethodAsync('Web', 'UpdateTags', tags.value);
+    }
+
+    function addTag(tag) {
+        let a = document.createElement('li');
+        a.textContent = tag.replace(' ', '\u00A0');
+        tags_display.appendChild(a);
+        tags.value = JSON.stringify(tags_list);
+        DotNet.invokeMethodAsync('Web', 'UpdateTags', tags.value);
+    }
+
+function refreshTags() {
+    reloadTags();
+    for (let i = 0; i < tags_list.length; i++) {
+        addTag(tags_list[i]);
+    }
+}
 ");
             
         }

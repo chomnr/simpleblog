@@ -16,7 +16,6 @@ namespace Application.Infrastructure.Services;
 public class PostService : IPostService
 {
     /* TODO: ADD CUSTOM ERRORS FOR CONVENIENCE */
-    /* TODO: THROW CONSTANTS IN DIFFERENT FILE SO IT'S PERSISTENT. */
     
     private readonly DatabaseDbContext _context;
     
@@ -80,10 +79,9 @@ public class PostService : IPostService
     public async Task<JsonResult> RetrieveSpecificAsync(RetrievePostCommand command)
     {
         var posts = _context.Posts;
+        var postId = command.Id;
 
-        var id = command.Id;
-
-        var result = await posts.FindAsync(id);
+        var result = await posts.FindAsync(postId);
         var user = await _context.Users.FindAsync(result.UserId);
         result.Username = user != null ? user.UserName : "{DELETED_USER}";
         
@@ -165,7 +163,9 @@ public class PostService : IPostService
 
         var title = command.Title;
         var body = command.Body;
-        var tags = command.Tags;
+        var tags = JsonConvert.DeserializeObject<List<string>>(command.Tags);
+        
+        Console.WriteLine(command.Tags);
         
         var post = _context.Posts;
         var findPost = await post.FindAsync(command.PostId);
@@ -190,14 +190,14 @@ public class PostService : IPostService
                 if (!PostConstraints.IsValidBody(body)) { return false; }
                 findPost.Body = body;
             }
-            /*
-            if (tags.Count != 0 && !tags.SequenceEqual(contextPost.Tags))
+            
+            if (!tags.SequenceEqual(findPost.Tags))
             {
                 Console.WriteLine("3: ");
                 if (!PostConstraints.AreTagsValid(tags)) { return false; }
-                contextPost.Tags = tags;
+                findPost.Tags = tags;
             }
-            */
+            
             await _context.SaveChangesAsync();
             return true;
         }

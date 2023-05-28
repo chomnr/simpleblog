@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Application.Common;
 using Application.Common.Interface;
@@ -36,9 +37,7 @@ public class EditPostCommand : IRequest<bool>
     public string? Title { get; set; }
     [StringLength(PostConstraints.MaxBodyLength)]
     public string? Body { get; set; }
-    [MinLength(PostConstraints.MinTagLength)]
-    [MaxLength(PostConstraints.MaxTagLength)]
-    public List<String>? Tags { get; set; }
+    public string? Tags { get; set; }
 }
 
 internal sealed class EditPostCommandHandler : IRequestHandler<EditPostCommand, bool>
