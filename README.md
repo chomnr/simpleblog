@@ -19,6 +19,6 @@ just from `#first-timers-only`. But contributions from anyone is welcomed.
 You can run SimpleBlog locally using `Docker`. Or you can build it straight from GitHub and run it using ISS Express.
 
 ## External Requirements
-The only external requirement that is needed is `PostgreSQL` & `SendGrid`.
+The only external requirement that are needed is `PostgreSQL` & `SendGrid`.
 
 
