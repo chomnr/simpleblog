@@ -9,7 +9,7 @@ COPY ["Web/Web.csproj", "Web/"]
 COPY ["Application/Application.csproj", "Application/"]
 RUN dotnet restore "Web/Web.csproj"
 COPY . .
-WORKDIR "/src/Web"
+WORKDIR "/src/Web" 
 RUN dotnet build "Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
