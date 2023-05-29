@@ -49,7 +49,7 @@ public class RegisterCommand : IRequest<IdentityResult>
     [Required]
     [MinLength(PasswordConstraints.MinLength)]
     [StringLength(PasswordConstraints.MaxLength)]
-    [RegularExpression(PasswordConstraints.PasswordRegex)]
+    [RegularExpression(PasswordConstraints.PasswordRegex, ErrorMessage = "Requires an 1 upper, 1 special and 1 digit")]
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
 }
