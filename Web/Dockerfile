@@ -1,10 +1,4 @@
-﻿FROM postgres:15 AS database
-WORKDIR /app
-RUN sudo service postgresql start
-ENV POSTGRES_USER "postgres"
-ENV POSTGRES_DB "postgres"
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -34,15 +28,3 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Web.dll"]
-
-
-#USER postgres
-#RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql
-
-#CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
-
-#ARG POSTGRES_DB
-#ARG POSTGRES_USER
-
-#ENV POSTGRES_DB $POSTGRES_DB
-#ENV POSTGRES_USER $POSTGRES_USER
