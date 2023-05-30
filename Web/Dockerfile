@@ -1,14 +1,14 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+﻿FROM postgres:15 AS database
+WORKDIR /app
+RUN sudo service postgresql start
+ENV POSTGRES_USER "postgres"
+ENV POSTGRES_DB "postgres"
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 EXPOSE 5432
-
-FROM postgres:15 AS database
-RUN sudo service postgresql start
-RUN ECHO "POSTGRES DATABASE RUNNING"
-ENV POSTGRES_USER "postgres"
-ENV POSTGRES_DB "postgres"
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
