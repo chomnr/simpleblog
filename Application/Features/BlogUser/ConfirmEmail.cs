@@ -33,7 +33,6 @@ public class ConfirmAccountQueryHandler : IRequestHandler<ConfirmAccountQuery, s
     public async Task<string> Handle(ConfirmAccountQuery payLoad, CancellationToken cancellationToken)
     {
         var account = await _userManager.FindByIdAsync(payLoad.UserId);
-        //todo add role after confirmation..
         if (account != null)
         {
             if (account.EmailConfirmed)
