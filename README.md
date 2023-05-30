@@ -21,7 +21,7 @@ Enter SendGrid key & Postgres credentials in the appsettings.json.
 Then follow the migrations directions.
 
 ## External Requirements
-The only external requirement that are needed is `PostgreSQL` & `SendGrid`.
+The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
 
 ## Migrations
 Make sure you're in the solution's directory.<br><br>
