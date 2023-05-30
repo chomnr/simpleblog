@@ -21,10 +21,10 @@ I used various new tools, such as the EntityFramework & Blazor Server. I prefera
 just from `#first-timers-only`. But contributions from anyone is welcomed.
 
 ## Getting started
-Install Postgres on your local machine and or server.<br>
+Install PostgresSQL or pgAdmin on your local machine or server.<br>
 Create an account on SendGrid.<br>
-Enter SendGrid key & Postgres credentials in the appsettings.json.
-Then follow the migrations directions.
+Enter SendGrid key & Postgres credentials in the appsettings.json.<br>
+Then proceed to the Migrations section.
 
 ## External Requirements
 The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
