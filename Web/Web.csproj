@@ -19,9 +19,6 @@
 
     <ItemGroup>
       <Content Remove="Areas\Identity\**" />
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>
