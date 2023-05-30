@@ -4,9 +4,10 @@ EXPOSE 80
 EXPOSE 443
 
 FROM postgres:15
-WORKDIR /app
+RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql
+USER postgres
 
-CMD ["postgres"]
+CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
 EXPOSE 5432
 
 #ARG POSTGRES_DB
