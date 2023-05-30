@@ -25,11 +25,9 @@ COPY . .
 WORKDIR "/src/Web"
 RUN dotnet build "Web.csproj" -c Release -o /app/build
 
-# Extra Stuff..
-#COPY Web/build.sh /app/build.sh
-COPY ["/Web/build.sh", "Web/"]
-RUN chmod +x /app/build.sh
-RUN /app/build.sh
+WORKDIR /src/Web
+RUN chmod +x build.sh
+RUN ./build.sh
 
 FROM build AS publish
 RUN dotnet publish "Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
