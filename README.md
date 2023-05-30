@@ -15,11 +15,18 @@ I used various new tools, such as the EntityFramework & Blazor Server. I prefera
 just from `#first-timers-only`. But contributions from anyone is welcomed.
 
 ## Getting started
-Install Postgres on your local machine and or server.
-Create an account on SendGrid.
+Install Postgres on your local machine and or server.<br>
+Create an account on SendGrid.<br>
 Enter SendGrid key & Postgres credentials in the appsettings.json.
+Then follow the migrations directions.
 
 ## External Requirements
 The only external requirement that are needed is `PostgreSQL` & `SendGrid`.
 
-## Tests
+## Migrations
+Make sure you're in the solution's directory.<br>
+Note: Make sure the database is running and the credentials have been set inside the appsettings.json<br>
+`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br>
+`dotnet ef database update --project Application --startup-project Web`
+
+
