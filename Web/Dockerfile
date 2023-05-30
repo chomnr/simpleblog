@@ -6,7 +6,7 @@ EXPOSE 443
 
 FROM postgres:15
 # QOL Dependencies
-RUN apt-get update && apt-get install -y postgresql-client
+#RUN apt-get update && apt-get install -y postgresql-client
 # DOCKER HUB ARG
 ARG POSTGRES_DB
 ARG POSTGRES_HOST
