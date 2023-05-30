@@ -4,16 +4,17 @@ EXPOSE 80
 EXPOSE 443
 
 FROM postgres:15
-RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql
-
+RUN sudo service postgresql start 
+    
 ENV POSTGRES_USER 'postgres'
 ENV POSTGRES_DB 'postgres'
 
-USER postgres
-
-CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
 EXPOSE 5432
 
+#USER postgres
+#RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql
+
+#CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
 
 #ARG POSTGRES_DB
 #ARG POSTGRES_USER
