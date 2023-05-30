@@ -26,7 +26,7 @@ The only external requirement that are needed is `PostgreSQL` & `SendGrid`.
 ## Migrations
 Make sure you're in the solution's directory.<br><br>
 Note: Make sure the database is running and the credentials have been set inside the appsettings.json<br>
-`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br>
+`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br><br>
 `dotnet ef database update --project Application --startup-project Web`
 
 
