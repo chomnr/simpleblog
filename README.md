@@ -14,11 +14,28 @@ You can modify anything to your liking.
 I used various new tools, such as the EntityFramework & Blazor Server. I preferably want commits 
 just from `#first-timers-only`. But contributions from anyone is welcomed.
 
-
 ## Getting started
-You can run SimpleBlog locally using `Docker`. Or you can build it straight from GitHub and run it using ISS Express.
+Install Postgres on your local machine and or server.<br>
+Create an account on SendGrid.<br>
+Enter SendGrid key & Postgres credentials in the appsettings.json.
+Then follow the migrations directions.
 
 ## External Requirements
-The only external requirement that are needed is `PostgreSQL` & `SendGrid`.
+The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
 
-## Tests
+## Appsettings
+### Placeholders
+`config["EmailResetPasswordBody"]` 
+`{url} {token} {userid} {firstname} {lastname}`
+<br><br>
+`config["EmailResetPasswordSubject"]` 
+`{url} {token} {userid} {firstname} {lastname}`
+
+
+## Migrations
+Make sure you're in the solution's directory.<br><br>
+Note: Make sure the database is running and the credentials have been set inside the appsettings.json<br><br>
+`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br><br>
+`dotnet ef database update --project Application --startup-project Web`
+
+
