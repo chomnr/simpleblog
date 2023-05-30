@@ -28,7 +28,7 @@ The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
 `config["EmailResetPasswordBody"]` 
 `{url} {token} {userid} {firstname} {lastname}`
 <br><br>
-`config["EmailResetPasswordSubject"]` 
+`config["EmailResetPasswordBody"]` 
 `{url} {token} {userid} {firstname} {lastname}`
 
 
