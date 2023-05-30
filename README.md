@@ -23,6 +23,15 @@ Then follow the migrations directions.
 ## External Requirements
 The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
 
+## Appsettings
+### Placeholders
+`config["EmailResetPasswordBody"]` 
+`{url} {token} {userid} {firstname} {lastname}`
+<br><br>
+`config["EmailResetPasswordSubject"]` 
+`{url} {token} {userid} {firstname} {lastname}`
+
+
 ## Migrations
 Make sure you're in the solution's directory.<br><br>
 Note: Make sure the database is running and the credentials have been set inside the appsettings.json<br><br>
