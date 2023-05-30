@@ -3,7 +3,6 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-
 FROM postgres:15
 # QOL Dependencies
 #RUN apt-get update && apt-get install -y postgresql-client
@@ -30,7 +29,7 @@ RUN dotnet build "Web.csproj" -c Release -o /app/build
 
 WORKDIR /src/Web
 RUN chmod +x build.sh
-RUN ./build.sh
+RUN cd ../ && ./build.sh
 
 FROM build AS publish
 RUN dotnet publish "Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
