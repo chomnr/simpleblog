@@ -31,7 +31,7 @@ The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
 
 ## Appsettings
 ### Placeholders
-`config["EmailResetPasswordBody"]` 
+`config["EmailConfirmationBody"]` 
 `{url} {token} {userid} {firstname} {lastname}`
 <br><br>
 `config["EmailResetPasswordBody"]` 
