@@ -20,6 +20,10 @@ EXPOSE 5432
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
+
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
 COPY ["/Web/Web.csproj", "Web/"]
 COPY ["/Application/Application.csproj", "Application/"]
 RUN dotnet restore "Web/Web.csproj"
