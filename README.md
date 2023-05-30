@@ -14,9 +14,10 @@ You can modify anything to your liking.
 I used various new tools, such as the EntityFramework & Blazor Server. I preferably want commits 
 just from `#first-timers-only`. But contributions from anyone is welcomed.
 
-
 ## Getting started
-You can run SimpleBlog locally using `Docker`. Or you can build it straight from GitHub and run it using ISS Express.
+Install Postgres on your local machine and or server.
+Create an account on SendGrid.
+Enter SendGrid key & Postgres credentials in the appsettings.json.
 
 ## External Requirements
 The only external requirement that are needed is `PostgreSQL` & `SendGrid`.
