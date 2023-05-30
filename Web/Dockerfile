@@ -15,7 +15,6 @@ WORKDIR /src
 
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="${PATH}:/root/.dotnet/tools"
-RUN export $PATH
 
 COPY ["/Web/Web.csproj", "Web/"]
 COPY ["/Application/Application.csproj", "Application/"]
