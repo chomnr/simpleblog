@@ -29,7 +29,7 @@ RUN dotnet build "Web.csproj" -c Release -o /app/build
 
 WORKDIR /src/Web
 RUN chmod +x build.sh
-RUN cd ../ && ./build.sh
+RUN ./build.sh
 
 FROM build AS publish
 RUN dotnet publish "Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
