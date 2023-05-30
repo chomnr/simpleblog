@@ -1,7 +1,7 @@
 ![SimpleBlogBanner](https://github.com/okjlez/SimpleBlog/blob/master/Web/blob/ReadMeLogo.png?raw=true)
 ----------------------------------------------------------------
 View Preview<br>
-https://www.youtube.com/watch?v=qjZLQP8ey7Q
+https://www.youtube.com/watch?v=MOxt6Icv19Q
 
 Live Preview<br>
 soon.
