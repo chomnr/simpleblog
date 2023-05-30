@@ -3,6 +3,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+# QOL Dependencies
+RUN apt-get update && apt-get install -y postgresql-client
+
 FROM postgres:15
 # DOCKER HUB ARG
 ARG POSTGRES_DB
