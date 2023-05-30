@@ -32,11 +32,8 @@ WORKDIR "/src/Web"
 RUN dotnet build "Web.csproj" -c Release -o /app/build
 
 WORKDIR /src/Web
-RUN dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations
-RUN dotnet ef database update --project Application --startup-project Web
-
-#RUN chmod +x build.sh
-#RUN ./build.sh
+RUN chmod +x build.sh
+RUN ./build.sh
 
 FROM build AS publish
 RUN dotnet publish "Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
