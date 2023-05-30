@@ -5,10 +5,15 @@ EXPOSE 443
 
 FROM postgres:15
 RUN mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql
+
+ENV POSTGRES_USER 'postgres'
+ENV POSTGRES_DB 'postgres'
+
 USER postgres
 
 CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
 EXPOSE 5432
+
 
 #ARG POSTGRES_DB
 #ARG POSTGRES_USER
