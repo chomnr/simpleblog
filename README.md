@@ -24,7 +24,7 @@ You can modify anything to your liking.
 ## Contributions
 I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
 
-## Building
+## Building Project
 ### Requirements
 <details>
 <summary>PostgreSQL >= 14 </summary>
