@@ -23,7 +23,22 @@ You can modify anything to your liking.
 
 ## Contributions
 I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
+## Features
+The most necessary features.
+#### Account
+* Sign In
+* Sign Up
+* Reset Password
+* Email Confirmation
 
+#### Post
+* Create Post
+* View Post
+* Update Post
+* Delete Post
+* Tags
+* Filter by User
+* Filter by Tag
 ## Building Project
 ### Requirements
 <details>
@@ -55,21 +70,3 @@ ensure that Postgres is RUNNING && CONFIGURED inside `appsettings.json`.
 From the root directory /SimpleBlog, run the following commands IN ORDER.
 * `dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`
 * `dotnet ef database update --project Application --startup-project Web`
-
-## Features
-The most necessary features.
-#### Account
-* Sign In
-* Sign Up
-* Reset Password
-* Email Confirmation
-
-#### Post
-* Create Post
-* View Post
-* Update Post
-* Delete Post
-* Tags
-* Filter by User
-* Filter by Tag
-
