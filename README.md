@@ -32,6 +32,7 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 <details>
 <summary>.NET 7</summary>
 </details>
+
 ### Optional
 <details>
 <summary>SendGrid</summary>
