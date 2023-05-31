@@ -30,10 +30,11 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 <summary>PostgreSQL >= 14 </summary>
 </details>
 <details>
-<summary>SendGrid</summary>
-</details>
-<details>
 <summary>.NET 7</summary>
+</details>
+### Optional
+<details>
+<summary>SendGrid</summary>
 </details>
 
 ### Instructions
