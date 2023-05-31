@@ -24,7 +24,6 @@ You can modify anything to your liking.
 ## Contributions
 I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
 * Bug Fixes (love it)
-* Abstraction (thank you)
 * Features (you shouldn't have)
 * More tests (i'm sorry)
 
