@@ -24,7 +24,11 @@ just from `#first-timers-only`. But contributions from anyone is welcomed.
 ## Requirements
 <details>
 <summary>PostgreSQL >= 14 </summary>
+</details>
+<details>
 <summary>SendGrid</summary>
+</details>
+<details>
 <summary>.NET 7</summary>
 </details>
 
