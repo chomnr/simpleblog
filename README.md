@@ -25,7 +25,6 @@ You can modify anything to your liking.
 I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
 
 ## Building
-----------------------------------------------------------------
 ### Requirements
 <details>
 <summary>PostgreSQL >= 14 </summary>
@@ -43,7 +42,7 @@ For the program to work PostgreSql must be running and be configured inside the 
 The project currently will work if you do not configure SendGrid inside `appsettings.json`
 <br><br>
 If you would like the user to only be able to SignIn with a confirmed account follow the instructions.
-* Go to Web/Program.cs
+* Go to `Web/Program.cs`
 * change `options.SignIn.RequireConfirmedAccount = false` to `true`
 * change `options.SignIn.RequireConfirmedEmail = false` to `true`
 
