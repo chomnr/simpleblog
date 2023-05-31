@@ -35,16 +35,6 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 <summary>.NET 7</summary>
 </details>
 
-
-## Getting started
-Install PostgresSQL or pgAdmin on your local machine or server.<br>
-Create an account on SendGrid.<br>
-Enter SendGrid key & Postgres credentials in the appsettings.json.<br>
-Then proceed to the Migrations section.
-
-## External Requirements
-The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
-
 ## Appsettings
 ### Placeholders
 `config["EmailConfirmationBody"]` 
