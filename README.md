@@ -37,7 +37,7 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 </details>
 
 ### Instructions
-For the program to work PostgreSql must be running and be configured inside the `Web/appsettings.json`. 
+For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json`. 
 <br><br>
 The project currently will work if you do not configure SendGrid inside `appsettings.json`
 <br><br>
