@@ -3,9 +3,7 @@ using Application.Common;
 using Application.Entities;
 using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Web.Areas.Account;
-using Web.Areas.Account.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -56,10 +54,11 @@ else
 {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
+    Console.WriteLine("Running Production Build of SimpleBlog");
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
