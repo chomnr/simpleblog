@@ -20,6 +20,15 @@ You can modify anything to your liking.
 I used various new tools, such as the EntityFramework & Blazor Server. I preferably want commits 
 just from `#first-timers-only`. But contributions from anyone is welcomed.
 
+
+## Requirements
+<details>
+<summary>PostgreSQL >= 14 </summary>
+<summary>SendGrid</summary>
+<summary>.NET 7</summary>
+</details>
+
+
 ## Getting started
 Install PostgresSQL or pgAdmin on your local machine or server.<br>
 Create an account on SendGrid.<br>
