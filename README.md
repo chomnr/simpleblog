@@ -24,7 +24,9 @@ You can modify anything to your liking.
 ## Contributions
 I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
 
-## Requirements
+## Building
+----------------------------------------------------------------
+### Requirements
 <details>
 <summary>PostgreSQL >= 14 </summary>
 </details>
@@ -35,13 +37,26 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 <summary>.NET 7</summary>
 </details>
 
-## Appsettings
-### Placeholders
-`config["EmailConfirmationBody"]` 
-`{url} {token} {userid} {firstname} {lastname}`
+### Instructions
+For the program to work PostgreSql must be running and be configured inside the `Web/appsettings.json`. 
 <br><br>
-`config["EmailResetPasswordBody"]` 
-`{url} {token} {userid} {firstname} {lastname}`
+The project currently will work if you do not configure SendGrid inside `appsettings.json`
+<br><br>
+If you would like the user to only be able to SignIn with a confirmed account follow the instructions.
+* Go to Web/Program.cs
+* change `options.SignIn.RequireConfirmedAccount = false` to `true`
+* change `options.SignIn.RequireConfirmedEmail = false` to `true`
+
+#### Migrations
+Please before running the second migration command `dotnet ef database update --project Application --startup-project Web`
+ensure that Postgres is RUNNING && CONFIGURED inside `appsettings.json`.
+<br><br>
+From the root directory /SimpleBlog, run the following commands IN ORDER.
+* `dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`
+* `dotnet ef database update --project Application --startup-project Web`
+
+## Features
+
 
 
 ## Migrations
