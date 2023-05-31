@@ -55,13 +55,19 @@ From the root directory /SimpleBlog, run the following commands IN ORDER.
 * `dotnet ef database update --project Application --startup-project Web`
 
 ## Features
+The most necessary features.
+#### Account
+* Sign In
+* Sign Up
+* Reset Password
+* Email Confirmation
 
-
-
-## Migrations
-Make sure you're in the solution's directory.<br><br>
-Note: Make sure the database is running and the credentials have been set inside the appsettings.json<br><br>
-`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br><br>
-`dotnet ef database update --project Application --startup-project Web`
-
+#### Post
+* Create Post
+* View Post
+* Update Post
+* Delete Post
+* Tags
+* Filter by User
+* Filter by Tag
 
