@@ -1,7 +1,7 @@
 ![SimpleBlogBanner](https://github.com/okjlez/SimpleBlog/blob/master/Web/blob/ReadMeLogo.png?raw=true)
 ----------------------------------------------------------------
 <p align="center">
-  <img src="https://app.codacy.com/project/badge/Grade/02e473424ae64646b7f24ec11455bc42"/>
+  <img src="https://img.shields.io/codacy/grade/75a7625558db465cbdf9943b45ee345a"/>
   <img src="https://img.shields.io/github/commit-activity/m/okjlez/simpleblog?color=ff69b4"/>
   <img src="https://img.shields.io/github/repo-size/okjlez/simpleblog"/>
 </p>
