@@ -1,5 +1,11 @@
 ![SimpleBlogBanner](https://github.com/okjlez/SimpleBlog/blob/master/Web/blob/ReadMeLogo.png?raw=true)
 ----------------------------------------------------------------
+View Preview<br>
+https://www.youtube.com/watch?v=MOxt6Icv19Q
+
+Live Preview<br>
+soon.
+
 I originally wrote a blog system in Rust, but it was terrible, so I rewrote it in a more familiar language. 
 This project should be used as a personal blog, meaning you should be the only person who uses it. But if you want
 more than one to use it, go right ahead. That's fine too.
@@ -15,20 +21,20 @@ I used various new tools, such as the EntityFramework & Blazor Server. I prefera
 just from `#first-timers-only`. But contributions from anyone is welcomed.
 
 ## Getting started
-Install Postgres on your local machine and or server.<br>
+Install PostgresSQL or pgAdmin on your local machine or server.<br>
 Create an account on SendGrid.<br>
-Enter SendGrid key & Postgres credentials in the appsettings.json.
-Then follow the migrations directions.
+Enter SendGrid key & Postgres credentials in the appsettings.json.<br>
+Then proceed to the Migrations section.
 
 ## External Requirements
 The only external requirements that are needed is `PostgreSQL` & `SendGrid`.
 
 ## Appsettings
 ### Placeholders
-`config["EmailResetPasswordBody"]` 
+`config["EmailConfirmationBody"]` 
 `{url} {token} {userid} {firstname} {lastname}`
 <br><br>
-`config["EmailResetPasswordSubject"]` 
+`config["EmailResetPasswordBody"]` 
 `{url} {token} {userid} {firstname} {lastname}`
 
 
