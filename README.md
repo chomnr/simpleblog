@@ -1,5 +1,8 @@
 ![SimpleBlogBanner](https://github.com/okjlez/SimpleBlog/blob/master/Web/blob/ReadMeLogo.png?raw=true)
 ----------------------------------------------------------------
+<div style="display:flex;justify-center:center;align-items:center">
+  <img src="https://app.codacy.com/project/badge/Grade/02e473424ae64646b7f24ec11455bc42"/></img>
+</div>
 View Preview<br>
 https://www.youtube.com/watch?v=MOxt6Icv19Q
 
