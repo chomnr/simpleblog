@@ -6,7 +6,7 @@
 @using Application.Features.Post
 @using Newtonsoft.Json
 @inject IMediator Mediator;
-@inject NavigationManager navManager;
+@inject NavigationManager NavManager;
 
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
     <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
@@ -24,7 +24,7 @@
                         {
                             @foreach (var tag in PostInfo.Tags)
                             {
-                                <li><a style="color:inherit;text-decoration: none;" href="post/tag/@tag">@tag</a></li>
+                                <li><a style="color:inherit;text-decoration: none;" href="@(NavManager.BaseUri + "post/tag/" + @tag)">@tag</a></li>
                             }
                         }
                         <li class="read-time"><a style="color:inherit;text-decoration: none;"></a>@GetReadTime(PostInfo.Body) min read</li>
@@ -62,7 +62,7 @@
         }
     }
 
-    private void RedirectToAccount(){ navManager.NavigateTo("account/" + PostInfo.UserId); }
+    private void RedirectToAccount(){ NavManager.NavigateTo(NavManager.BaseUri + "account/" + PostInfo.UserId); }
     
     private string StripHtmlTags(string html)
     {
