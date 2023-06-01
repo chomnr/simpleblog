@@ -31,14 +31,6 @@
 
 <script>
 console.log("SimpleBlog | https://github.com/chomnr/SimpleBlog")
-document.addEventListener('click', function(e) {
-    let clicked = e.target;
-    let id_of_clicked = clicked.id;
-    let current_url = window.location.href;
-    if ( id_of_clicked.startsWith('post-')) {
-        window.location.href = current_url = "/post/" + id_of_clicked.substring(5);
-    }
-})
 </script>
 
 </body>
