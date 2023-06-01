@@ -9,8 +9,14 @@
 @inject NavigationManager NavManager;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-<PageTitle>Index</PageTitle>
+<PageTitle>SimpleBlog</PageTitle>
 
+@if (IsInitLoaderLoading)
+{
+    <div class="loader">
+        <span class="loader-design"></span>
+    </div>
+}
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
     <div class="blg-child-node col" style="color: #eae7e1;align-items: center;justify-content: center;">
         <h1 class="section-title with-divider">
@@ -88,6 +94,8 @@
     private string? UserId;
     private string? UserRole;
 
+    private bool IsInitLoaderLoading = true;
+
     private List<Post> PostsData { get; set; }
     
     public class CustomPostView
@@ -105,7 +113,7 @@
     {
         TotalPages = amount;
     }
-
+    
     private int PageRetrieval()
     {
         var difference = TotalPages - Page;
@@ -121,13 +129,12 @@
         await Task.Delay(50);
         var uri = new Uri(NavManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
-        
+
         if (queryParams["page"] != null)
         {
             Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
-            Page = Page <= TotalPages ? int.Parse(queryParams["page"]) : 0;
-            
-            if (PreviousPage == Page){ return; }
+            Page = Page > TotalPages ? 1 : int.Parse(queryParams["page"]);
+            if (PreviousPage == Page){ Console.WriteLine("yes"); return; }
 
             PreviousPage = Page;
             
@@ -137,52 +144,55 @@
             
             if (result != null)
             {
+                IsInitLoaderLoading = false;
                 UpdatePostView(result.AllPosts);
                 StateHasChanged();
             }
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async void OnAfterRender(bool firstRender)
     {
-        UserState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (UserState != null)
+        if (firstRender)
         {
-            UserId = UserState.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserRole = UserState.User.FindFirstValue(ClaimTypes.Role);
-        }
+            UserState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (UserState != null)
+            {
+                UserId = UserState.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                UserRole = UserState.User.FindFirstValue(ClaimTypes.Role);
+            }
         
-        var uri = new Uri(NavManager.Uri);
-        var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            var uri = new Uri(NavManager.Uri);
+            var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         
-        if (queryParams["page"] != null)
-        {
-            Page = int.Parse(queryParams["Page"]);
-            Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
-            Page = Page > TotalPages ? 1 : int.Parse(queryParams["page"]);
-        }
-        else
-        {
-            Page = 1;
-        }
+            if (queryParams["page"] != null)
+            {
+                Page = int.Parse(queryParams["Page"]);
+                Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
+            }
+            else
+            {
+                Page = 1;
+            }
 
-        var command = new RetrievePostsCommand { Page = Page };
-        var response = await Mediator.Send(command);
-        var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
+            var command = new RetrievePostsCommand { Page = Page };
+            var response = await Mediator.Send(command);
+            var result = JsonConvert.DeserializeObject<CustomPostView>(response.Value.ToString());
 
-        if (result != null)
-        {
-            PreviousPage = Page;
-            UpdatePostView(result.AllPosts);
-            UpdateTotalPage(result.PageCount);
+            if (result != null)
+            {
+                UpdateTotalPage(result.PageCount);
+                if (queryParams["page"] != null && Page > 1)
+                {   
+                    Page = Page > TotalPages ? 1 : int.Parse(queryParams["page"]);
+                    UpdatePostsViewByPage();
+                    return;
+                }
+                UpdatePostView(result.AllPosts);
+                PreviousPage = Page;
+                IsInitLoaderLoading = false;
+                StateHasChanged();
+            }
         }
     }
-    
-    public static string GetDate(long milliseconds)
-    {
-        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
-
-        return dateTimeOffset.ToString("dd MMM yyyy");
-    }
-    
 }
