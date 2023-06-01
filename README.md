@@ -9,7 +9,7 @@ View Preview<br>
 https://www.youtube.com/watch?v=MOxt6Icv19Q
 
 Live Preview<br>
-soon.
+https://projects.zeljko.me/simpleblog/
 
 I originally wrote a blog system in Rust, but it was terrible, so I rewrote it in a more familiar language. 
 This project should be used as a personal blog, meaning you should be the only person who uses it. But if you want
