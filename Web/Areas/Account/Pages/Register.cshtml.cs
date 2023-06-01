@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Common.Interface;
+using Application.Common.Security;
 using Application.Entities;
 using Application.Features.BlogUser;
 using MediatR;
@@ -10,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Web.Areas.Account.Pages;
 
+[NotAuthorize]
 public abstract class MediatorRegisterModel : PageModel
 {   
     [BindProperty]
@@ -28,16 +31,14 @@ public abstract class MediatorRegisterModel : PageModel
 internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where TUser : class
 {
     private readonly IMediator _mediator;
-    private readonly UserManager<BlogUser> _userManager;
-    private readonly SignInManager<BlogUser> _signInManager;
+    private readonly IWebHelperService _webHelper;
 
     public MediatorRegisterModel(IMediator mediator, 
-        UserManager<BlogUser> userManager,
+        IWebHelperService webHelper,
         SignInManager<BlogUser> signInManager)
     {
         _mediator = mediator;
-        _userManager = userManager;
-        _signInManager = signInManager;
+        _webHelper = webHelper;
     }
     
     public override async Task OnGetAsync(string? returnUrl = null)
@@ -46,14 +47,7 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
         {
             ModelState.AddModelError(string.Empty, ErrorMessage);
         }
-
         returnUrl ??= Url.Content("~/");
-        
-        if (_signInManager.IsSignedIn(HttpContext.User))
-        {
-            Response.Redirect("/");
-        }
-        
         ReturnUrl = returnUrl;
     }
 
@@ -69,7 +63,7 @@ internal sealed class MediatorRegisterModel<TUser> : MediatorRegisterModel where
             var result = await _mediator.Send(Input);
             if (result.Succeeded)
             {
-                return RedirectToPage("/register/confirmation", new { email = Input.Email, returnUrl = returnUrl });
+                Response.Redirect(_webHelper.GetPathBase() + "account/register/confirmation");
             }
             else
             {

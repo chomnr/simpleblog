@@ -1,10 +1,8 @@
 ﻿using System.Reflection;
 using Application.Common.Interface;
 using Application.Entities;
-using Application.Features.BlogUser;
 using Application.Infrastructure.Persistence;
 using Application.Infrastructure.Services;
-using MediatR;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +45,6 @@ public class Startup
         services.AddScoped<IWebHelperService, WebHelperService>();
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<SignInManager<BlogUser>>();
-        
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
         return services;
     }
