@@ -56,6 +56,15 @@ From the root directory /SimpleBlog, run the following commands IN ORDER.
 * `dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`
 * `dotnet ef database update --project Application --startup-project Web`
 
+#### PathBase
+What is a PathBase?<br>
+`example.com` and `test.example.com` are not a path base <br>
+`example.com/pathbase` and `test.example.com` are a path base <br><br>
+
+In the event where you have your website hosted on a PathBase, you must follow these instructions.
+* Go to `Web/Program.cs`
+* Add `app.UsePathBase("/pathbase");` make sure you change `/pathbase` to your PathBase
+
 ## Features
 The most necessary features.
 #### Account
