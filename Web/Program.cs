@@ -3,9 +3,7 @@ using Application.Common;
 using Application.Entities;
 using Application.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Web.Areas.Account;
-using Web.Areas.Account.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -36,6 +34,11 @@ services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
+services.AddMvc(options =>
+{
+    options.EnableEndpointRouting = false;
+});
+
 services.AddHttpContextAccessor();
 
 builder.Services.AddAntiforgery();
@@ -46,6 +49,11 @@ services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BlogUser>>();
 
 var app = builder.Build();
+app.UsePathBase("/simpleblog");
+
+app.MapControllers();
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -63,15 +71,12 @@ else
 //app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseMvc();
 
 app.UseRouting();
 
 app.UseAuthentication();  
 
 app.UseAuthorization();
-
-app.MapControllers();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
 
 app.Run();
