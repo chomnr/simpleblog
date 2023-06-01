@@ -1,16 +1,16 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using Application.Entities;
+using Application.Common.Interface;
+using Application.Common.Security;
 using Application.Features.Post;
 using Ganss.Xss;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 
 namespace Web.Areas.Post.Pages;
 
+[CustomAuthorize]
 public class MediatorCreatePostModel : PageModel
 {
     [BindProperty]
@@ -19,11 +19,6 @@ public class MediatorCreatePostModel : PageModel
     [BindProperty]
     public string TagHolder { get; set; }
 
-    public string? ReturnUrl { get; set; }
-    
-    [TempData]
-    public string? ErrorMessage { get; set; }
-    
     public virtual Task OnGetAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
     
     public virtual Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
@@ -32,33 +27,35 @@ public class MediatorCreatePostModel : PageModel
 internal sealed class MediatorCreatePostModel<TPost> : MediatorCreatePostModel where TPost : class
 {
     private readonly IMediator _mediator;
-    private readonly SignInManager<BlogUser> _signInManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public MediatorCreatePostModel(IMediator mediator, SignInManager<BlogUser> signInManager, IHttpContextAccessor httpContextAccessor)
+    private readonly IWebHelperService _webHelper;
+    
+    public MediatorCreatePostModel(
+        IHttpContextAccessor httpContextAccessor, 
+        IMediator mediator, 
+        IWebHelperService webHelper)
     {
-        _mediator = mediator;
-        _signInManager = signInManager;
         _httpContextAccessor = httpContextAccessor;
+        _webHelper = webHelper;
+        _mediator = mediator;
     }
     
     public override async Task OnGetAsync(string? returnUrl = null)
-    {   
-        if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        /*
+        if (_httpContextAccessor.HttpContext == null)
         {
-            ModelState.AddModelError(string.Empty, ErrorMessage);
+            Response.Redirect(_webHelper.GetPathBase());
+            return;
         }
 
-        if (!_signInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
+        var user = _httpContextAccessor.HttpContext.User;
+        if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            Response.Redirect("/account/login");
+            //Response.Redirect( _webHelper.GetPathBase() + "auth/login");
+            LocalRedirect("~/auth/login");
         }
-        else
-        {
-            returnUrl ??= Url.Content("~/");
-        }
-
-        ReturnUrl = returnUrl;
+        */
     }
     
     public override async Task<IActionResult> OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null)
@@ -66,19 +63,18 @@ internal sealed class MediatorCreatePostModel<TPost> : MediatorCreatePostModel w
         if (ModelState.IsValid)
         {
             var sanitizer = new HtmlSanitizer();
-            // Converts {"[\"yes\",\"hello\"]"} to {dog,yes,hello,readable} in Database.
-             //Input.Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(Input.Body));
-            if (TagHolder != null) {
+            if (TagHolder != null!)
+            {
                 Input.Tags = JsonConvert.DeserializeObject<List<string>>(TagHolder.ToUpper());
             }
-            
+
             Input.Title = sanitizer.Sanitize(Input.Title);
             Input.Body = sanitizer.Sanitize(Input.Body);
             
             var result = await _mediator.Send(Input);
             if (result)
             {
-                Response.Redirect("/post/create/confirmation");
+                Response.Redirect( _webHelper.GetPathBase() + "post/create/confirmation");
             }
         }
         return Page();

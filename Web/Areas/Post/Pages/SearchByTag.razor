@@ -5,7 +5,7 @@
 @using Application.Entities
 @using Application.Common
 @inject IMediator Mediator;
-@inject NavigationManager navManager;
+@inject NavigationManager NavManager;
 
 <section class="blg-section" style="padding-left: 25px;padding-right: 25px;">
     <div class="blg-child-node col" style="color: #eae7e1;align-items: center">
@@ -15,9 +15,9 @@
             @foreach (var post  in PostTagData)
             {
                 <article id="post-@post.Id" class="sub-post">
-                    <div class="post-author"><a style="color:inherit;text-decoration: none;" href="account/@post.UserId">@post.Username</a></div>
+                    <div class="post-author"><a style="color:inherit;text-decoration: none;" href="@(NavManager.BaseUri + "account/" + @post.UserId)">@post.Username</a></div>
                     <div class="post-date">@Utilities.GetDate(long.Parse(post.DateCreated))</div>
-                    <div class="post-title"><a style="color:inherit;text-decoration: none;" href="post/@post.Id">@post.Title</a></div>
+                    <div class="post-title"><a style="color:inherit;text-decoration: none;" href="@(NavManager.BaseUri + "post/" + @post.Id)">@post.Title</a></div>
                     <ul class="post-tags">
                         <li><a style="color:inherit;text-decoration: none;">@Tag</a></li>
                     </ul>
@@ -29,29 +29,29 @@
                 {
                     if (Page > 1)
                     {
-                        <a href="/post/tag/@Tag?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
+                        <a href="@(NavManager.BaseUri + "post/tag/" + Tag + "?page=" + (Page-1))" @onclick="UpdatePostsViewByPage">Previous</a>
                     }
                     
                     for (var i = PageRetrieval() <= 0 ? 1 : PageRetrieval() ; i < Page + 4 && i < TotalPages; i++)
                     {
                         if (Page == i) {
-                            <a href="/post/tag/@Tag?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            <a href="@(NavManager.BaseUri + "post/tag/" + Tag + "?page=" + i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
                         } else {
-                            <a href="/post/tag/@Tag?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                            <a href="@(NavManager.BaseUri + "post/tag/" + Tag + "?page=" + i)" @onclick="UpdatePostsViewByPage">@(i)</a>
                         }
                     }
                     if (Page == TotalPages)
                     {
-                        <a href="/post/tag/@Tag?page=@(TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                        <a href="@(NavManager.BaseUri + "post/tag/" + Tag + "?page=" + TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     else
                     {
-                        <a href="/post/tag/@Tag?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                        <a href="@(NavManager.BaseUri + "post/tag/" + Tag + "?page=" + TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     
                     if (Page != TotalPages)
                     {
-                        <a href="/post/tag/@Tag?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
+                        <a href="@(NavManager.BaseUri + "post/tag/" + Tag + "?page=" + (Page+1))" @onclick="UpdatePostsViewByPage">></a>
                     }
                 }
             </div>
@@ -98,7 +98,7 @@
     private async void UpdatePostsViewByPage()
     {
         await Task.Delay(50);
-        var uri = new Uri(navManager.Uri);
+        var uri = new Uri(NavManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         
         if (queryParams["page"] != null)
@@ -125,7 +125,7 @@
     protected override async Task OnInitializedAsync()
     {
         
-        var uri = new Uri(navManager.Uri);
+        var uri = new Uri(NavManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         
         if (queryParams["page"] != null)

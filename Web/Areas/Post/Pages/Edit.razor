@@ -6,7 +6,7 @@
 @using System.Security.Claims
 @inject IMediator Mediator;
 @inject IJSRuntime JsRuntime
-@inject NavigationManager navManager;
+@inject NavigationManager NavManager;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <CascadingAuthenticationState>
@@ -137,7 +137,7 @@
             
             if (response)
             {
-                navManager.NavigateTo("/post/" + PostId);
+                NavManager.NavigateTo(NavManager.BaseUri + "post/" + PostId);
             }
         }
     }
@@ -147,9 +147,9 @@
         var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var userId = authenticationState.User.FindFirstValue(ClaimTypes.NameIdentifier);
         
-        if (userId == null) { navManager.NavigateTo("/"); }
+        if (userId == null) { NavManager.NavigateTo(NavManager.BaseUri); }
         await LoadPostInfo();
-        if (!userId.Equals(PostInfo.UserId)) { navManager.NavigateTo("/"); }
+        if (!userId.Equals(PostInfo.UserId)) {NavManager.NavigateTo(NavManager.BaseUri); }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -24,12 +24,13 @@ public class WebHelperService : IWebHelperService
 
     public string GetPathBase()
     {
-        if (_httpContextAccessor.HttpContext != null)
+        if (_httpContextAccessor.HttpContext != null && 
+            !string.IsNullOrEmpty(_httpContextAccessor.HttpContext.Request.PathBase))
         {
             var request = _httpContextAccessor.HttpContext.Request;
-            return request.PathBase.ToString();
+            return request.PathBase.ToString() + "/";
         }
-        return "INVALID_PATH_BASE";
+        return "/";
     }
     
     public string GetBaseUrl()
@@ -41,4 +42,5 @@ public class WebHelperService : IWebHelperService
         }
         return "INVALID_BASE_URL";
     }
+    
 }

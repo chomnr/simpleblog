@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Common.Security;
 using Application.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Areas.Account.Pages;
 
+[CustomAuthorize]
 public class LogoutModel : PageModel
 {
     public virtual Task OnGetAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
@@ -29,20 +31,6 @@ internal sealed class LogoutModel<TUser> : MediatorLoginModel where TUser : clas
     // todo fix.
     public override async Task OnGetAsync(string? returnUrl = null)
     {
-        if (!string.IsNullOrEmpty(ErrorMessage))
-        {
-            ModelState.AddModelError(string.Empty, ErrorMessage);
-        }
-
-        returnUrl ??= Url.Content("~/");
-
-        if (!_signInManager.IsSignedIn(HttpContext.User))
-        {
-            Response.Redirect("/");
-        }
-
         await _signInManager.SignOutAsync();
-        
-        ReturnUrl = returnUrl;
     }
 }

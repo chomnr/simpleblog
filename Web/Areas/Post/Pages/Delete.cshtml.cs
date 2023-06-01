@@ -4,6 +4,7 @@ using Application.Entities;
 using Application.Features.BlogUser.Recovery;
 using Application.Features.Post;
 using MediatR;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -30,30 +31,33 @@ internal sealed class MediatorDeletePost<TUser> : MediatorDeletePost where TUser
     private readonly IMediator _mediator;
     private readonly UserManager<BlogUser> _userManager;
     private readonly SignInManager<BlogUser> _signInManager;
+    private readonly NavigationManager _navManager;
 
     public MediatorDeletePost(IMediator mediator, 
         UserManager<BlogUser> userManager,
-        SignInManager<BlogUser> signInManager)
+        SignInManager<BlogUser> signInManager,
+        NavigationManager navManager)
     {
         _mediator = mediator;
         _userManager = userManager;
         _signInManager = signInManager;
+        _navManager = navManager;
     }
 
     public override async Task OnGetAsync(int postId, string? returnUrl = null)
     {
         if (!_signInManager.IsSignedIn(HttpContext.User))
         {
-            Response.Redirect("/");
+            Response.Redirect("/" + _navManager.BaseUri);
         }
 
         var post = new RetrievePostCommand { Id = postId };
         var response = await _mediator.Send(post);
 
-        if (response.Value == null) { Response.Redirect("/"); }
+        if (response.Value == null) { Response.Redirect("/" + _navManager.BaseUri); }
         
         var result = JsonConvert.DeserializeObject<Application.Entities.Post>(response.Value.ToString());
-        if (!result.UserId.Equals(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))) { Response.Redirect("/"); }
+        if (!result.UserId.Equals(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier))) { Response.Redirect("/" + _navManager.BaseUri); }
 
         Input = new DeletePostCommand
         {

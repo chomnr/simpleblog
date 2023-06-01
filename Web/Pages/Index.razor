@@ -6,7 +6,7 @@
 @using Application.Common
 @using System.Security.Claims
 @inject IMediator Mediator;
-@inject NavigationManager navManager;
+@inject NavigationManager NavManager;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Index</PageTitle>
@@ -21,15 +21,15 @@
             @foreach (var post in PostsData)
             {
                 <article id="post-@post.Id" class="sub-post">
-                    <div class="post-author"><a style="color:inherit;text-decoration: none;" href="account/@post.UserId">@post.Username</a></div>
+                    <div class="post-author"><a style="color:inherit;text-decoration: none;" href="@(NavManager.BaseUri + "account/" + post.UserId)">@post.Username</a></div>
                     <div class="post-date">@Utilities.GetDate(long.Parse(post.DateCreated))</div>
-                    <div class="post-title"><a style="color:inherit;text-decoration: none;" href="post/@post.Id">@post.Title</a></div>
+                    <div class="post-title"><a style="color:inherit;text-decoration: none;" href="@(NavManager.BaseUri + "post/" + @post.Id)">@post.Title</a></div>
                     <ul class="post-tags">
                         @if (post.Tags != null)
                         {
                             @foreach (var tag in post.Tags)
                             {
-                                <li><a style="color:inherit;text-decoration: none;" href="post/tag/@tag.ToUpper()">@tag.ToUpper()</a></li>
+                                <li><a style="color:inherit;text-decoration: none;" href="@(NavManager.BaseUri + "post/tag/" + tag.ToUpper())">@tag.ToUpper()</a></li>
                             }
                         }
                     </ul>
@@ -37,8 +37,8 @@
                     @if (post.UserId == UserId)
                     {
                         <div class="post-manager">
-                            <div class="action"><a href="post/edit/@post.Id"><i class="fa-solid fa-pen-to-square"></i></a></div>
-                            <div class="action"><a href="post/delete?postId=@post.Id"><i class="fa-solid fa-trash"></i></a></div>
+                            <div class="action"><a href="@(NavManager.BaseUri + "post/edit/" + post.Id)"><i class="fa-solid fa-pen-to-square"></i></a></div>
+                            <div class="action"><a href="@(NavManager.BaseUri + "post/delete?postId=" + post.Id)"><i class="fa-solid fa-trash"></i></a></div>
                         </div>
                     }
                 </article>
@@ -48,29 +48,29 @@
                 {
                     if (Page > 1)
                     {
-                        <a href="/?page=@(Page-1)" @onclick="UpdatePostsViewByPage">Previous</a>
+                        <a href="@(NavManager.BaseUri + "?page=" + (Page-1))" @onclick="UpdatePostsViewByPage">Previous</a>
                     }
                     
                     for (var i = PageRetrieval() <= 0 ? 1 : PageRetrieval() ; i < Page + 4 && i < TotalPages; i++)
                     {
                         if (Page == i) {
-                                <a href="/?page=@(i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
+                                <a href="@(NavManager.BaseUri + "?page=" + i)" class="active" @onclick="UpdatePostsViewByPage">@(i)</a>
                         } else {
-                                <a href="/?page=@(i)" @onclick="UpdatePostsViewByPage">@(i)</a>
+                                <a href="@(NavManager.BaseUri + "?page=" + i)" @onclick="UpdatePostsViewByPage">@(i)</a>
                          }
                     }
                     if (Page == TotalPages)
                     {
-                        <a href="/?page=@(TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                        <a href="@(NavManager.BaseUri + "?page=" + TotalPages)" class="active" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     else
                     {
-                        <a href="/?page=@(TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
+                        <a href="@(NavManager.BaseUri + "?page=" + TotalPages)" @onclick="UpdatePostsViewByPage">@(TotalPages)</a>
                     }
                     
                     if (Page != TotalPages)
                     {
-                        <a href="/?page=@(Page+1)" @onclick="UpdatePostsViewByPage">></a>
+                        <a href="@(NavManager.BaseUri + "?page=" + (Page+1))" @onclick="UpdatePostsViewByPage">></a>
                     }
                 }
             </div>
@@ -119,7 +119,7 @@
     private async void UpdatePostsViewByPage()
     {
         await Task.Delay(50);
-        var uri = new Uri(navManager.Uri);
+        var uri = new Uri(NavManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         
         if (queryParams["page"] != null)
@@ -152,7 +152,7 @@
             UserRole = UserState.User.FindFirstValue(ClaimTypes.Role);
         }
         
-        var uri = new Uri(navManager.Uri);
+        var uri = new Uri(NavManager.Uri);
         var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
         
         if (queryParams["page"] != null)

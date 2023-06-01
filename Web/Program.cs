@@ -34,14 +34,11 @@ services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-services.AddMvc(options =>
-{
-    options.EnableEndpointRouting = false;
-});
+services.AddServerSideBlazor().AddHubOptions(hub => hub.MaximumReceiveMessageSize = 100 * 1024 * 1024); 
 
 services.AddHttpContextAccessor();
 
-builder.Services.AddAntiforgery();
+services.AddAntiforgery();
 
 services.AddRazorPages();
 services.AddServerSideBlazor();
@@ -53,7 +50,7 @@ var app = builder.Build();
 // Must use if you have a Pathbase 
 // Regular domain -> example.com || subdomain.example.com
 // Domain w/ Pathbase -> example.com/simpleblog
-//app.UsePathBase("/simpleblog");
+app.UsePathBase("/simpleblog");
 
 app.MapControllers();
 app.MapBlazorHub();
@@ -66,16 +63,17 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseHttpsRedirection();
-    Console.WriteLine("Running SimpleBlog in Production.");
+    //not necessary if cloudflare or nginx does it for you
+    app.UseHttpsRedirection(); 
+    //app.UseHsts();
+    //app.UseMvc();
 }
 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 //app.UseExceptionHandler("/Error");
-//app.UseHsts();
-//app.UseHttpsRedirection();
+//app.UseHsts();    Console.WriteLine("Running SimpleBlog in Production.");
 
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseMvc();
 
 app.UseRouting();
 
