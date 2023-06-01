@@ -1,9 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Application.Common.Interface;
-using Application.Common.Security;
 using Application.Entities;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +10,7 @@ namespace Web.Areas.Account.Pages;
 public class LogoutModel : PageModel
 {
     public virtual Task OnGetAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) => throw new NotImplementedException();
-
+    
     public virtual Task<IActionResult>
         OnPostAsync([StringSyntax(StringSyntaxAttribute.Uri)] string? returnUrl = null) =>
         throw new NotImplementedException();
@@ -37,19 +34,10 @@ internal sealed class LogoutModel<TUser> : MediatorLoginModel where TUser : clas
             ModelState.AddModelError(string.Empty, ErrorMessage);
         }
         
-        
-        returnUrl ??= Url.Content("~/");
-
-        if (!_signInManager.IsSignedIn(HttpContext.User))
+        if (_signInManager.IsSignedIn(HttpContext.User))
         {
-            Response.Redirect(_webHelper.GetPathBase());
-        }
-        else
-        {
+            Redirect("/");
             await _signInManager.SignOutAsync();
-            Response.Redirect(_webHelper.GetPathBase() + "auth/logout");
         }
-
-        ReturnUrl = returnUrl;
     }
 }

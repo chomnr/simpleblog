@@ -49,8 +49,8 @@ var app = builder.Build();
 
 // Must use if you have a Pathbase 
 // Regular domain -> example.com || subdomain.example.com
-// Domain w/ Pathbase -> example.com/simpleblog
-app.UsePathBase("/simpleblog");
+// Domain w/ Pathbase -> example.com/simpleblog || test.example.com/simpleblog
+//app.UsePathBase("/simpleblog");
 
 app.MapControllers();
 app.MapBlazorHub();

@@ -134,7 +134,7 @@
         {
             Page = Page > 0 ? int.Parse(queryParams["page"]) : 1;
             Page = Page > TotalPages ? 1 : int.Parse(queryParams["page"]);
-            if (PreviousPage == Page){ Console.WriteLine("yes"); return; }
+            if (PreviousPage == Page){ return; }
 
             PreviousPage = Page;
             
