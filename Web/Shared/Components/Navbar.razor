@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Application.Entities
-@inject NavigationManager Navigation
+@using AngleSharp.Dom
+@inject NavigationManager navManager
 
 <div class="blg-head">
     <nav class="default-nav">
@@ -10,12 +11,12 @@
         <ul>
             <AuthorizeView>
                 <Authorized>
-                    <li><NavLink class="nav-link" href="/post/create">CREATE POST</NavLink></li>
-                    <li><NavLink class="nav-link" href="/auth/logout">LOGOUT</NavLink></li>
+                    <li><NavLink class="nav-link" href="@navManager.ToAbsoluteUri("/post/create")">CREATE POST</NavLink></li>
+                    <li><NavLink class="nav-link" href="@navManager.ToAbsoluteUri("/auth/logout")">LOGOUT</NavLink></li>
                 </Authorized>
                 <NotAuthorized>
-                    <li><NavLink class="nav-link" href="/auth/login">LOGIN</NavLink></li>
-                    <li><NavLink class="nav-link" href="/auth/register">REGISTER</NavLink></li>
+                    <li><NavLink class="nav-link" href="@navManager.ToAbsoluteUri("/auth/login")">LOGIN</NavLink></li>
+                    <li><NavLink class="nav-link" href="@navManager.ToAbsoluteUri("/auth/register")">REGISTER</NavLink></li>
                 </NotAuthorized>
             </AuthorizeView>
         </ul>
