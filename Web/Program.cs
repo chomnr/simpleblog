@@ -49,7 +49,11 @@ services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<BlogUser>>();
 
 var app = builder.Build();
-app.UsePathBase("/simpleblog");
+
+// Must use if you have a Pathbase 
+// Regular domain -> example.com || subdomain.example.com
+// Domain w/ Pathbase -> example.com/simpleblog
+//app.UsePathBase("/simpleblog");
 
 app.MapControllers();
 app.MapBlazorHub();
