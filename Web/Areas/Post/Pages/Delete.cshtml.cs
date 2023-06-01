@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+using Application.Common.Security;
 using Application.Entities;
-using Application.Features.BlogUser.Recovery;
 using Application.Features.Post;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 namespace Web.Areas.Post.Pages;
 
+[CustomAuthorize]
 public class MediatorDeletePost : PageModel
 {
     [BindProperty]
@@ -46,11 +47,7 @@ internal sealed class MediatorDeletePost<TUser> : MediatorDeletePost where TUser
 
     public override async Task OnGetAsync(int postId, string? returnUrl = null)
     {
-        if (!_signInManager.IsSignedIn(HttpContext.User))
-        {
-            Response.Redirect("/" + _navManager.BaseUri);
-        }
-
+        
         var post = new RetrievePostCommand { Id = postId };
         var response = await _mediator.Send(post);
 
@@ -65,6 +62,7 @@ internal sealed class MediatorDeletePost<TUser> : MediatorDeletePost where TUser
         };
     }
 
+    //TODO: ADD ADDITIONAL CHECKS TO THIS...
     public override async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
        if (ModelState.IsValid)

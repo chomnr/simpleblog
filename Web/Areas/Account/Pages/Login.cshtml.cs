@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Common.Interface;
+using Application.Common.Security;
 using Application.Entities;
 using Application.Features.BlogUser;
 using MediatR;
@@ -9,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Web.Areas.Account.Pages;
 
+
+[NotAuthorize]
 public abstract class MediatorLoginModel : PageModel
 {   
     [BindProperty]
@@ -28,11 +32,13 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
 {
     private readonly IMediator _mediator;
     private readonly SignInManager<BlogUser> _signInManager;
+    private readonly IWebHelperService _webHelper;
 
-    public MediatorLoginModel(IMediator mediator, SignInManager<BlogUser> signInManager)
+    public MediatorLoginModel(IMediator mediator, SignInManager<BlogUser> signInManager, IWebHelperService webHelper)
     {
         _mediator = mediator;
         _signInManager = signInManager;
+        _webHelper = webHelper;
     }
     
     // todo fix.
@@ -42,14 +48,7 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
         {
             ModelState.AddModelError(string.Empty, ErrorMessage);
         }
-
         returnUrl ??= Url.Content("~/");
-
-        if (_signInManager.IsSignedIn(HttpContext.User))
-        {
-            Response.Redirect("/");
-        }
-        
         ReturnUrl = returnUrl;
     }
     
@@ -60,7 +59,7 @@ internal sealed class MediatorLoginModel<TUser> : MediatorLoginModel where TUser
             var result = await _mediator.Send(Input);
             if (result.Succeeded)
             {
-                Response.Redirect("/");
+                Response.Redirect(_webHelper.GetPathBase());
             }
             else
             {

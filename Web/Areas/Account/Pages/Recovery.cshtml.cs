@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Application.Common.Interface;
+using Application.Common.Security;
 using Application.Entities;
 using Application.Features.BlogUser;
 using MediatR;
@@ -10,6 +12,7 @@ using SendGrid;
 
 namespace Web.Areas.Account.Pages;
 
+[NotAuthorize]
 public abstract class MediatorRecoveryModel : PageModel
 {   
     [BindProperty]
@@ -29,11 +32,13 @@ internal sealed class MediatorRecoveryModel<TUser> : MediatorRecoveryModel where
 {
     private readonly IMediator _mediator;
     private readonly SignInManager<BlogUser> _signInManager;
+    private readonly IWebHelperService _webHelper;
 
-    public MediatorRecoveryModel(IMediator mediator, SignInManager<BlogUser> signInManager)
+    public MediatorRecoveryModel(IMediator mediator, SignInManager<BlogUser> signInManager, IWebHelperService webHelper)
     {
         _mediator = mediator;
         _signInManager = signInManager;
+        _webHelper = webHelper;
     }
     
     // todo fix.
@@ -43,14 +48,7 @@ internal sealed class MediatorRecoveryModel<TUser> : MediatorRecoveryModel where
         {
             ModelState.AddModelError(string.Empty, ErrorMessage);
         }
-
         returnUrl ??= Url.Content("~/");
-        
-        if (_signInManager.IsSignedIn(HttpContext.User))
-        {
-            Response.Redirect("/");
-        }
-        
         ReturnUrl = returnUrl;
     }
     
@@ -59,8 +57,7 @@ internal sealed class MediatorRecoveryModel<TUser> : MediatorRecoveryModel where
         if (ModelState.IsValid)
         {
             await _mediator.Send(Input);
-            return RedirectToPage("recovery/confirmation");
-            // we dont want them to know if the email exists or not so send success message regardless ok...
+            Response.Redirect(_webHelper.GetPathBase() + "account/recovery/confirmation");
         }
         return Page();
     }
