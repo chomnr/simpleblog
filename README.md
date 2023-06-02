@@ -31,7 +31,7 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 ## Building Project
 ### Requirements
 * PostgreSQL >= 14
-* 
+* .NET 7
 ### Instructions
 For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json`. 
 <br><br>
