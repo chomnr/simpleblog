@@ -240,7 +240,7 @@ nav.default-nav li a:hover { opacity: 0.6; }
 
 .blg-section .blg-child-node.col { flex-direction: column; }
 
-.blg-section .blg-child-node .section-title { font-weight: bold; width: 100%; }
+.blg-section .blg-child-node .section-title { font-weight: bold; width: 100%; word-break: break-all; }
 .blg-section .blg-child-node .section-title.with-divider { border-bottom: 1px solid var(--accent-color); }
 
 /* INPUT TITLE */
