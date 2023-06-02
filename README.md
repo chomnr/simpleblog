@@ -42,7 +42,7 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json`. 
 <br><br>
 The project currently will work if you do not configure SendGrid inside `appsettings.json`
-<br><br>
+<br>
 
 #### Migrations
 Please before running the second migration command `dotnet ef database update --project Application --startup-project Web`
