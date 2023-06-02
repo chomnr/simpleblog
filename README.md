@@ -26,13 +26,12 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 * Bug Fixes (love it)
 * Features (you shouldn't have)
 * More tests (i'm sorry)
+* 
 
 ## Building Project
 ### Requirements
-<details>
-<summary>PostgreSQL >= 14 </summary>
-</details>
-
+* PostgreSQL >= 14
+* 
 ### Instructions
 For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json`. 
 <br><br>
