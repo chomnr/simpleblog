@@ -43,10 +43,6 @@ For the program to work PostgreSQL must be running and be configured inside the 
 <br><br>
 The project currently will work if you do not configure SendGrid inside `appsettings.json`
 <br><br>
-If you would like the user to only be able to SignIn with a confirmed account follow the instructions.
-* Go to `Web/Program.cs`
-* change `options.SignIn.RequireConfirmedAccount = false` to `true`
-* change `options.SignIn.RequireConfirmedEmail = false` to `true`
 
 #### Migrations
 Please before running the second migration command `dotnet ef database update --project Application --startup-project Web`
@@ -64,6 +60,12 @@ What is a PathBase?<br>
 In the event where you have your website hosted on a PathBase, you must follow these instructions.
 * Go to `Web/Program.cs`
 * Add `app.UsePathBase("/pathbase");` make sure you change `/pathbase` to your PathBase
+
+#### Require Email Confirmation
+If you would like the user to only be able to SignIn with a confirmed account follow the instructions.
+* Go to `Web/Program.cs`
+* change `options.SignIn.RequireConfirmedAccount = false` to `true`
+* change `options.SignIn.RequireConfirmedEmail = false` to `true`
 
 ## Features
 The most necessary features.
