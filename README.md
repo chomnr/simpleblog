@@ -33,11 +33,6 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 <summary>PostgreSQL >= 14 </summary>
 </details>
 
-### Optional
-<details>
-<summary>SendGrid</summary>
-</details>
-
 ### Instructions
 For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json`. 
 <br><br>
