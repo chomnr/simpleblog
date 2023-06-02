@@ -26,7 +26,6 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 * Bug Fixes (love it)
 * Features (you shouldn't have)
 * More tests (i'm sorry)
-* 
 
 ## Building Project
 ### Requirements
