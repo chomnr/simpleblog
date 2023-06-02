@@ -50,7 +50,7 @@ From the root directory /SimpleBlog, run the following commands IN ORDER.
 #### PathBase
 What is a PathBase?<br>
 `example.com` and `test.example.com` are not a path base <br>
-`example.com/pathbase` and `test.example.com` are a path base <br>
+`example.com/pathbase` and `test.example.com/pathbase` are a path base <br>
 
 In the event where you have your website hosted on a PathBase, you must follow these instructions.
 * Go to `Web/Program.cs`
