@@ -2,8 +2,8 @@
 ----------------------------------------------------------------
 <p align="center">
   <img src="https://img.shields.io/codacy/grade/75a7625558db465cbdf9943b45ee345a"/>
-  <img src="https://img.shields.io/github/commit-activity/m/okjlez/simpleblog?color=ff69b4"/>
-  <img src="https://img.shields.io/github/repo-size/okjlez/simpleblog"/>
+  <img src="https://img.shields.io/github/commit-activity/m/chomnr/simpleblog?color=ff69b4"/>
+  <img src="https://img.shields.io/github/repo-size/chomnr/simpleblog"/>
 </p>
 View Preview<br>
 https://www.youtube.com/watch?v=MOxt6Icv19Q
