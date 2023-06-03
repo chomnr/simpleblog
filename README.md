@@ -21,12 +21,6 @@ the abstraction, thank you.
 
 You can modify anything to your liking. 
 
-## Contributions
-I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
-* Bug Fixes (love it)
-* Features (you shouldn't have)
-* More tests (i'm sorry)
-
 ## Getting started
 <b>For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json` before execution.</b>
 
@@ -86,4 +80,10 @@ If you would like the user to only be able to sign in with a confirmed account, 
 * Go to `Web/Program.cs`
 * change `options.SignIn.RequireConfirmedAccount = false` to `true`
 * change `options.SignIn.RequireConfirmedEmail = false` to `true`
+
+## Contributions
+I preferably just want commits from `#first-timers-only`. But contributions from anyone is welcomed.
+* Bug Fixes (love it)
+* Features (you shouldn't have)
+* More tests (i'm sorry)
 
