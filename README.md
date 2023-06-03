@@ -28,10 +28,12 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 * More tests (i'm sorry)
 
 ## Getting started
+<b>For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json` before execution.</b>
+
 1. Install [PostgreSQL 15.3](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 2. Install [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 
-### Installation
+### 1. Installation
 ```bash
 git clone https://github.com/chomnr/SimpleBlog.git
 cd simpleblog
@@ -50,53 +52,38 @@ dotnet test Tests/Tests.csproj
 dotnet publish Web/Web.csproj --configuration Release 
 ```
 
+### 2. Migrations
+Please before running the migration commands ensure that Postgres is RUNNING && CONFIGURED inside `appsettings.json`.
 
-## Installation
-### Requirements
-* PostgreSQL >= 14
-* .NET 7
-### Instructions
-For the program to work PostgreSQL must be running and be configured inside the `Web/appsettings.json`. 
-<br><br>
-The project currently will work if you do not configure SendGrid inside `appsettings.json`
+```bash
+# Run directly from root folder. ./simpleblog
+dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations
+dotnet ef database update --project Application --startup-project Web
+```
+
+### 3* Configuring a domain with a pathbase.
+If you plan to host your site on a pathbase, please continue reading. If not, don't worry.
+#### What is a pathbase?
+Here's an example.
 <br>
+<br>
+✅ 
+```
+example.com/pathbase and test.example.com/pathbase have a pathbase..
+```
 
-#### Migrations
-Please before running the second migration command `dotnet ef database update --project Application --startup-project Web`
-ensure that Postgres is RUNNING && CONFIGURED inside `appsettings.json`.
-<br><br>
-From the root directory /SimpleBlog, run the following commands IN ORDER.<br>
-`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br>
-`dotnet ef database update --project Application --startup-project Web`<br>
-
-#### PathBase
-What is a PathBase?<br>
-`example.com` and `test.example.com` are not a path base <br>
-`example.com/pathbase` and `test.example.com/pathbase` are a path base <br>
-
-In the event where you have your website hosted on a PathBase, you must follow these instructions.
+❌
+```
+example.com and test.example.com do not have a pathbase.
+```
+#### Setting up a pathbase.
 * Go to `Web/Program.cs`
 * Add `app.UsePathBase("/pathbase");` make sure you change `/pathbase` to your PathBase
 
-#### Require Email Confirmation
-If you would like the user to only be able to SignIn with a confirmed account follow the instructions.
+### 4* Setting up email confirmation.
+If you would like the user to only be able to sign in with a confirmed account, please follow the instructions.
+#### Setup
 * Go to `Web/Program.cs`
 * change `options.SignIn.RequireConfirmedAccount = false` to `true`
 * change `options.SignIn.RequireConfirmedEmail = false` to `true`
 
-## Features
-The most necessary features.
-#### Account
-* Sign In
-* Sign Up
-* Reset Password
-* Email Confirmation
-
-#### Post
-* Create Post
-* View Post
-* Update Post
-* Delete Post
-* Tags
-* Filter by User
-* Filter by Tag
