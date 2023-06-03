@@ -27,6 +27,30 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 * Features (you shouldn't have)
 * More tests (i'm sorry)
 
+## Getting started
+1. Install [PostgreSQL 15.3](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+2. Install [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+
+### Installation
+```bash
+git clone https://github.com/chomnr/SimpleBlog.git
+cd simpleblog
+
+# Build
+dotnet build
+
+# Run
+cd Web
+dotnet run
+
+# Unit tests
+dotnet test Tests/Tests.csproj 
+
+# Publish
+dotnet publish Web/Web.csproj --configuration Release 
+```
+
+
 ## Installation
 ### Requirements
 * PostgreSQL >= 14
@@ -41,9 +65,9 @@ The project currently will work if you do not configure SendGrid inside `appsett
 Please before running the second migration command `dotnet ef database update --project Application --startup-project Web`
 ensure that Postgres is RUNNING && CONFIGURED inside `appsettings.json`.
 <br><br>
-From the root directory /SimpleBlog, run the following commands IN ORDER.
-* `dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`
-* `dotnet ef database update --project Application --startup-project Web`
+From the root directory /SimpleBlog, run the following commands IN ORDER.<br>
+`dotnet ef migrations add "InitialMigration" --project Application --startup-project Web --output-dir Infrastructure/Persistence/Migrations`<br>
+`dotnet ef database update --project Application --startup-project Web`<br>
 
 #### PathBase
 What is a PathBase?<br>
