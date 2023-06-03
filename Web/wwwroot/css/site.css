@@ -25,6 +25,9 @@
     --default-article-padding: 7px 0px;
 }
 
+html {
+    background: black;
+}
 html, body {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), 
     url("https://cdn.discordapp.com/attachments/1088291004341301328/1110035740529795082/chomnr_black_background_texture_subtle_flaws_in_the_tiles_da604a1d-304b-42b1-b404-fb7648a3bf4c.png") ;
