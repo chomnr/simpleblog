@@ -27,7 +27,7 @@ I preferably just want commits from `#first-timers-only`. But contributions from
 * Features (you shouldn't have)
 * More tests (i'm sorry)
 
-## Building Project
+## Installation
 ### Requirements
 * PostgreSQL >= 14
 * .NET 7
