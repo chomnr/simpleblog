@@ -26,6 +26,7 @@ You can modify anything to your liking.
 
 1. Install [PostgreSQL 15.3](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 2. Install [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+3. Blazor Server
 
 ### 1. Installation
 ```bash
